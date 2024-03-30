@@ -56,6 +56,78 @@ else
     echo "";
 fi
 
+# Create a readme.md with placeholder
+if test -f "$PROJECT_DIR/readme.md"; then
+    echo "The readme.md file already exist. Skipping creating a new readme.md.";
+    echo "";
+else
+    echo "Creating a new readme.md file...";
+    touch "readme.md";
+    # Add default placeholder contents
+    echo "\
+# $PROJECT_NAME
+
+---
+" >> readme.md;
+
+    echo "Done."
+    echo "";
+fi
+
+# Create a makefile for the build process
+if test -f "$PROJECT_DIR/makefile"; then
+    echo "The makefile already exist. Skipping creating a new makefile.";
+    echo "";
+else
+    echo "Creating a new makefile...";
+    touch "makefile";
+    # Add default placeholder contents
+    echo "\
+# NOTE: Make sure all indentations use tabs
+
+# DEFAULT_GOAL specify the default target
+# This is run when no target is specified
+.DEFAULT_GOAL := build
+
+# Target definitions
+# .PHONY helps avoid possible name-collisions with other directory or file names on the computer
+.PHONY: fmt vet build
+
+# Target
+fmt:
+	# Task: Format all source files
+	cd src
+	go fmt ./...
+	cd ..
+
+# Target
+vet: fmt
+	# Task: Verify any possible errors
+	cd src
+	go vet ./...
+	cd ..
+
+# Target
+build: vet
+	# Task: Build in debug mode
+	go build -o bin/$OUT_FILE src/main.go
+
+# Target
+try: vet
+	# Task: Build in debug mode, run, then remove built binary
+	if test -f "bin/$OUT_FILE-Temp"; then \
+		rm -f bin/$OUT_FILE-Temp; \
+	fi
+	go build -o bin/$OUT_FILE-Temp src/main.go
+	bin/$OUT_FILE-Temp
+	rm -f bin/$OUT_FILE-Temp
+
+" >> makefile;
+
+    echo "Done."
+    echo "";
+fi
+
 # Create a new "src" folder if does not exist yet
 if test -d "$PROJECT_DIR/src"; then
     echo "The src directory exist. Skipping creating a new src directory.";

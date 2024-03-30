@@ -109,8 +109,13 @@ vet: fmt
 
 # Target
 build: vet
-	# Task: Build in debug mode
+	# Task: Build in debug mode in Linux
 	go build -o bin/$OUT_FILE src/main.go
+
+# Target
+build-win: vet
+	# Task: Build in debug mode in Windows
+	go build -o bin\\$OUT_FILE.exe src\main.go
 
 # Target
 try: vet
@@ -121,6 +126,26 @@ try: vet
 	go build -o bin/$OUT_FILE-Temp src/main.go
 	bin/$OUT_FILE-Temp
 	rm -f bin/$OUT_FILE-Temp
+
+# Target
+try-win: vet
+	# Task: Build in debug mode, run, then remove built binary in Windows
+	if test -f "bin\\$OUT_FILE-Temp"; then \
+		rm -f bin\\$OUT_FILE-Temp; \
+	fi
+	go build -o bin\\$OUT_FILE-Temp src\main.go
+	bin\\$OUT_FILE-Temp
+	rm -f bin\\$OUT_FILE-Temp
+
+# Target
+run:
+	# Task: Run the application in Linux
+	go run src/main.go
+
+# Target
+run-win:
+	# Task: Run the application in Windows
+	go run src\main.go
 
 " >> makefile;
 
@@ -158,16 +183,24 @@ func main() {
 }
 
 // FOR WINDOWS:
-//  To run:                 go run $PROJECT_NAME\src\main.go
-//  To compile:             go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go
-//  To run after compile:   .\\$PROJECT_NAME\bin\\$OUT_FILE.exe
-//  Compile + Run:          go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go && .\\$PROJECT_NAME\bin\\$OUT_FILE.exe
+//  To Run:                 make run-win
+//                          go run $PROJECT_NAME\src\main.go
+//  To Build:               make build-win
+//                          go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go
+//  To Run after Build:     .\\bin\\$OUT_FILE.exe
+//                          .\\$PROJECT_NAME\bin\\$OUT_FILE.exe
+//  Try Build + Run:        make try-win
+//                          go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go && .\\$PROJECT_NAME\bin\\$OUT_FILE.exe && rm .\\$PROJECT_NAME\bin\\$OUT_FILE.exe
 
 // FOR LINUX:
-//  To run:                 go run $PROJECT_NAME/src/main.go
-//  To compile:             go build -o $PROJECT_NAME/bin/$OUT_FILE $PROJECT_NAME/src/main.go
-//  To run after compile:   ./$PROJECT_NAME/bin/$OUT_FILE
-//  Compile + Run:          go build -o $PROJECT_NAME/bin/$OUT_FILE $PROJECT_NAME/src/main.go && ./$PROJECT_NAME/bin/$OUT_FILE
+//  To Run:                 make run
+//                          go run $PROJECT_NAME/src/main.go
+//  To Build:               make build
+//                          go build -o $PROJECT_NAME/bin/$OUT_FILE $PROJECT_NAME/src/main.go
+//  To Run after Build:     ./bin/$OUT_FILE
+//                          ./$PROJECT_NAME/bin/$OUT_FILE
+//  Try Build + Run:        make try
+//                          go build -o $PROJECT_NAME/bin/$OUT_FILE $PROJECT_NAME/src/main.go && ./$PROJECT_NAME/bin/$OUT_FILE && rm ./$PROJECT_NAME/bin/$OUT_FILE
 
 " >> src/main.go;
 

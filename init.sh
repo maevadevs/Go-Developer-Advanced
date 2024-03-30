@@ -76,16 +76,9 @@ else
     touch "src/main.go";
     # Add default placeholder contents
     echo "\
-// Package
-// *******
 package main
 
-// Imports
-// *******
 import \"fmt\"
-
-// Functions
-// *********
 
 // This is the main entry of the application.
 func main() {

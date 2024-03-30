@@ -187,7 +187,7 @@ func main() {
 //                          go run $PROJECT_NAME\src\main.go
 //  To Build:               make build-win
 //                          go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go
-//  To Run after Build:     .\\bin\\$OUT_FILE.exe
+//  To Run after Build:     .\bin\\$OUT_FILE.exe
 //                          .\\$PROJECT_NAME\bin\\$OUT_FILE.exe
 //  Try Build + Run:        make try-win
 //                          go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go && .\\$PROJECT_NAME\bin\\$OUT_FILE.exe && rm .\\$PROJECT_NAME\bin\\$OUT_FILE.exe

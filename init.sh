@@ -120,8 +120,8 @@ build-win: vet
 # Target
 try: vet
 	# Task: Build in debug mode, run, then remove built binary
-	if test -f "bin/$OUT_FILE-Temp"; then \
-		rm -f bin/$OUT_FILE-Temp; \
+	if test -f "bin/$OUT_FILE-Temp"; then \\
+		rm -f bin/$OUT_FILE-Temp; \\
 	fi
 	go build -o bin/$OUT_FILE-Temp src/main.go
 	bin/$OUT_FILE-Temp
@@ -130,8 +130,8 @@ try: vet
 # Target
 try-win: vet
 	# Task: Build in debug mode, run, then remove built binary in Windows
-	if test -f "bin\\$OUT_FILE-Temp"; then \
-		rm -f bin\\$OUT_FILE-Temp; \
+	if test -f "bin\\$OUT_FILE-Temp"; then \\
+		rm -f bin\\$OUT_FILE-Temp; \\
 	fi
 	go build -o bin\\$OUT_FILE-Temp src\main.go
 	bin\\$OUT_FILE-Temp

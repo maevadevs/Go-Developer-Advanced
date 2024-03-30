@@ -144,6 +144,7 @@ Command | Action
 ```tree
 Go-Module-Name
 |- go.mod
+|- makefile
 |- readme.md
 |- bin/
 |- src/
@@ -377,7 +378,7 @@ func main() {
   - Requiring this tooling is good software engineering practice
   - Use scripts to specify the build steps
 - **Go developers use `make` as the principal build solution**
-  - Has been used to build programs since 1976
+  - `make` has been used to build programs since 1976
   - Specify a set of operations for building the program
   - Specify the order in which to perform the steps
 - To use `make`

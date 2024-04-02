@@ -5,6 +5,16 @@ import (
 	"math/cmplx"
 )
 
+// Package-level Constants
+const pi float64 = 3.1415
+
+const (
+	idKey   = "id"
+	nameKey = "name"
+)
+
+const total = 20 * 10
+
 // This is the main entry of the application.
 func main() {
 	// Example of Integers
@@ -98,7 +108,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Complex Number
-	fmt.Println("Example of Boolean Literals:")
+	fmt.Println("Example of Complex Literals:")
 
 	x := complex(2.5, 3.1)
 	y := complex(10.2, 2)
@@ -127,6 +137,107 @@ func main() {
 
 	fmt.Println("mySumF =", mySumF)
 	fmt.Println("mySumI =", mySumI)
+
+	fmt.Println()
+
+	// Example of Variable Declarations
+	fmt.Println("Example of Variable Declarations:")
+
+	// Long-format declaration with var
+	var someNum int = 100
+	// Declaration-Only with var
+	var myNum int
+	myNum = 77
+	// Multiple declaration and assignment
+	var userAge, favNum int = 26, 100
+	// Multiple declaration only
+	var dogAge, dogBirthYear int
+	dogAge = 7
+	dogBirthYear = 2017
+	// Declaration as list
+	var (
+		uFname, uLname     string
+		uAge                    = 26
+		uIsAdult           bool = true
+		uFavNum, uWorstNum      = 7, -100
+	)
+	// Using := With Multiple Variables
+	sName, sAge := "John", 15
+	// Using := With Multiple Variables & Reassignment
+	sName, sAge, sIsAdult := "Johnny", 26, true
+
+	fmt.Println("someNum =", someNum)
+	fmt.Println("myNum =", myNum)
+	fmt.Println("userAge =", userAge)
+	fmt.Println("favNum =", favNum)
+	fmt.Println("dogAge =", dogAge)
+	fmt.Println("dogBirthYear =", dogBirthYear)
+	fmt.Println("uFname =", uFname)
+	fmt.Println("uLname =", uLname)
+	fmt.Println("uAge =", uAge)
+	fmt.Println("uIsAdult =", uIsAdult)
+	fmt.Println("uFavNum =", uFavNum)
+	fmt.Println("uWorstNum =", uWorstNum)
+	fmt.Println("sName =", sName)
+	fmt.Println("sAge =", sAge)
+	fmt.Println("sIsAdult =", sIsAdult)
+
+	fmt.Println()
+
+	// Example of Function-level Constants
+	fmt.Println("Example of Function-level Constants:")
+
+	const greetingsConst = "Hello"
+
+	fmt.Println("greetingsConst =", greetingsConst)
+
+	fmt.Println()
+
+	// Example of Package-level Constants
+	fmt.Println("Example of Package-level Constants:")
+
+	fmt.Println("pi =", pi)
+	fmt.Println("idKey =", idKey)
+	fmt.Println("nameKey =", nameKey)
+	fmt.Println("total =", total)
+
+	// This is an error: Constants are immutable
+	// pi = pi + 1
+	// GREETINGS = "Hi!"
+
+	fmt.Println()
+
+	// Example of Untyped Constant
+	fmt.Println("Example of Untyped Constant:")
+
+	const uConst = 100
+
+	// Legal usage
+	var i int = uConst
+	var f float64 = uConst
+	var b byte = uConst
+
+	fmt.Println("uConst =", uConst)
+	fmt.Println("i =", i)
+	fmt.Println("f =", f)
+	fmt.Println("b =", b)
+
+	fmt.Println()
+
+	// Example of Typed Constant
+	fmt.Println("Example of Typed Constant:")
+
+	const tConst int64 = 100
+
+	// Legal usage:
+	// Can only be assigned to int64
+	// Asigning to any other type is a compile error
+	var i64 int64 = tConst
+
+	fmt.Println("tConst =", tConst)
+	fmt.Println("i64 =", i64)
+
+	fmt.Println()
 }
 
 // FOR WINDOWS:

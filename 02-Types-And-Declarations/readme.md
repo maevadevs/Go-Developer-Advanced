@@ -26,6 +26,17 @@
   - [Runes](#runes)
 - [Explicit Type Conversion](#explicit-type-conversion)
 - [Literals Are Untyped](#literals-are-untyped)
+- [`var` vs `:=`](#var-vs-)
+  - [Long-Format Declaration With `var`](#long-format-declaration-with-var)
+  - [Short-Format Declaration With `var`](#short-format-declaration-with-var)
+  - [Declaration Only With `var`](#declaration-only-with-var)
+  - [Multiple Declaration](#multiple-declaration)
+  - [Walrus Shortcut `:=`](#walrus-shortcut-)
+  - [Which Style To Choose](#which-style-to-choose)
+- [Using `const`](#using-const)
+  - [Typed Const vs Untyped Const](#typed-const-vs-untyped-const)
+- [Unused Variables](#unused-variables)
+- [Naming Variables And Constants](#naming-variables-and-constants)
 
 ---
 
@@ -47,7 +58,7 @@
 
 ## Zero Values
 
-- Go assigns a default value to declared variables with no initial values
+- Declared variables with no initial values are assigned default Zero Values
   - Explicit *Zero Value*
   - Makes code clearer
   - Removes sources of bugs
@@ -64,16 +75,16 @@
 - **Literals are considered *untyped***
   - Situations where the type is not explicitly declared
   - In those cases, Go uses the *default type* for a literal
-  - *If a type cannot be determined from an expression (e.g. Should `3` be used as a Float or an Integer?), the literal defaults to a default type*
+  - **If a type cannot be determined from an expression (e.g. Should `3` be used as a Float or an Integer?), the literal defaults to a default type**
 
 ### Integer Literal
 
 - Sequence of numbers
 - Base 10 by default
 - **Different prefixes can be used to specify other bases**
-  - `0b` => Binary
-  - `0x` => Hexadecimal
-  - `0o` => Octal: `0` can also be used for *Octal* but it is confusing so do not use it
+  - `0b` => *Binary*
+  - `0x` => *Hexadecimal*
+  - `0o` => *Octal*: `0` by itself can also be used for *Octal* but it is confusing so do not use it
   - Prefix can be uppercase or lowercase
 - **Optional `_` can be used as separators**
   - But cannot be at the beginning or end
@@ -82,7 +93,7 @@
   - It is better to only use them to improve readability for 1000s-boundaries
   - Or at byte-boundaries for binary, octal, or hexadecimal
 - **In practice, use Base-10 to represent integers**
-  - Octal is mostly only used for POSIX permission flag
+  - Octal is mostly only used for POSIX permission flags
   - Hexadecimal and Binary are sometimes used for bit filters or networking and infrastructure applications
 
 ```go
@@ -111,8 +122,7 @@ func main() {
 
 ### Float Literal
 
-- Sequence of numbers
-- Has a decimal point to indicate the fractional portion
+- Sequence of numbers with decimal point to indicate the fractional portion
 - Can also have an exponent `e` or `E` with positive of negative number
 - Can also be written in hexadecimal
   - E.g. `0x12.34p5`
@@ -202,19 +212,21 @@ func main() {
 
 ### String Literal
 
-- 2 ways: *Interpreted String Literal `""`* and *Raw String Literal <code>``</code>*
-  - ***Interpreted String Literal* is surrounded by double-quotes `""`**
-    - Contains zero or more rune literals
-    - They interpret rune literals into single characters
-    - The following cannot appear in *Interpreted String Literal*
-      - Unescaped backslash `\`
-      - Unescaped newlines `n`
-      - Unescaped double-quote `"`
-  - **In these cases, using *Raw String Literal* is more appropriate**
-    - Delimited with backticks <code>``</code>
-    - **Can contain any character except backticks**
-    - No escape character can be applied
-    - All characters are included as-is
+- 2 ways:
+  - *Interpreted String Literal `""`*
+  - *Raw String Literal <code>``</code>*
+- ***Interpreted String Literal* is surrounded by double-quotes `""`**
+  - Contains zero or more rune literals
+  - They *interpret* rune literals into single characters
+  - The following cannot appear in *Interpreted String Literal*
+    - Unescaped backslash `\`
+    - Unescaped newlines `n`
+    - Unescaped double-quote `"`
+- **In these cases, using *Raw String Literal* is more appropriate**
+  - Delimited with backticks <code>``</code>
+  - **Can contain any character except backticks**
+  - No escape character can be applied
+  - All characters are included as-is
 
 ```go
 package main
@@ -354,7 +366,7 @@ Integer Type|Range
 - **Integer division results in an integer**
   - Truncation toward `0`
   - To get Float, use type-conversion
-- **Division by `0` causes a `panic`**
+- **Integer Division by `0` causes a `panic`**
 - Support usual comparison operators
   - `==` and `!=`
   - `>` and `>=`
@@ -370,6 +382,8 @@ Integer Type|Range
 ### Floating-Point Types
 
 - 2 Floating-Point types
+  - `float32`
+  - `float64`
 - IEEE 754 standard
 - **Zero-Value = `0.0`**
 - **Literal Default Type: `float64`**
@@ -399,7 +413,6 @@ Float Type|Range|Precision
   - Multiplication `*` and `*=`
   - Division `/` and `/=`
 - **Float division has some properties**
-  - Truncation toward `0`
   - Division of Non-Zero by `0` results in `±Inf`
   - Division of `0` by `0` results in `NaN`
 - Support usual comparison operators
@@ -458,7 +471,7 @@ import "fmt"
 // This is the main entry of the application.
 func main() {
     // Example of Complex Number
-    fmt.Println("Example of Boolean Literals:")
+    fmt.Println("Example of Complex Literals:")
 
     x := complex(2.5, 3.1)
     y := complex(10.2, 2)
@@ -488,7 +501,7 @@ func main() {
 ## Strings and Runes
 
 - String is a built-in data type
-- Supports Unicode: We can put any unicode characters in strings
+- Supports Unicode - We can put any unicode characters in strings
 - Zero-Value is `""`
 - Default Type is `string`
 - **Strings are immutable**
@@ -504,7 +517,7 @@ func main() {
 - Represent a single code-point
 - Used for representing a character
 - Alias for `int32` type
-  - But use `rune` for character, not `int32`
+  - **But use `rune` for character, not `int32`**
   - They are same for the compiler, but bad programming practice to mismatch
   - Helps to clarify the intent in the code
 - Default type is `rune`
@@ -525,7 +538,7 @@ var lNameInitial int32 = 'R'
   - Even for integers and floats
 - Type conversion is done by calling the type as a function on the value
   - **For any values that are not of the same type: At least one must be converted before they can be used together**
-  - The same applies for same type but different sizes (E.g. `int8` and `int32`)
+  - The same applies for values of same type but different sizes (E.g. `int8` and `int32`)
 
 ```go
 package main
@@ -550,10 +563,332 @@ func main() {
 ```
 
 - Due to this strictness, we cannot treat other types as *booleans*
-  - In other languages, some values are trrated as *truthy* or *falsy*
+  - In other languages, some values are treated as *truthy* or *falsy*
   - **Go does not allow *truthy* and *falsy* either**
-  - **No other type can be converted to booleans, either implicitly or explicitly**
+  - **No other types can be converted to booleans, either implicitly or explicitly**
   - **Must use comparison operators to get back booleans**
-    - E.g. A typical check that is used a lot is `!= nil`
+    - E.g. A typical check that is used a lot is `x != nil`
 
 ## Literals Are Untyped
+
+- We cannot add 2 integers of different types
+- But we can use integer literals as floating-point
+
+```go
+var x float64 = 100
+var y float64 = 200.50 * 50
+```
+
+- **Literals are untyped**
+  - Their types are not enforced until needed
+  - This allows literals to be used with any compatible variables
+- **However, this only works on compatible/similar types**
+  - We cannot assign strings to numeric variables
+  - Size limitations also exist
+    - Compile-time error if the value overflows the variable type
+
+## `var` vs `:=`
+
+- Go has different ways for declaring variables
+- Each style communicates about how the variable is used
+- *Variables can be declared at the package-level or function-level*
+  - However, it is preferable to do so at the function-level as much as possible
+
+### Long-Format Declaration With `var`
+
+- This is the most verbose format
+- Most general case
+
+```go
+// Long-format declaration with var
+var x int = 100
+```
+
+### Short-Format Declaration With `var`
+
+- If the type of the value can be deduced, we can skip the type
+- *The type of the variable is deduced from the assigned value*
+
+```go
+// Short-format declaration with var
+var x = 100
+```
+
+### Declaration Only With `var`
+
+- We can declare only without assigning an initial value
+- The type is required
+- Assigns the *Zero-Value* of the type as the default value
+
+```go
+// Declaration-Only with var
+var x int
+```
+
+### Multiple Declaration
+
+- This is similar to Python's *tuple assignment*
+- The variables can be of the same type
+
+```go
+// Multiple declaration and assignment
+var age, favNum int = 26, 100
+```
+
+- We can also declare-only and assign Zero-Value
+
+```go
+// Multiple declaration only
+var age, favNum int
+```
+
+- If assigning initial value, the variables can be of different types
+- The type of the variables are deduced from the assigned values
+
+```go
+// Declaring and assigning multiples
+var name, age, isAdult = "John", 26, true
+```
+
+- We can also declare a list of variables at once
+- This approach allows some to have initial values and some not
+- We can combine different previous approach
+
+```go
+var (
+    uFname, uLname string
+    uAge = 26
+    uIsAdult bool = true
+    uFavNum, uWorstNum = 7, -100
+)
+```
+
+### Walrus Shortcut `:=`
+
+- `:=` can replace `var` declaration with type inference
+- It is preferred over `var`
+
+```go
+// Equivalent statements
+var num = 100
+num := 100
+```
+
+- We can also use it with multiple variables at once
+
+```go
+// Using := With Multiple Variables
+name, age, isAdult := "John", 26, true
+```
+
+- **NOTE: `:=` can only be used for declaration, not for re-assignments**
+  - However, with multiple declarations, it can be used for re-assignment **if at least one variable is new**
+
+```go
+// Using := With Multiple Variables & Reassignment
+name, age := "John", 15
+name, age, isAdult := "Johnny", 26, true
+```
+
+- **Limitation of `:=`**
+  - It cannot be used to declare variables at the *package-level*
+  - `var` must be used for *package-level* variables
+  - `:=` can only be used inside functions
+
+### Which Style To Choose
+
+- **Choose what makes the intent clear**
+  - `var` is more explicit but can be verbose
+  - `:=` is easy to understand but can be confusing if the value is not explicit
+  - `var` is the only option for package-level variables
+  - `:=` is the most common inside functions
+  - Use declaration lists when declaring multiple variables
+- Avoid `:=` when:
+  - Initializing to zero-value
+  - Assigning an untyped constant
+  - Variable type cannot/should not be deduced from the assigned value
+  - Prefer `var x byte = 20` over `x := byte(20)`
+  - **Sometimes, `:=` creates a new variable than using an existing one (*Shadowing*)**
+    - In those cases, it is better to use `var`
+- **NOTE: Only use the *Multiple declaration and assignment* style when assigning multiple values from a function return**
+- **NOTE: Rarely declare variables outside funnctions**
+  - Package-level variables is not a good idea
+  - Can be difficult to track the changes made
+  - Make it hard to understand the flow of the data in the program
+  - Can lead to subtle bugs
+  - **Only declare them as *immutable***
+
+## Using `const`
+
+- Allows to declare values as *immutable*
+- Usage is very similar to `var`
+- But re-assignments result in error
+
+```go
+package main
+
+import "fmt"
+
+// Package-level Constants
+const pi float64 = 3.1415
+const (
+    idKey   = "id"
+    nameKey = "name"
+)
+const total = 20 * 10
+
+// This is the main entry of the application.
+func main() {
+    // Example of Function-level Constants
+    fmt.Println("Example of Function-level Constants:")
+
+    const greetings = "Hello"
+
+    fmt.Println("greetings = ", greetings)
+
+    // Example of Package-level Constants
+    fmt.Println("Example of Package-level Constants:")
+
+    fmt.Println("pi = ", pi)
+    fmt.Println("idKey = ", idKey)
+    fmt.Println("nameKey = ", nameKey)
+    fmt.Println("total = ", v)
+
+    // This is an error: Constants are immutable
+    // pi = pi + 1
+    // greeting = "Hi!"
+}
+```
+
+- **NOTE: `const` in Go is very limited**
+  - Can only hold values that the compiler can figure out at compile-time
+  - Can be assigned:
+    - Numeric Literals
+    - `true` / `false`
+    - Strings
+    - Runes
+    - Values for calling `complex()`, `real()`, `image()`, `len()`, `cap()`
+    - Expression with operator and preceding value
+    - `iota`
+  - **We cannot specify that a value calculated at runtime is immutable**
+    - `const` is only a way to give names to literals
+
+```go
+// This is an error
+x := 5
+y := 6
+const total = x + y
+```
+
+- **NOTE: There are no *immutable arrays, slices, maps, structs***
+  - We cannot specify that a field in a struct is immutable
+  - But within a function, it is clear if a variable is being modified
+  - So immutability is less important
+  - *Go is call-by-value*: Prevents modification to passed-parameters
+
+### Typed Const vs Untyped Const
+
+- Constants can be typed or untyped
+- **Untyped Constant** is the same as literal
+  - Has no type on its own
+  - Has default type when type cannot be inferred
+- **Typed Constant** can be assigned directly only to a *"variable"* of the same type
+- **Usage depends on the intent**
+  - Constants to be used with multiple numeric types => *Keep untyped*
+  - Untyped Constants give more flexibility
+  - But in some situations, an enforced type is preferrable: E.g. Enumeration with `iota`
+
+```go
+// Example of Untyped Constant
+const uconst = 100
+
+// Legal usage
+var i int = uconst
+var f float64 = uconst
+var b byte = uconst
+
+// Example of Typed Constant
+const tconst int64 = 100
+
+// Legal usage:
+// Can only be assigned to int64
+// Asigning to any other type is a compile error
+var i64 int64 = tconst
+```
+
+## Unused Variables
+
+- **Every *local* declared variables/constants must be used/read at least once**
+- It is a compile-time error if a declared variable is not used
+- As long as the variable is read once
+  - Go will not catch the unused `x = 30`
+  - 3rd-party tools can be used to cleanup these
+
+```go
+// This code will compile
+package main
+
+func main() {
+    x := 10
+    x = 20
+    fmt.Println("x =", x)
+    x = 30
+}
+```
+
+- **NOTE: This rule does not apply to *constants* and *package-level variables***
+  - It is better to avoid package-level variables*
+  - Constants in Go are calculated at compile-time (cannot have side-effects)
+  - Can be eliminated if unused: They are excluded from the compiled binary
+
+```go
+// This code will compile
+package main
+
+var note string = "It will not complain if I am unused!"
+
+func main() {
+    const PI = 10
+}
+```
+
+## Naming Variables And Constants
+
+- Identifier names need to start with a letter or `_`
+- Name can contain number, letter, `_`
+- **Any Unicode character can be used**
+- **However, not any unicode character *should* be used**
+  - Name should communicate intent
+  - Should not be difficult to type on keyboard
+  - **Look-alike Unicode code-points can be a nightmare**
+    - Even if the look alike, they are completely different variables
+
+```go
+// Avoid this!!
+func main() {
+    ａ = "hello" // Unicode U+FF41: ａ
+    a = "bye" // Standard lowercase-A: U+0061
+    fmt.Println(ａ) // hello
+    fmt.Println(a) // bye
+    fmt.Println(ａ == a) // false
+
+}
+```
+
+- **NOTE: `_` is rarely used in naming**
+  - Idiomatic Go does not use *snake_casing*
+  - Only *PascalCasing* and *camelCasing*
+  - **`_` is mostly only used as a *discard* variable**
+- **NOTE: Do not use *all-caps* when naming constants**
+  - Go use the case of the first letter of a name to determine its accessibility (*private* vs *public*)
+  - **Keep `const` naming the same as `var`**
+- **Within functions, favor short names**
+  - Smaller scope = Shorter name
+  - Single-letters are common for `for` loops
+  - Sometimes, the first letter of the type might be used
+  - These short names serve 2 purposes
+    - Eliminate repetitive typing
+    - Serve as a check on how complicated the code is: *If you cannot keep track, your block is doing too much*
+- **Within package block, favor descriptive names**
+  - Clarify what the value represent
+- For more details on naming, [check the docs](https://google.github.io/styleguide/go/decisions#naming)

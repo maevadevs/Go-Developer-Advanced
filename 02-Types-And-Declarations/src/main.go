@@ -80,7 +80,7 @@ func main() {
 	var greetings string = "Hello World!"
 	// Using Escapes
 	var greetingsLong string = "Greetings and \n\"Salutations\"!"
-	var goPath string = "https:\\\\go.dev"
+	var sysPath string = "C:\\\\Windows\\System32"
 	// Using Raw String Literal
 	var greetingsRaw string = `Greetings and
     "Salutations"!`
@@ -88,7 +88,7 @@ func main() {
 
 	fmt.Println("greetings =", greetings)
 	fmt.Println("greetingsLong =", greetingsLong)
-	fmt.Println("goPath =", goPath)
+	fmt.Println("sysPath =", sysPath)
 	fmt.Println("greetingsRaw =", greetingsRaw)
 	fmt.Println("goPathRaw =", goPathRaw)
 

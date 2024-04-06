@@ -143,13 +143,13 @@ Command | Action
 
 ```tree
 Go-Module-Name
-|- go.mod
-|- makefile
-|- readme.md
-|- bin/
-|- src/
-|  |- main.go
-|- tests/
+|-- go.mod
+|-- makefile
+|-- readme.md
+|-- bin/
+|-- src/
+|   |-- main.go
+|-- tests/
 ```
 
 ### Go Module
@@ -162,7 +162,7 @@ Go-Module-Name
 go mod init unique/module/path
 ```
 
-- It declares:
+- It declares
   - The name of the module and its path
   - Minimum supported Go version
   - Any additional module dependencies
@@ -175,7 +175,7 @@ go mod init unique/module/path
 ```sh
 module unique/module/path
 
-go 1.22.1
+go 1.22.2
 ```
 
 ### `main.go`
@@ -203,7 +203,7 @@ func main() {
 #### Import Declaration
 
 - Allows to import external packages that are referenced in the file
-- **Go imports only whole packages**
+  - **Go imports only whole packages**
   - We cannot limit the import to specific functions or other elements
 - `fmt` is from the standard library so it is already available
 
@@ -304,7 +304,7 @@ func main() { // ...no automatic semicolon insertion here
 
 - It is possible for code to be syntactically valid yet likely incorrect
 - `go vet` can detect these errors
-- Run in it a directory with `.go` files to scan for common coding mistakes
+- Run it in a directory with `.go` files to scan for common coding mistakes
 
 ```go
 package main
@@ -465,13 +465,13 @@ Command|Description
 
 ## Staying Up-To-Date
 
-- Updating Go environment does not affect previously-compiled programs
+- **Updating Go environment does not affect previously-compiled programs**
   - Go compiles to standalone native binary
   - There is no dependency on any VMs
   - The version of Go does not affect the runtime of the compiled program
 - For Windows, `chocolatey` can be used to install and update Go
 - For Mac, `brew` can be used to install and update Go
-- Otherwise, follow the installer's option be removing and re-installing
+- Otherwise, follow the installer's option for removing and re-installing
 - For Linux
   - Move the current installaton in a backup location
   - Download and unpack the new installation

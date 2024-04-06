@@ -43,8 +43,7 @@
 - Write programs in a way that makes intentions clear
 - Some particular approaches produce clearer codes
 - Built-in types in Go and how to declare them
-- Go does things differently
-- Subtle differences with other languages
+- Go does things differently: Subtle differences from other languages
 - **NOTE: All declared variables in Go must be used**
 
 ## Predeclared Types
@@ -58,7 +57,7 @@
 
 ## Zero Values
 
-- Declared variables with no initial values are assigned default Zero Values
+- **Declared variables with no initial values are assigned default *Zero Values***
   - Explicit *Zero Value*
   - Makes code clearer
   - Removes sources of bugs
@@ -66,7 +65,7 @@
 
 ## Literals
 
-- Explicitly specified number, character, or string
+- **Explicitly specified number, character, or string**
 - 4 common kinds of literals
   - Integer literal
   - Float Literal
@@ -123,7 +122,7 @@ func main() {
 ### Float Literal
 
 - Sequence of numbers with decimal point to indicate the fractional portion
-- Can also have an exponent `e` or `E` with positive of negative number
+- Can also have an exponent `e` or `E` with positive or negative number
 - Can also be written in hexadecimal
   - E.g. `0x12.34p5`
   - `p` indicates the exponent
@@ -225,6 +224,7 @@ func main() {
 - **In these cases, using *Raw String Literal* is more appropriate**
   - Delimited with backticks <code>``</code>
   - **Can contain any character except backticks**
+  - If <code>\`</code> is required, try using <code>\`raw string\` + "`"</code> instead
   - No escape character can be applied
   - All characters are included as-is
 
@@ -242,7 +242,7 @@ func main() {
     var greetings string = "Hello World!"
     // Using Escapes
     var greetingsLong string = "Greetings and \n\"Salutations\"!"
-    var goPath string = "https:\\\\go.dev"
+    var sysPath string = "C:\\\\Windows\\System32"
     // Using Raw String Literal
     var greetingsRaw string = `Greetings and
     "Salutations"!`
@@ -250,7 +250,7 @@ func main() {
 
     fmt.Println("greetings =", greetings)
     fmt.Println("greetingsLong =", greetingsLong)
-    fmt.Println("goPath =", goPath)
+    fmt.Println("sysPath =", sysPath)
     fmt.Println("greetingsRaw =", greetingsRaw)
     fmt.Println("goPathRaw =", goPathRaw)
 }
@@ -501,7 +501,8 @@ func main() {
 ## Strings and Runes
 
 - String is a built-in data type
-- Supports Unicode - We can put any unicode characters in strings
+- Supports Unicode
+  - We can put any unicode characters in strings
 - Zero-Value is `""`
 - Default Type is `string`
 - **Strings are immutable**
@@ -616,7 +617,7 @@ var x = 100
 
 ### Declaration Only With `var`
 
-- We can declare only without assigning an initial value
+- We can declare only, without assigning an initial value
 - The type is required
 - Assigns the *Zero-Value* of the type as the default value
 
@@ -666,7 +667,7 @@ var (
 ### Walrus Shortcut `:=`
 
 - `:=` can replace `var` declaration with type inference
-- It is preferred over `var`
+- `:=` is preferred over `var`
 
 ```go
 // Equivalent statements
@@ -704,10 +705,11 @@ name, age, isAdult := "Johnny", 26, true
   - `:=` is the most common inside functions
   - Use declaration lists when declaring multiple variables
 - Avoid `:=` when:
+  - Declaring Package-level variables
   - Initializing to zero-value
   - Assigning an untyped constant
   - Variable type cannot/should not be deduced from the assigned value
-  - Prefer `var x byte = 20` over `x := byte(20)`
+    - Prefer `var x byte = 20` over `x := byte(20)`
   - **Sometimes, `:=` creates a new variable than using an existing one (*Shadowing*)**
     - In those cases, it is better to use `var`
 - **NOTE: Only use the *Multiple declaration and assignment* style when assigning multiple values from a function return**
@@ -792,7 +794,7 @@ const total = x + y
 - **Untyped Constant** is the same as literal
   - Has no type on its own
   - Has default type when type cannot be inferred
-- **Typed Constant** can be assigned directly only to a *"variable"* of the same type
+- **Typed Constant** can be assigned directly only a *"variable"* of the same type
 - **Usage depends on the intent**
   - Constants to be used with multiple numeric types => *Keep untyped*
   - Untyped Constants give more flexibility
@@ -818,7 +820,7 @@ var i64 int64 = tconst
 
 ## Unused Variables
 
-- **Every *local* declared variables/constants must be used/read at least once**
+- **Every *locally* declared variables/constants must be used/read at least once**
 - It is a compile-time error if a declared variable is not used
 - As long as the variable is read once
   - Go will not catch the unused `x = 30`
@@ -837,7 +839,7 @@ func main() {
 ```
 
 - **NOTE: This rule does not apply to *constants* and *package-level variables***
-  - It is better to avoid package-level variables*
+  - It is better to avoid *package-level variables*
   - Constants in Go are calculated at compile-time (cannot have side-effects)
   - Can be eliminated if unused: They are excluded from the compiled binary
 

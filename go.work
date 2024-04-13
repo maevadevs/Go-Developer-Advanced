@@ -3,4 +3,5 @@ go 1.22.2
 use (
     ./01-Setup-And-Hello-World
     ./02-Types-And-Declarations
+    ./03-Composite-Types
 )

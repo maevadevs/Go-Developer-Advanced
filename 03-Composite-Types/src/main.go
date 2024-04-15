@@ -335,11 +335,87 @@ func main() {
 	fmt.Println()
 
 	// Converting Array To Slice
+	// -------------------------
 	fmt.Println("Converting array to slice:")
 	bArray := [4]int{100, 200, 300, 400}
 	bSlice := bArray[:]
 	fmt.Println("bArray =", bArray)
 	fmt.Println("bSlice =", bSlice)
+
+	fmt.Println()
+
+	// Converting Slice to Array
+	// -------------------------
+	fmt.Println("Converting slice to array:")
+	cSlice := []int{10, 20, 30, 40}
+	cArray := [4]int(cSlice)
+	smallArray := [2]int(cSlice)
+	cSlice[0] = 100
+	fmt.Println("cSlice =", cSlice)
+	fmt.Println("cArray =", cArray)
+	fmt.Println("smallArray =", smallArray)
+
+	fmt.Println()
+
+	// Example of Strings
+	// ------------------
+	fmt.Println("Example of Strings:")
+	var strA string = "Hello there!"
+	var strASub1 byte = strA[6]
+	var strASub2 string = strA[4:7]
+	var strASub3 string = strA[:5]
+	var strASub4 string = strA[6:]
+	fmt.Println("strA =", strA)
+	fmt.Println("strASub1 =", strASub1)
+	fmt.Println("strASub2 =", strASub2)
+	fmt.Println("strASub3 =", strASub3)
+	fmt.Println("strASub4 =", strASub4)
+
+	fmt.Println()
+
+	// String Code-point Issue
+	// -----------------------
+	fmt.Println("Example of Strings:")
+	var strB string = "Hello 😊"
+	var strBSub1 byte = strB[6]
+	var strBSub2 string = strB[4:7]
+	var strBSub3 string = strB[:5]
+	var strBSub4 string = strB[6:]
+	fmt.Println("strB =", strB)
+	fmt.Println("strBSub1 =", strBSub1)
+	fmt.Println("strBSub2 =", strBSub2)
+	fmt.Println("strBSub3 =", strBSub3)
+	fmt.Println("strBSub4 =", strBSub4)
+
+	fmt.Println()
+
+	// Length of String Issue
+	// ----------------------
+	fmt.Println("Length of String Issue:")
+	var strC string = "Hello 😊"
+	fmt.Println("strC =", strC)
+	fmt.Println("len(strC) =", len(strC))
+
+	fmt.Println()
+
+	// Strings, runes, bytes type conversion
+	// -------------------------------------
+	fmt.Println("Strings, runes, bytes type conversion:")
+	var a rune = 'a'
+	stringA := string(a)
+	var b byte = 'b'
+	stringB := string(b)
+	stringC := "Hello 😊"
+	var bs []byte = []byte(stringC)
+	var rs []rune = []rune(stringC)
+
+	fmt.Println("a =", a)
+	fmt.Println("b =", b)
+	fmt.Println("stringA =", stringA)
+	fmt.Println("stringB =", stringB)
+	fmt.Println("stringC =", stringC)
+	fmt.Println("bs =", bs)
+	fmt.Println("rs =", rs)
 }
 
 // FOR WINDOWS:

@@ -29,6 +29,8 @@
   - [`copy()`](#copy)
 - [Converting Array To Slice](#converting-array-to-slice)
 - [Converting Slice To Array](#converting-slice-to-array)
+- [Strings, Runes, Bytes](#strings-runes-bytes)
+  - [UTF-8](#utf-8)
 
 ---
 
@@ -70,7 +72,7 @@ var arrC = [12]int{1, 5: 4, 6, 10, 100, 15}
 var arrD = [...]int{100, 200, 300}
 ```
 
-- With can combine any of the above with the `:=` operator as well
+- We can combine any of the above with the `:=` operator as well
 
 ```go
 // Array declaration with :=
@@ -462,7 +464,7 @@ var data []int
 ```
 
 - **NOTE: A slice with zero-length and zero-capacity is different from a `nil` slice**
-  - Comparing the 2 will returns `false`
+  - Comparing the 2 will return `false`
   - Comparing a `nil` to a `nil` returns `true`
   - *For simplicity, favor `nil` slice*
   - **A zero-length slice is only useful when converting a slice to JSON**
@@ -479,7 +481,7 @@ var data = []int{}
 data := []int{1, 2, 3, 4, 5}
 ```
 
-- If you do not know the slice values but have an idea of how large the slice with be, use `make()`
+- If you do not know the slice values but have an idea of how large the slice will be, use `make()`
   - If using slice as a buffer: *Specify a non-zero length*
   - If you know the exact size needed: *Specify the length and index into the slice to set the values*
   - In other situations: *Zero length and specify the capacity*
@@ -664,6 +666,7 @@ fmt.Println("After copying into array:", arrL, sliceS)
 
 ```go
 // Converting Array To Slice
+// -------------------------
 bArray := [4]int{100, 200, 300, 400}
 bSlice := bArray[:]
 ```
@@ -675,3 +678,117 @@ bSlice := bArray[:]
   - Can create an array from a subset of a slice
   - **The data is *copied* into a new memory**
   - There is no memory-sharing issue
+
+```go
+// Converting Slice to Array
+// -------------------------
+fmt.Println("Converting slice to array:")
+cSlice := []int{10, 20, 30, 40}
+cArray := [4]int(cSlice)
+smallArray := [2]int(cSlice)
+cSlice[0] = 100
+fmt.Println("cSlice =", cSlice)
+fmt.Println("cArray =", cArray)
+fmt.Println("smallArray =", smallArray)
+```
+
+- **The size of the array must be specified at compile-time**
+  - Cannot use `[...]` notation
+  - The size of the array but be `<=` the **length** of the slice
+  - But the compiler cannot detect this
+  - Code will panic at runtime if this is not the case
+- **NOTE: We can use a type-conversion to convert a slice into a pointer to an array**
+  - The storage between the 2 will be shared
+
+```go
+slice := []int{1,2,3,4}
+arrayPtr := (*[4]int)(slice)
+```
+
+## Strings, Runes, Bytes
+
+- Strings are not made of *Runes*
+- Using a sequence of *bytes* instead
+- Bytes do not have to be in any particular character encoding
+  - But usually assumed to be UTF-8 code points
+  - Unless using hexadecimal escapes, string literals are UTF8
+- *NOTE: Source-code is always in UTF-8*
+- We can extract values from a string using indexing
+  - Zero-based indexing
+  - Slice-expression also works with strings
+
+```go
+// Example of Strings
+// ------------------
+var strA string = "Hello there!"
+var strASub1 byte = strA[6]
+var strASub2 string = strA[4:7]
+var strASub3 string = strA[:5]
+var strASub4 string = strA[6:]
+```
+
+- **Since strings are immutable, they do not have the modification issue as with slices**
+  - However, a string is a sequence of bytes
+  - A UTF8 code-point can be 1 to 4 bytes
+  - When dealing with non-english languages and emojis, this can be an issue
+  - **We can break the code-points of some characters**
+  - ***Only use slicing and indexing when string contains only 1-byte characters***
+  - ***Better option: extract substrings and code-points using functions from `strings` and `unicode/utf8` packages***
+
+```go
+// String Code-point Issue
+// -----------------------
+var strB string = "Hello 😊"
+var strBSub1 byte = strB[6]
+var strBSub2 string = strB[4:7]
+var strBSub3 string = strB[:5]
+var strBSub4 string = strB[6:]
+```
+
+- We can get the length of a string using the `len()` function
+  - **However, it returns the length in *Bytes*, not in *code-points***
+  - This is also an issue with non-english languages and emojis
+  - ***Only use `len()` when string contains only 1-byte characters***
+
+```go
+// Length of String Issue
+// ----------------------
+var strC string = "Hello 😊"
+fmt.Println("len(strC) =", len(strC))
+```
+
+- Go has a complicated relationship between strings, runes, and bytes
+  - *A single rune or byte can be converted to a string with `string()`*
+  - *A string can be converted back and forth to `[]bytes` or `[]rune`*
+- Most data in Go is used as a sequence of bytes
+  - **Most common string-type conversion is to/from `[]bytes`**
+  - `[]rune` are uncommon
+
+```go
+// Strings, runes, bytes type conversion
+var a rune = 'a'
+stringA := string(a)
+var b byte = 'b'
+stringB := string(b)
+stringC := "Hello 😊"
+var bs []byte = []byte(stringC)
+var rs []rune = []rune(stringC)
+```
+
+- **NOTE: `go vet` blocks `string(someInt)`**
+  - Other than from `rune` and `byte`
+  - This is because the integer is interpreted as ASCII code
+  - E.g. `string(65)` becomes `"A"`, not `"65"`
+  - **It is not a good idea to convert an integer into a string with `string()`**
+
+### UTF-8
+
+- Most commonly used encoding for Unicode
+- Unicode uses a total of 4 bytes (32-bits) for each codepoint (character)
+  - UTF-32 - 4-bytes codepoint, but waste space
+  - UTF-16 - One or two 2-bytes codepoint, but also waste space
+  - UTF-8
+    - 1-byte codepoint for value below 128 (Most English characters)
+    - Expand to max 4-bytes for larger values
+    - Worst-case is the same as UTF-32
+    - **Not required in Go but strongly recommended**

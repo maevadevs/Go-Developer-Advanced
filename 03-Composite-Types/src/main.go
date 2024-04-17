@@ -416,6 +416,27 @@ func main() {
 	fmt.Println("stringC =", stringC)
 	fmt.Println("bs =", bs)
 	fmt.Println("rs =", rs)
+
+	fmt.Println()
+
+	// Declaring Maps
+	// --------------
+	fmt.Println("Declaring Maps:")
+	var nilMap map[string]int
+	notNilMap := map[string]int{}
+	// Declaring a Map with values
+	valuedMap := map[string][]string{
+		"Orcas":   {"Fred", "Ralph", "Mandarin"},
+		"Lions":   {"Sarah", "Peter", "Mark"},
+		"Kittens": {"Waldo", "Raul", "Alpha"},
+	}
+	// Creating a Map with make(): Specify the default size
+	ages := make(map[int][]string, 10)
+
+	fmt.Println("nilMap:", nilMap)
+	fmt.Println("notNilMap:", notNilMap)
+	fmt.Println("valuedMap:", valuedMap)
+	fmt.Println("ages:", ages)
 }
 
 // FOR WINDOWS:

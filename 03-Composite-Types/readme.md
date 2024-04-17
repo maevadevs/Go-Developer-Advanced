@@ -31,6 +31,9 @@
 - [Converting Slice To Array](#converting-slice-to-array)
 - [Strings, Runes, Bytes](#strings-runes-bytes)
   - [UTF-8](#utf-8)
+- [Maps](#maps)
+  - [Comparison With Slices](#comparison-with-slices)
+  - [Map vs HashMap](#map-vs-hashmap)
 
 ---
 
@@ -791,4 +794,69 @@ var rs []rune = []rune(stringC)
     - 1-byte codepoint for value below 128 (Most English characters)
     - Expand to max 4-bytes for larger values
     - Worst-case is the same as UTF-32
+    - We cannot randomly access a string encoded in UTF-8
+    - Need to start at the beginning of the string and count
     - **Not required in Go but strongly recommended**
+- Instead of using *slice expression* and *index expression*, use `strings` and `unicode/utf8` packages
+
+## Maps
+
+- Allows to associate one value to another
+- Format: `map[KeyType]ValueType`
+- Zero-Value: `nil`
+- **Attempting to write to a `nil` map result in a panic**
+
+```go
+// Declaring a nil Map
+var nilMap map[string]int
+```
+
+- We can also create a map using *Map-Literal*
+  - **This does not result in a `nil` map**
+  - **It has a length of `0`**
+  - We can read from and write to this map
+
+```go
+// Declaring a Map with Map Literal
+nilMap2 := map[string]int{}
+```
+
+- We can also provide values to the map
+- **NOTE: Comma is required for the last entry as well**
+
+```go
+// Declaring a Map with values
+valuedMap := map[string][]string{
+    "Orcas": []string{"Fred", "Ralph", "Mandarin"},
+    "Lions": []string{"Sarah", "Peter", "Mark"},
+    "Kittens": []string{"Waldo", "Raul", "Alpha"},
+}
+```
+
+- *The type of value can be anything*
+- *Some restrictions apply to the type of keys*
+  - Can be any *comparable* types
+- **We can use `make()` to build a map**
+  - Allows to specify a default size
+  - Will have a length of `0`
+  - Can grow past the initially-specified size
+
+```go
+// Creating a Map with make()
+ages := make(map[int][string], 10)
+```
+
+### Comparison With Slices
+
+- Maps are similar to Slices
+  - Dynamically grow as new entries are added
+  - Specific initiale size can be provided
+  - `len(map)` returns the number of `k:v` pairs in the map
+  - Zero-Value is `nil`
+  - Cannot be compared via `==` or `!=`
+  - Can only be compared against `nil`
+  - Cannot check if 2 maps are identical
+- ***Use Slice for list of data to be processed in sequential order***
+- ***Use Maps for organizing values using something other than sequential order***
+
+### Map vs HashMap

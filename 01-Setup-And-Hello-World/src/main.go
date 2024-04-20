@@ -5,7 +5,7 @@ import "fmt"
 // This is the main entry of the application.
 func main() {
 	fmt.Println("Hello world!")
-	fmt.Printf("Hello %s!\n", "world")
+	fmt.Printf("Hello again %s!\n", "world")
 }
 
 // FOR WINDOWS:

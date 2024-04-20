@@ -24,12 +24,17 @@ vet: fmt
 
 # Target
 build: vet
-	# Task: Build in debug mode
+	# Task: Build module
 	go build -o bin/Hello-World src/main.go
 
 # Target
+run: build
+	# Task: Build module then run
+	bin/Hello-World
+
+# Target
 try: vet
-	# Task: Build in debug mode, run, then remove built binary
+	# Task: Build module, run, then remove built binary
 	if test -f "bin/Hello-World-Temp"; then \
 		rm -f bin/Hello-World-Temp; \
 	fi

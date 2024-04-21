@@ -17,16 +17,16 @@
   - [Differences With Arrays](#differences-with-arrays)
     - [The Zero-Value for slice is `nil`](#the-zero-value-for-slice-is-nil)
     - [Slices Are Not Comparable With `==`](#slices-are-not-comparable-with-)
-  - [Slices Helper Functions](#slices-helper-functions)
-  - [`len()` Function](#len-function)
-  - [`append()` Function](#append-function)
-  - [Capacity](#capacity)
+  - [Slices Helper Functions From `slices`](#slices-helper-functions-from-slices)
+  - [Built-In `len()` Function](#built-in-len-function)
+  - [Built-In `append()` Function](#built-in-append-function)
+  - [Length vs Capacity](#length-vs-capacity)
   - [NOTE: About Go Runtime](#note-about-go-runtime)
-  - [`make()`](#make)
-  - [Emptying A Slice](#emptying-a-slice)
+  - [Built-In `make()` Function](#built-in-make-function)
+  - [Built-In `clear()` Function](#built-in-clear-function)
   - [Which Slice Declarations To Use](#which-slice-declarations-to-use)
-  - [Slicing Slices](#slicing-slices)
-  - [`copy()`](#copy)
+  - [Subslicing Slices](#subslicing-slices)
+  - [Built-In `copy()` Function](#built-in-copy-function)
 - [Converting Array To Slice](#converting-array-to-slice)
 - [Converting Slice To Array](#converting-slice-to-array)
 - [Strings, Runes, Bytes](#strings-runes-bytes)
@@ -40,7 +40,7 @@
 ## Arrays
 
 - Arrays are rarely used in Go
-- **All elements in an array must be of the type of the array**
+- **All elements in an array must be of the same type of the array**
 
 ### Array Declarations
 
@@ -92,7 +92,7 @@ arrE := [...]int{100, 200, 300}
 arrF := [...]int{1,2,3,4,5}
 var arrG = [5]int{1,2,3,4,5}
 
-fmt.Println("arrF == arrG:", arrF == arrG)
+fmt.Println("arrF == arrG?", arrF == arrG)
 ```
 
 ### Multidimensional Array
@@ -156,12 +156,12 @@ fmt.Println("arrK =", arrK, "length =", len(arrK))
 
 ### Purpose: Why Arrays Exist If They Are So Limited
 
-- The main purpose of arrays is to be used behind-the-scenes for *Slices*
+- **The main purpose of arrays is to be used behind-the-scenes for *Slices***
 
 ## Slices
 
-- Most of the time, *Slices* are what we should use for a *sequence* data structure
-- **Slice length is dynamic: Can grow and shrink**
+- Most of the time, *Slices* are what we should use for a *sequence-based* data structure
+- **Slice length is dynamic: Can grow and shrink as needed**
 - **The slice length is NOT part of its type**
   - Removes the limitation from arrays
   - Allows to write functions to process slices of any size
@@ -192,7 +192,17 @@ sliceB := []int{1, 5: 4, 6, 10, 100, 15}
 
 ```go
 // Slice of slice of integers
-var SliceC [][]int
+// Default value is nil
+var sliceC [][]int
+
+// For better definition, we use make()
+// This initialize the slice with Zero-values instead of nil
+sliceC = make([][]int, 4)
+
+sliceC[0] = []int{1, 2, 3, 4}
+sliceC[1] = []int{5, 6, 7, 8}
+sliceC[2] = []int{9, 10, 11, 12}
+sliceC[3] = []int{13, 14, 15, 16}
 ```
 
 ### Slice Access
@@ -246,15 +256,15 @@ var sliceE []int
 fmt.Println("sliceE is nil?", sliceE == nil)
 ```
 
-### Slices Helper Functions
+### Slices Helper Functions From `slices`
 
 - `slices` package includes helper functions for dealing with slices
 - Also has functions for comparing slices
 
 Function|Description
 :-|:-
-`slices.Equal()`|Takes 2 slices *with comparable elements* and return `true` if the slices are same length with all equal elements. Else, return `false`. *The slice elements must be comparable*
-`slices.EqualFunc()`|Allows to pass a function argument to customize conditions for equality. *The slice elements do not have to be comparable*
+`slices.Equal()`|- Takes 2 slices *with comparable elements*<br>- Return `true` if the slices are same length with all equal elements<br>- Else, return `false`<br>- *The slice elements must be comparable*
+`slices.EqualFunc()`|- Allows to pass a function argument to customize conditions for equality<br>- *The slice elements do not have to be comparable*
 
 ```go
 import (
@@ -275,13 +285,13 @@ fmt.Println("slices.Equal(sliceX, sliceS) ?", slices.Equal(sliceX, sliceS))
 
 - **NOTE: `reflect` package contains a `DeepEqual` function that can compare almost anything**
   - Legacy function, primarily for testing
-  - Was often used to compare slices before `slices.Equal` and `slice.EqualFunc`
+  - Was often used to compare slices before `slices.Equal` and `slices.EqualFunc`
   - **Do not use `reflect.DeepEqual` in new codes**
   - It is slower and less safe
 
-### `len()` Function
+### Built-In `len()` Function
 
-- Built-in function for getting length of collections
+- **Built-in function for getting length of collections**
   - Can be used on both **Arrays** and **Slices**
   - Also works on **Strings**, **Maps**, **Channels**
   - **However, any other type will result in compile-time error**
@@ -294,7 +304,7 @@ sliceF := []int{10, 20, 30, 40, 50}
 fmt.Println("sliceF =", sliceF, "length =", len(sliceF))
 ```
 
-### `append()` Function
+### Built-In `append()` Function
 
 - Used to grow a slice by appending new elements to its end
 - **Takes 2 parameters**
@@ -330,30 +340,31 @@ sliceH = append(sliceH, 6, 7, 8, 9)
 sliceH = append(sliceH, sliceG...)
 ```
 
-### Capacity
+### Length vs Capacity
 
 - A slice is a sequence of values
   - Each element assigned to consecutive memory locations
   - Quick read and write
-- *Length of slice = Number of consecutive memory locations that have been assigned a value*
+- **Length of slice = Number of consecutive memory locations that have been assigned a value**
   - Each value added via `append()` increases the length
 - **Capacity of slice = Number of consecutive memory locations that have been reserved**
   - Can be larger than *length*
   - When `length == capacity`, there are no more rooms to append additional values
   - If so:
     - The runtime allocate a new backing array for larger capacity
-    - *The values in the original backing array are copied into the new backing array*
+    - ***The values in the original backing array are copied into the new backing array***
     - The new value is appended at the end of the new array
     - The slice is updated to refer to the new backing array
     - The updated slice is returned
-- **For this reason, growing a slice can take some time**
+    - *NOTE: Slice is a reference type*
+- **For this reason, growing a slice can cause performance hit**
   - Allocate new memory
-  - Copy contents from old memory to new memory
+  - Copy all contents from old memory to new memory
   - Garbage collection
-- **Go usually increase capacity by more than one each time it runs out of capacity**
+- **Go usually increases capacity by more than one each time it runs out of capacity**
   - Double when the current capacity is less than 256
-  - Bigger slice: Increase by `(currCap + 768) / 4`
-  - Slowly converge at 25% growth
+  - For bigger slice: Increase by `(currCap + 768) / 4`
+  - Slowly converge to 25% growth
 - **Built-in `cap()` function returns the capacity of a slice**
   - Less used than `len()`
   - Mostly used to check if a slice is large enough to hold a data
@@ -365,14 +376,18 @@ sliceH = append(sliceH, sliceG...)
 ```go
 // Appending and Slice Capacity
 var xSlice []int
+fmt.Println("Slice Len Cap")
 fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
 xSlice = append(xSlice, 10)
 fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
+// We reach the current slice cap here
 xSlice = append(xSlice, 20)
 fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
+// This one double the cap
+// Copy into a new slice
 xSlice = append(xSlice, 30)
 fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
@@ -380,7 +395,7 @@ fmt.Println(xSlice, len(xSlice), cap(xSlice))
 xSlice = append(xSlice, 40)
 fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
-// This one increases the cap
+// This one double the cap
 // Copy into a new slice
 xSlice = append(xSlice, 50)
 fmt.Println(xSlice, len(xSlice), cap(xSlice))
@@ -388,28 +403,29 @@ fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
 - **While it is nice that slices can grow dynamically, it is more efficient to size them once**
   - If the size can be determined at the beginning
-  - We can use the `make()` function then
+  - We can use `make()` to specify the capacity
 
 ### NOTE: About Go Runtime
 
-- **Provides different services**
+- **Go Runtime provides different services**
   - Set of libraries that enables programs written in Go to run
   - Memory Allocation
   - Garbage Collection
   - Concurrency Support
   - Networking
   - Built-in types and functions
-- **Compiled/Bundled into every Go programs**
+- **The Runtime is compiled and bundled into every Go programs**
   - No VM involved
   - Allows easier distribution of compiled Go programs
   - Avoids compatibility issues between runtime and program
-  - But can increase the size of the compiled program slightly (Minimum 2MB, even for simplest programs)
+  - But can slightly increase the size of the compiled program (Minimum 2MB, even for simplest programs)
 
-### `make()`
+### Built-In `make()` Function
 
-- The way we currently declare slices does not allow to create an empty slice with length and capacity specified
-- For that, we use `make()`
+- The way we currently declare slices does not allow to create an empty slice with specified length and capacity
+- For that, we use `make()` instead
 - Allows to specify the type, length, and capacity
+- ***NOTE: `make()` can be used to make a `slice`, `map`, or `chan`***
 
 ```go
 // Declaring a slice using make()
@@ -417,8 +433,9 @@ fmt.Println(xSlice, len(xSlice), cap(xSlice))
 sliceI := make([]int, 5)
 ```
 
-- Using `make()`, all elements are initialized to `0`
-- **NOTE: Since all elements are initialized, we should not use `append()` to the slice**
+- ***When using `make()`, all elements are initialized to `Zero-Value` instead of `nil`***
+- **WARNING: Since elements are initialized, we should not use `append()` to the slice**
+  - I.e. when initializing with specified `length`
   - The slice is not empty
   - Using `append()` will increase the length and double the capacity of the slice
 - We can also specify a different initial capacity
@@ -429,8 +446,8 @@ sliceI := make([]int, 5)
 sliceJ := make([]int, 5, 10)
 ```
 
-- We can also make a slice of `0` length but with capacity
-  - **Using this approach allows to `append()` to the slice**
+- We can also make a slice of length `0` but with a specified capacity
+  - **Using this approach allows to use `append()` to the slice**
 
 ```go
 // Declaring a slice using make()
@@ -439,21 +456,26 @@ sliceK := make([]int, 0, 10)
 sliceK = append(sliceK, 1, 2, 3, 4, 5)
 ```
 
-- **NOTE: Never specify a capacity less than the length**
+- ***WARNING: Never specify a capacity less than the length***
   - If done via constant, it is a compile-time error
   - If done via variables, it is a runtime error
 
-### Emptying A Slice
+### Built-In `clear()` Function
 
 - `clear()` allows to reset all elements in a slice back to the zero-value
-- **NOTE: The length of the slice remains unchanged**
+- ***WARNING: The length of the slice remains unchanged***
+  - Only resets the elements to their *zero-value*
 
 ```go
 // Resetting slice using clear()
 sliceL := []string{"first", "second", "third"}
+sliceLInt := []int{100, 200, 300}
 fmt.Println("Before:", sliceL, len(sliceL))
+fmt.Println("Before:", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
 clear(sliceL)
+clear(sliceLInt)
 fmt.Println("After:", sliceL, len(sliceL))
+fmt.Println("After:", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
 ```
 
 ### Which Slice Declarations To Use
@@ -466,7 +488,7 @@ fmt.Println("After:", sliceL, len(sliceL))
 var data []int
 ```
 
-- **NOTE: A slice with zero-length and zero-capacity is different from a `nil` slice**
+- ***WARNING: A slice with zero-length and zero-capacity is different from a `nil` slice***
   - Comparing the 2 will return `false`
   - Comparing a `nil` to a `nil` returns `true`
   - *For simplicity, favor `nil` slice*
@@ -475,27 +497,29 @@ var data []int
 ```go
 // Slice with zero length and zero capacity
 var data = []int{}
+// Equivalent
+data := make([]int, 0, 0)
 ```
 
-- With starting values or if slice's values will not change, use slice literal
+- With specified starting values or if slice's values will not change, use slice literal
 
 ```go
 // Slice literal
 data := []int{1, 2, 3, 4, 5}
 ```
 
-- If you do not know the slice values but have an idea of how large the slice will be, use `make()`
+- **If you do not know the slice values but have an idea of how large the slice will be, use `make()`**
   - If using slice as a buffer: *Specify a non-zero length*
   - If you know the exact size needed: *Specify the length and index into the slice to set the values*
   - In other situations: *Zero length and specify the capacity*
 - **The choice is usually between the 2nd and the 3rd option**
   - Option 2 might be slower but introduces less bugs
-  - `append()` always increases the length
-  - *Specifying the length with `make()` must be done carefully*
+  - **`append()` always increases the length**
+  - ***NOTE: Specifying the length with `make()` must be done carefully***
 
-### Slicing Slices
+### Subslicing Slices
 
-- Slice expression creates a slice from a slice
+- **Slice expression creates a slice from a slice**
 - Written inside brackets
 - Consists of *starting* and *ending* offsets separated by colon
 - Ending offset is *up-to-but-not-including*
@@ -518,8 +542,8 @@ fmt.Println("sliceM[1:3] =", subM3)
 fmt.Println("sliceM[:] =", subM4)
 ```
 
-- ***WARNING: Slicing a slice does not make a copy***
-  - Assigning the slice of the slice to a variable create an alias to the original variable
+- ***WARNING: Slicing a slice does not make a new copy***
+  - Assigning the slice of the slice to a variable create an alias to the original slice variable
   - **Changing an element in one variable affects all other aliases**
 
 ```go
@@ -553,8 +577,8 @@ fmt.Println("AFTER:", "subM1", cap(subM1), subM1)
 ```
 
 - To avoid this issue, either:
-  - **never use `append()` with subslices**
-  - **always use *full slice expression* with `append()`**
+  - **Never use `append()` with subslices**
+  - **Always use *full slice expression* with `append()`**
     - Includes a 3rd part
     - *Indicates last position in the capacity of the original slice that is available for the subslice*
     - *Subtract the starting offset from this number to get the subslice capacity*
@@ -580,10 +604,12 @@ fmt.Println("subN2 =", subN2)
 
 - Both `subN1` and `subN2` have a capacity of `2`
 - **After limiting the capacities of the subslices to their lengths, appending to the subslices would now force to create new slices for them, which breaks the aliases with the other subslices**
-- ***NOTE: If possible, avoid modifying slices after they have been sliced or produced by slicing***
+- ***NOTE:***
+  - ***If possible, avoid modifying slices after they have been sliced or produced by slicing***
   - **Else, use the *Full-slice expression* to prevent `append()` from sharing capacity**
+  - ***It is better to create independent copies of subslices using `copy()`***
 
-### `copy()`
+### Built-In `copy()` Function
 
 - Allows to create a slice independant of the original slice
 - Takes 2 parameters:
@@ -591,8 +617,7 @@ fmt.Println("subN2 =", subN2)
   - `source` slice
 - Copies as many values as possible from source to destination
   - Limited by whichever slice is smaller
-  - Capacities do not matter
-  - Only the lengths
+  - **Capacities do not matter: Only the lengths**
 - Returns the number of elements copied
 
 ```go
@@ -602,9 +627,9 @@ fmt.Println("Slicing copy:")
 sliceO := []int{1, 2, 3, 4}
 sliceP := make([]int, 4)
 
-fmt.Println("Before Copying:", sliceO, sliceP)
+fmt.Println("Before Copying:", "src =", sliceO, "dest =", sliceP)
 num := copy(sliceP, sliceO)
-fmt.Println("After Copying:", sliceO, sliceP, "copied", num, "elements")
+fmt.Println("After Copying:", "src =", sliceO, "dest =",
 ```
 
 - Can also copy a subset of a slice
@@ -615,10 +640,10 @@ fmt.Println("After Copying:", sliceO, sliceP, "copied", num, "elements")
 fmt.Println("Copying subset of slice:")
 sliceQ := make([]int, 2)
 num = copy(sliceQ, sliceO)
-fmt.Println("After Copying:", sliceO, sliceQ, "copied", num, "elements")
+fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceQ, "copied", num, "elements")
 ```
 
-- Can also copy from the middle of the source slice
+- Can also copy from the middle of the source slice (or anu subslice)
 - **NOTE: We do not have to assign the return of `copy()` if we do not need it**
 
 ```go
@@ -627,7 +652,7 @@ fmt.Println("After Copying:", sliceO, sliceQ, "copied", num, "elements")
 fmt.Println("Copying from the middle of slice:")
 sliceR := make([]int, 2)
 copy(sliceR, sliceO[2:])
-fmt.Println("After Copying:", sliceO, sliceR, "copied", num, "elements")
+fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceR, "copied")
 ```
 
 - We can copy between 2 slices that cover overlapping sections of an underlying slice
@@ -635,9 +660,9 @@ fmt.Println("After Copying:", sliceO, sliceR, "copied", num, "elements")
 ```go
 // Overlapping copies
 // ------------------
-fmt.Println("Overlapping copies")
+fmt.Println("Overlapping copies:")
 num = copy(sliceO[:3], sliceO[1:])
-fmt.Println("After Copying:", sliceO, "copied", num, "elements")
+fmt.Println("After Copying:", "src =", sliceO, "copied", "dest =", num, "elements")
 ```
 
 - **NOTE: We can use `copy()` on arrays as well**
@@ -646,7 +671,7 @@ fmt.Println("After Copying:", sliceO, "copied", num, "elements")
 ```go
 // Using copy() with arrays
 // ------------------------
-fmt.Println("Using copy() with arrays")
+fmt.Println("Using copy() with arrays:")
 sliceS := []int{1,2,3,4} // Slice
 arrL := [4]int{5,6,7,8} //  Array
 sliceT := make([]int, 2)
@@ -660,27 +685,34 @@ fmt.Println("After copying into array:", arrL, sliceS)
 
 ## Converting Array To Slice
 
-- We can take a slice from an array
+- We can make a slice from an array
 - Using slice expression
 - Allows to use an array as a slice
 - **To convert an entire array into a slice, use `[:]`**
 - We can also convert only a subset with `[start:]` or `[:end]`
-- **WARNING: This results in the same memory-sharing issue as a slice of slice**
+- ***WARNING: This results in the same memory-sharing issue as a slice of slice***
+  - **Use `copy()` to avoid memory-sharing issue**
 
 ```go
 // Converting Array To Slice
 // -------------------------
+
+// With memory-sharing issue
 bArray := [4]int{100, 200, 300, 400}
 bSlice := bArray[:]
+
+// Without memory-sharing issue
+var bSlice = make([]int, len(bArray[:]))
+copy(bSlice, bArray[:])
 ```
 
 ## Converting Slice To Array
 
-- For *slice* to *array*, we use a type-conversion
+- **For *slice* to *array*, we use a type-conversion**
   - Can convert an entire slice to an array of the same type
   - Can create an array from a subset of a slice
   - **The data is *copied* into a new memory**
-  - There is no memory-sharing issue
+  - **There is no memory-sharing issue**
 
 ```go
 // Converting Slice to Array
@@ -689,7 +721,7 @@ fmt.Println("Converting slice to array:")
 cSlice := []int{10, 20, 30, 40}
 cArray := [4]int(cSlice)
 smallArray := [2]int(cSlice)
-cSlice[0] = 100
+cSlice[0] = 100 // No memory-sharing
 fmt.Println("cSlice =", cSlice)
 fmt.Println("cArray =", cArray)
 fmt.Println("smallArray =", smallArray)
@@ -697,11 +729,12 @@ fmt.Println("smallArray =", smallArray)
 
 - **The size of the array must be specified at compile-time**
   - Cannot use `[...]` notation
-  - The size of the array but be `<=` the **length** of the slice
+  - The size of the array must be `<=` the size of the slice
   - But the compiler cannot detect this
   - Code will panic at runtime if this is not the case
 - **NOTE: We can use a type-conversion to convert a slice into a pointer to an array**
   - The storage between the 2 will be shared
+  - This will have a memory-sharing issue
 
 ```go
 slice := []int{1,2,3,4}
@@ -710,12 +743,12 @@ arrayPtr := (*[4]int)(slice)
 
 ## Strings, Runes, Bytes
 
-- Strings are not made of *Runes*
-- Using a sequence of *bytes* instead
-- Bytes do not have to be in any particular character encoding
+- **Strings are not made of *Runes***
+  - **Using a sequence of *bytes* instead**
+  - Bytes do not have to be in any particular character encoding
   - But usually assumed to be UTF-8 code points
-  - Unless using hexadecimal escapes, string literals are UTF8
-- *NOTE: Source-code is always in UTF-8*
+  - String literals are UTF8 unless using hexadecimal escapes
+- *NOTE: Go Source-code is always in UTF-8*
 - We can extract values from a string using indexing
   - Zero-based indexing
   - Slice-expression also works with strings
@@ -731,8 +764,8 @@ var strASub4 string = strA[6:]
 ```
 
 - **Since strings are immutable, they do not have the modification issue as with slices**
-  - However, a string is a sequence of bytes
-  - A UTF8 code-point can be 1 to 4 bytes
+- However, a string is a sequence of bytes
+- A UTF8 code-point can be 1 to 4 bytes
   - When dealing with non-english languages and emojis, this can be an issue
   - **We can break the code-points of some characters**
   - ***Only use slicing and indexing when string contains only 1-byte characters***
@@ -741,7 +774,7 @@ var strASub4 string = strA[6:]
 ```go
 // String Code-point Issue
 // -----------------------
-var strB string = "Hello 😊"
+var strB string = "Hello 😊!"
 var strBSub1 byte = strB[6]
 var strBSub2 string = strB[4:7]
 var strBSub3 string = strB[:5]
@@ -749,33 +782,33 @@ var strBSub4 string = strB[6:]
 ```
 
 - We can get the length of a string using the `len()` function
-  - **However, it returns the length in *Bytes*, not in *code-points***
+  - **However, it returns the length in *Bytes*, not in *Code-Points***
   - This is also an issue with non-english languages and emojis
   - ***Only use `len()` when string contains only 1-byte characters***
 
 ```go
 // Length of String Issue
 // ----------------------
-var strC string = "Hello 😊"
+var strC string = "Hello 😊!"
 fmt.Println("len(strC) =", len(strC))
 ```
 
 - Go has a complicated relationship between strings, runes, and bytes
   - *A single rune or byte can be converted to a string with `string()`*
-  - *A string can be converted back and forth to `[]bytes` or `[]rune`*
+  - *A string can be converted back and forth to `[]byte` or `[]rune`*
 - Most data in Go is used as a sequence of bytes
-  - **Most common string-type conversion is to/from `[]bytes`**
+  - **Most common string-type conversion is to/from `[]byte`**
   - `[]rune` are uncommon
 
 ```go
 // Strings, runes, bytes type conversion
-var a rune = 'a'
-stringA := string(a)
-var b byte = 'b'
-stringB := string(b)
-stringC := "Hello 😊"
-var bs []byte = []byte(stringC)
-var rs []rune = []rune(stringC)
+var charA rune = 'a'
+stringA := string(charA)
+var charB byte = 'b'
+stringB := string(charB)
+stringC := "Hello 😊!"
+var bytesStringC []byte = []byte(stringC)
+var runesStringC []rune = []rune(stringC)
 ```
 
 - **NOTE: `go vet` blocks `string(someInt)`**
@@ -786,8 +819,8 @@ var rs []rune = []rune(stringC)
 
 ### UTF-8
 
-- Most commonly used encoding for Unicode
-- Unicode uses a total of 4 bytes (32-bits) for each codepoint (character)
+- The most commonly-used encoding for Unicode
+- **Unicode uses a total of 4 bytes/32-bits for each codepoint ("character")**
   - UTF-32 - 4-bytes codepoint, but waste space
   - UTF-16 - One or two 2-bytes codepoint, but also waste space
   - UTF-8
@@ -797,14 +830,16 @@ var rs []rune = []rune(stringC)
     - We cannot randomly access a string encoded in UTF-8
     - Need to start at the beginning of the string and count
     - **Not required in Go but strongly recommended**
-- Instead of using *slice expression* and *index expression*, use `strings` and `unicode/utf8` packages
+- **Instead of using *slice expression* and *index expression*, use `strings` and `unicode/utf8` packages**
 
 ## Maps
 
-- Allows to associate one value to another
+- Allow to associate one value to another
 - Format: `map[KeyType]ValueType`
 - Zero-Value: `nil`
-- **Attempting to write to a `nil` map result in a panic**
+- Length of `nil` map: `0`
+- Attempting to read a `nil` map returns the zero-value of the `ValueType`
+- ***WARNING: Attempting to write to a `nil` map results in a `panic`***
 
 ```go
 // Declaring a nil Map
@@ -818,7 +853,7 @@ var nilMap map[string]int
 
 ```go
 // Declaring a Map with Map Literal
-nilMap2 := map[string]int{}
+notNilMap := map[string]int{}
 ```
 
 - We can also provide values to the map
@@ -850,7 +885,7 @@ ages := make(map[int][string], 10)
 
 - Maps are similar to Slices
   - Dynamically grow as new entries are added
-  - Specific initiale size can be provided
+  - Specific initiale size can be provided with `make()`
   - `len(map)` returns the number of `k:v` pairs in the map
   - Zero-Value is `nil`
   - Cannot be compared via `==` or `!=`

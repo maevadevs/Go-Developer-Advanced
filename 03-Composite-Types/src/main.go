@@ -42,7 +42,9 @@ func main() {
 	arrF := [...]int{1, 2, 3, 4, 5}
 	arrG := [5]int{1, 2, 3, 4, 5}
 
-	fmt.Println("arrF == arrG:", arrF == arrG)
+	fmt.Println("arrF =", arrF)
+	fmt.Println("arrG =", arrG)
+	fmt.Println("arrF == arrG?", arrF == arrG)
 	fmt.Println()
 
 	// Multidimensional Array
@@ -80,8 +82,8 @@ func main() {
 	arrJ := [3]int{10, 20, 30}
 	arrK := [...]int{15, 25, 35}
 
-	fmt.Println("arrJ =", arrJ, "length =", len(arrJ))
-	fmt.Println("arrK =", arrK, "length =", len(arrK))
+	fmt.Println("arrJ =", arrJ, "=> length =", len(arrJ))
+	fmt.Println("arrK =", arrK, "=> length =", len(arrK))
 	fmt.Println()
 
 	// Slice Declarations
@@ -106,7 +108,17 @@ func main() {
 	fmt.Println("Multidimensional Slices:")
 
 	// Slice of slice of integers
+	// Default value is nil
 	var sliceC [][]int
+
+	// For better definition, we use make()
+	// This initialize the slice with Zero-values instead of nil
+	sliceC = make([][]int, 4)
+
+	sliceC[0] = []int{1, 2, 3, 4}
+	sliceC[1] = []int{5, 6, 7, 8}
+	sliceC[2] = []int{9, 10, 11, 12}
+	sliceC[3] = []int{13, 14, 15, 16}
 
 	fmt.Println(sliceC)
 	fmt.Println()
@@ -156,7 +168,7 @@ func main() {
 	fmt.Println("Length of a slice:")
 	sliceF := []int{10, 20, 30, 40, 50}
 
-	fmt.Println("sliceF =", sliceF, "length =", len(sliceF))
+	fmt.Println("sliceF =", sliceF, "=> length =", len(sliceF))
 
 	fmt.Println()
 
@@ -164,15 +176,19 @@ func main() {
 	// --------------------
 	fmt.Println("Appending to a Slice:")
 	var sliceG []int
-	sliceG = append(sliceG, 100)
 	// Appending to an existing slice
 	sliceH := []int{1, 2, 3, 4, 5}
+
+	fmt.Println("Before: sliceG =", sliceG)
+	fmt.Println("Before: sliceH =", sliceH)
+
+	sliceG = append(sliceG, 100)
 	// We can append more than 1 value at once
 	sliceH = append(sliceH, 6, 7, 8, 9)
 	// Appending one slice to another
 
-	fmt.Println("sliceG =", sliceG)
-	fmt.Println("sliceH =", sliceH)
+	fmt.Println("After: sliceG =", sliceG)
+	fmt.Println("After: sliceH =", sliceH)
 
 	fmt.Println()
 
@@ -181,7 +197,7 @@ func main() {
 	fmt.Println("Extending a Slice:")
 	sliceH = append(sliceH, sliceG...)
 
-	fmt.Println("sliceH =", sliceH)
+	fmt.Println("Extending sliceH with sliceG =", sliceH)
 
 	fmt.Println()
 
@@ -189,22 +205,31 @@ func main() {
 	// ----------------------------
 	fmt.Println("Appending and Slice Capacity:")
 	var xSlice []int
+	fmt.Println("Slice Len Cap")
 	fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
 	xSlice = append(xSlice, 10)
 	fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
+	// We reach the current slice cap here
 	xSlice = append(xSlice, 20)
 	fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
+	// This one double the cap
+	// Copy into a new slice
 	xSlice = append(xSlice, 30)
 	fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
+	// We reach the current slice cap here
 	xSlice = append(xSlice, 40)
 	fmt.Println(xSlice, len(xSlice), cap(xSlice))
 
+	// This one double the cap
+	// Copy into a new slice
 	xSlice = append(xSlice, 50)
 	fmt.Println(xSlice, len(xSlice), cap(xSlice))
+
+	fmt.Println()
 
 	// Declaring a slice using make()
 	// ------------------------------
@@ -215,11 +240,14 @@ func main() {
 	sliceJ := make([]int, 5, 10)
 	// Length: 0, Capacity: 10
 	sliceK := make([]int, 0, 10)
+
+	fmt.Println("Before Append: sliceK =", sliceK, "len(sliceK) =", len(sliceK), "cap(sliceK) =", cap(sliceK))
+
 	sliceK = append(sliceK, 1, 2, 3, 4, 5)
 
 	fmt.Println("sliceI =", sliceI, "len(sliceI) =", len(sliceI), "cap(sliceI) =", cap(sliceI))
 	fmt.Println("sliceJ =", sliceJ, "len(sliceJ) =", len(sliceJ), "cap(sliceJ) =", cap(sliceJ))
-	fmt.Println("sliceK =", sliceK, "len(sliceK) =", len(sliceK), "cap(sliceK) =", cap(sliceK))
+	fmt.Println("After Append: sliceK =", sliceK, "len(sliceK) =", len(sliceK), "cap(sliceK) =", cap(sliceK))
 
 	fmt.Println()
 
@@ -227,9 +255,13 @@ func main() {
 	// -----------------------------
 	fmt.Println("Resetting slice using clear():")
 	sliceL := []string{"first", "second", "third"}
-	fmt.Println("Before:", sliceL, len(sliceL))
+	sliceLInt := []int{100, 200, 300}
+	fmt.Println("Before:", sliceL, "len =", len(sliceL), "cap =", cap(sliceL))
+	fmt.Println("Before:", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
 	clear(sliceL)
-	fmt.Println("After:", sliceL, len(sliceL))
+	clear(sliceLInt)
+	fmt.Println("After:", sliceL, "len =", len(sliceL), "cap =", cap(sliceL))
+	fmt.Println("After:", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
 
 	fmt.Println()
 
@@ -265,7 +297,7 @@ func main() {
 	fmt.Println()
 
 	// Slice of slice with append()
-	fmt.Println("Slice of slice with append()")
+	fmt.Println("Slice of slice with append():")
 	fmt.Println("BEFORE:", "sliceM", "cap =", cap(sliceM), sliceM)
 	fmt.Println("BEFORE:", "subM1", "cap =", cap(subM1), subM1)
 
@@ -283,11 +315,19 @@ func main() {
 	subN1 := sliceN[:2:2]
 	subN2 := sliceN[2:4:4]
 
+	fmt.Println("sliceN =", sliceN)
+	fmt.Println("subN1 =", subN1)
+	fmt.Println("subN2 =", subN2)
 	fmt.Println("Capacities:", cap(sliceN), cap(subN1), cap(subN2))
 
 	subN1 = append(subN1, "i", "j", "k")
 	sliceN = append(sliceN, "x", "y")
 	subN2 = append(subN2, "z", "zz")
+
+	fmt.Println("Operations:")
+	fmt.Println("\tappend(subN1, \"i\", \"j\", \"k\")")
+	fmt.Println("\tappend(sliceN, \"x\", \"y\")")
+	fmt.Println("\tappend(sliceN, \"x\", \"y\")")
 
 	fmt.Println("sliceN =", sliceN)
 	fmt.Println("subN1 =", subN1)
@@ -301,27 +341,27 @@ func main() {
 	sliceO := []int{1, 2, 3, 4}
 	sliceP := make([]int, 4)
 
-	fmt.Println("Before Copying:", sliceO, sliceP)
+	fmt.Println("Before Copying:", "src =", sliceO, "dest =", sliceP)
 	num := copy(sliceP, sliceO)
-	fmt.Println("After Copying:", sliceO, sliceP, "copied", num, "elements")
+	fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceP, "copied", num, "elements")
 
 	fmt.Println()
 
 	fmt.Println("Copying subset of slice:")
 	sliceQ := make([]int, 2)
 	num = copy(sliceQ, sliceO)
-	fmt.Println("After Copying:", sliceO, sliceQ, "copied", num, "elements")
+	fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceQ, "copied", num, "elements")
 
 	fmt.Println()
 
 	fmt.Println("Copying from the middle of slice:")
 	sliceR := make([]int, 2)
 	copy(sliceR, sliceO[2:])
-	fmt.Println("After Copying:", sliceO, sliceR, "copied")
+	fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceR, "copied")
 
 	fmt.Println()
 
-	fmt.Println("Overlapping copies")
+	fmt.Println("Overlapping copies:")
 	num = copy(sliceO[:3], sliceO[1:])
 	fmt.Println("After Copying:", sliceO, "copied", num, "elements")
 
@@ -344,7 +384,14 @@ func main() {
 	// -------------------------
 	fmt.Println("Converting array to slice:")
 	bArray := [4]int{100, 200, 300, 400}
-	bSlice := bArray[:]
+
+	fmt.Println("bArray Before =", bArray)
+
+	var bSlice = make([]int, len(bArray[:]))
+	copy(bSlice, bArray[:])
+	bSlice[0] = 10000 // No memory-sharing after using copy()
+	bArray[3] = 40000 // No memory-sharing after using copy()
+
 	fmt.Println("bArray =", bArray)
 	fmt.Println("bSlice =", bSlice)
 
@@ -354,9 +401,13 @@ func main() {
 	// -------------------------
 	fmt.Println("Converting slice to array:")
 	cSlice := []int{10, 20, 30, 40}
+
+	fmt.Println("cSlice Before =", cSlice)
+
 	cArray := [4]int(cSlice)
 	smallArray := [2]int(cSlice)
-	cSlice[0] = 100
+	cSlice[0] = 10000 // No memory-sharing
+	cArray[3] = 40000 // No memory-sharing
 	fmt.Println("cSlice =", cSlice)
 	fmt.Println("cArray =", cArray)
 	fmt.Println("smallArray =", smallArray)
@@ -381,8 +432,8 @@ func main() {
 
 	// String Code-point Issue
 	// -----------------------
-	fmt.Println("Example of Strings:")
-	var strB string = "Hello 😊"
+	fmt.Println("Example of Strings With Code-Point Issues:")
+	var strB string = "Hello 😊!"
 	var strBSub1 byte = strB[6]
 	var strBSub2 string = strB[4:7]
 	var strBSub3 string = strB[:5]
@@ -398,7 +449,7 @@ func main() {
 	// Length of String Issue
 	// ----------------------
 	fmt.Println("Length of String Issue:")
-	var strC string = "Hello 😊"
+	var strC string = "Hello 😊!"
 	fmt.Println("strC =", strC)
 	fmt.Println("len(strC) =", len(strC))
 
@@ -407,21 +458,21 @@ func main() {
 	// Strings, runes, bytes type conversion
 	// -------------------------------------
 	fmt.Println("Strings, runes, bytes type conversion:")
-	var a rune = 'a'
-	stringA := string(a)
-	var b byte = 'b'
-	stringB := string(b)
-	stringC := "Hello 😊"
-	var bs []byte = []byte(stringC)
-	var rs []rune = []rune(stringC)
+	var charA rune = 'a'
+	stringA := string(charA)
+	var charB byte = 'b'
+	stringB := string(charB)
+	stringC := "Hello 😊!"
+	var bytesStringC []byte = []byte(stringC)
+	var runesStringC []rune = []rune(stringC)
 
-	fmt.Println("a =", a)
-	fmt.Println("b =", b)
+	fmt.Println("charA =", charA)
+	fmt.Println("charB =", charB)
 	fmt.Println("stringA =", stringA)
 	fmt.Println("stringB =", stringB)
 	fmt.Println("stringC =", stringC)
-	fmt.Println("bs =", bs)
-	fmt.Println("rs =", rs)
+	fmt.Println("bytesStringC =", bytesStringC)
+	fmt.Println("runesStringC =", runesStringC)
 
 	fmt.Println()
 
@@ -437,12 +488,12 @@ func main() {
 		"Kittens": {"Waldo", "Raul", "Alpha"},
 	}
 	// Creating a Map with make(): Specify the default size
-	ages := make(map[int][]string, 10)
+	agesMap := make(map[int][]string, 10)
 
 	fmt.Println("nilMap:", nilMap)
 	fmt.Println("notNilMap:", notNilMap)
 	fmt.Println("valuedMap:", valuedMap)
-	fmt.Println("ages:", ages)
+	fmt.Println("agesMap:", agesMap)
 
 	fmt.Println()
 }

@@ -39,3 +39,30 @@ These are notes from reading *Learning Go* book.
 3. [Composite Types](./03-Composite-Types/)
    - Arrays
      - Array Declarations
+     - Comparing Arrays
+     - Multidimensional Array
+     - Array Access
+     - Getting Array Length
+     - Arrays Limitations
+     - Arrays Purpose
+   - Slices
+     - Working With Slices
+     - Multidimensional Slice
+     - Slice Access
+     - Differences With Arrays
+     - Slices Helper Functions From `slices`
+     - Built-In `len()` Function
+     - Built-In `append()` Function
+     - Length vs Capacity
+     - Built-In `make()` Function
+     - Built-In `clear()` Function
+     - Choosing Slice Declaration
+     - Subslicing Slice
+     - Built-In `copy()` Function
+     - Converting Array To Slice: `copy()`
+     - Converting Slice to Array: Type-Conversion
+   - Strings, Runes, Bytes
+     - UTF-8
+   - Maps
+     - Comparison With Slices
+     - Map vs Hashmap

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/cmplx"
+	"strings"
 )
 
 // Package-level Constants
@@ -12,11 +13,15 @@ const (
 	idKey   = "id"
 	nameKey = "name"
 )
-
-const total = 20 * 10
+const total = 20 * 10 // untyped
 
 // This is the main entry of the application.
 func main() {
+	// Headers
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
+	fmt.Println()
+
 	// Example of Integers
 	fmt.Println("Example of Integers:")
 
@@ -85,12 +90,15 @@ func main() {
 	var greetingsRaw string = `Greetings and
     "Salutations"!`
 	var goPathRaw string = `https://go.dev`
+	var rawStringWithBacktick string = `Backticks ` + "(`) " + `cannot appear in raw string.
+    For that, use "" to contain the ` + "(`)" + `, then concatenate.`
 
 	fmt.Println("greetings =", greetings)
 	fmt.Println("greetingsLong =", greetingsLong)
 	fmt.Println("sysPath =", sysPath)
 	fmt.Println("greetingsRaw =", greetingsRaw)
 	fmt.Println("goPathRaw =", goPathRaw)
+	fmt.Println("rawStringWithBacktick =", rawStringWithBacktick)
 
 	fmt.Println()
 
@@ -131,10 +139,11 @@ func main() {
 	var myInt int = 10
 	var myFloat float64 = 30.2
 
-	// Explicit conversion is required
+	// Explicit type conversion is required
 	var mySumF float64 = float64(myInt) + myFloat
 	var mySumI int = myInt + int(myFloat)
 
+	fmt.Printf("%d + %.1f\n", myInt, myFloat)
 	fmt.Println("mySumF =", mySumF)
 	fmt.Println("mySumI =", mySumI)
 
@@ -203,7 +212,7 @@ func main() {
 
 	// This is an error: Constants are immutable
 	// pi = pi + 1
-	// GREETINGS = "Hi!"
+	// greetingsConst = "Hi!"
 
 	fmt.Println()
 
@@ -230,8 +239,8 @@ func main() {
 	const tConst int64 = 100
 
 	// Legal usage:
-	// Can only be assigned to int64
-	// Asigning to any other type is a compile error
+	// Can only be assigned to type int64
+	// Assigning to any other type is a compile error
 	var i64 int64 = tConst
 
 	fmt.Println("tConst =", tConst)

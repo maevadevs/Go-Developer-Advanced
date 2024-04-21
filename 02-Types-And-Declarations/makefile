@@ -6,7 +6,7 @@
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
-.PHONY: fmt vet build
+.PHONY: fmt vet build run try
 
 # Target
 fmt:

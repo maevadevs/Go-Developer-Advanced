@@ -91,7 +91,7 @@ else
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
-.PHONY: fmt vet build
+.PHONY: fmt vet build run try
 
 # Target
 fmt:
@@ -109,18 +109,28 @@ vet: fmt
 
 # Target
 build: vet
-	# Task: Build in debug mode in Linux
+	# Task: Build module in Linux
 	go build -o bin/$OUT_FILE src/main.go
 
 # Target
 build-win: vet
-	# Task: Build in debug mode in Windows
+	# Task: Build module in Windows
 	go build -o bin\\$OUT_FILE.exe src\main.go
 
 # Target
+run: build
+	# Task: Build module then run in Linux
+	bin/$OUT_FILE
+
+# Target
+run-win: build-win
+	# Task: Build module then run in Windows
+	bin\\$OUT_FILE.exe
+
+# Target
 try: vet
-	# Task: Build in debug mode, run, then remove built binary
-	if test -f "bin/$OUT_FILE-Temp"; then \\
+	# Task: Build module, run, then remove built binary in Linux
+	if test -f bin/$OUT_FILE-Temp; then \\
 		rm -f bin/$OUT_FILE-Temp; \\
 	fi
 	go build -o bin/$OUT_FILE-Temp src/main.go
@@ -129,23 +139,13 @@ try: vet
 
 # Target
 try-win: vet
-	# Task: Build in debug mode, run, then remove built binary in Windows
-	if test -f "bin\\$OUT_FILE-Temp"; then \\
+	# Task: Build module, run, then remove built binary in Windows
+	if test -f bin\\$OUT_FILE-Temp; then \\
 		rm -f bin\\$OUT_FILE-Temp; \\
 	fi
 	go build -o bin\\$OUT_FILE-Temp src\main.go
 	bin\\$OUT_FILE-Temp
 	rm -f bin\\$OUT_FILE-Temp
-
-# Target
-run:
-	# Task: Run the application in Linux
-	go run src/main.go
-
-# Target
-run-win:
-	# Task: Run the application in Windows
-	go run src\main.go
 
 " >> makefile;
 

@@ -443,6 +443,8 @@ func main() {
 	fmt.Println("notNilMap:", notNilMap)
 	fmt.Println("valuedMap:", valuedMap)
 	fmt.Println("ages:", ages)
+
+	fmt.Println()
 }
 
 // FOR WINDOWS:

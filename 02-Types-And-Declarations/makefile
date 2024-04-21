@@ -35,12 +35,12 @@ build-win: vet
 # Target
 run: build
 	# Task: Build module then run in Linux
-	go run src/main.go
+	bin/Types
 
 # Target
 run-win: build-win
 	# Task: Build module then run in Windows
-	go run src\main.go
+	bin\Types.exe
 
 # Target
 try: vet

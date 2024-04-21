@@ -24,17 +24,27 @@ vet: fmt
 
 # Target
 build: vet
-	# Task: Build in debug mode in Linux
+	# Task: Build module in Linux
 	go build -o bin/Composite src/main.go
 
 # Target
 build-win: vet
-	# Task: Build in debug mode in Windows
+	# Task: Build module in Windows
 	go build -o bin\Composite.exe src\main.go
 
 # Target
+run: build
+	# Task: Build module then run in Linux
+	bin/Composite
+
+# Target
+run-win: build-win
+	# Task: Build module then run in Windows
+	bin\Composite.exe
+
+# Target
 try: vet
-	# Task: Build in debug mode, run, then remove built binary
+	# Task: Build module, run, then remove built binary in Linux
 	if test -f bin/Composite-Temp; then \
 		rm -f bin/Composite-Temp; \
 	fi
@@ -44,20 +54,10 @@ try: vet
 
 # Target
 try-win: vet
-	# Task: Build in debug mode, run, then remove built binary in Windows
+	# Task: Build module, run, then remove built binary in Windows
 	if test -f bin\Composite-Temp; then \
 		rm -f bin\Composite-Temp; \
 	fi
 	go build -o bin\Composite-Temp src\main.go
 	bin\Composite-Temp
 	rm -f bin\Composite-Temp
-
-# Target
-run:
-	# Task: Run the application in Linux
-	go run src/main.go
-
-# Target
-run-win:
-	# Task: Run the application in Windows
-	go run src\main.go

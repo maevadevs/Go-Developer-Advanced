@@ -37,3 +37,5 @@ These are notes from reading *Learning Go* book.
    - Unused Variables
    - Naming Variables And Constants
 3. [Composite Types](./03-Composite-Types/)
+   - Arrays
+     - Array Declarations

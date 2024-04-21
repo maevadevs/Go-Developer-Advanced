@@ -3,10 +3,16 @@ package main
 import (
 	"fmt"
 	"slices"
+	"strings"
 )
 
 // This is the main entry of the application.
 func main() {
+	// Headers
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
+	fmt.Println()
+
 	// Array Declarations
 	// ------------------
 	fmt.Println("Array Declaration:")

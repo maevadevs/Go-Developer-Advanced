@@ -24,20 +24,40 @@ vet: fmt
 
 # Target
 build: vet
-	# Task: Build module
+	# Task: Build module in Linux
 	go build -o bin/Hello-World src/main.go
 
 # Target
+build-win: vet
+	# Task: Build module in Windows
+	go build -o bin\Hello-World.exe src\main.go
+
+# Target
 run: build
-	# Task: Build module then run
+	# Task: Build module then run in Linux
 	bin/Hello-World
 
 # Target
+run-win: build-win
+	# Task: Build module then run in Windows
+	bin\Hello-World.exe
+
+# Target
 try: vet
-	# Task: Build module, run, then remove built binary
-	if test -f "bin/Hello-World-Temp"; then \
+	# Task: Build module, run, then remove built binary in Linux
+	if test -f bin/Hello-World-Temp; then \
 		rm -f bin/Hello-World-Temp; \
 	fi
 	go build -o bin/Hello-World-Temp src/main.go
 	bin/Hello-World-Temp
 	rm -f bin/Hello-World-Temp
+
+# Target
+try-win: vet
+	# Task: Build module, run, then remove built binary in Windows
+	if test -f bin\Hello-World-Temp; then \
+		rm -f bin\Hello-World-Temp; \
+	fi
+	go build -o bin\Hello-World-Temp src\main.go
+	bin\Hello-World-Temp
+	rm -f bin\Hello-World-Temp

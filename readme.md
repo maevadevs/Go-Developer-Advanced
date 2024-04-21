@@ -66,3 +66,10 @@ These are notes from reading *Learning Go* book.
    - Maps
      - Comparison With Slices
      - Map vs Hashmap
+     - Reading and Writing a Map
+     - *Comma-Ok* Idiom
+     - Built-In `delete()` Function
+     - Map: Built-In `clear()` Function
+     - Comparing Maps
+     - Using Maps As Sets
+   - Structs

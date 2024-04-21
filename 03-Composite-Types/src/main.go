@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"maps"
 	"slices"
 	"strings"
 )
@@ -387,7 +388,7 @@ func main() {
 
 	fmt.Println("bArray Before =", bArray)
 
-	var bSlice = make([]int, len(bArray[:]))
+	bSlice := make([]int, len(bArray[:]))
 	copy(bSlice, bArray[:])
 	bSlice[0] = 10000 // No memory-sharing after using copy()
 	bArray[3] = 40000 // No memory-sharing after using copy()
@@ -494,6 +495,127 @@ func main() {
 	fmt.Println("notNilMap:", notNilMap)
 	fmt.Println("valuedMap:", valuedMap)
 	fmt.Println("agesMap:", agesMap)
+
+	fmt.Println()
+
+	// Reading & Writing to Maps
+	// -------------------------
+	fmt.Println("Reading and Writing to Maps:")
+	totalWins := map[string]int{}
+
+	fmt.Println("Before:")
+	fmt.Println("totalWins =", totalWins)
+
+	// Writing to a Map
+	totalWins["Orcas"] = 1
+	totalWins["Lions"] = 2
+	totalWins["Kittens"]++
+	totalWins["Lions"] = 3
+
+	// Reading a Map
+	fmt.Println("After:")
+	fmt.Println("totalWins[\"Orcas\"] =", totalWins["Orcas"])
+	fmt.Println("totalWins[\"Lions\"] =", totalWins["Lions"])
+	fmt.Println("totalWins[\"Kittens\"] =", totalWins["Kittens"])
+
+	fmt.Println()
+
+	// Comma-Ok Idiom
+	// --------------
+	fmt.Println("Comma-Ok Idiom:")
+	greetMap := map[string]int{
+		"hello": 5,
+		"world": 0,
+	}
+	fmt.Println(greetMap)
+
+	// In the map with value 5
+	val, ok := greetMap["hello"]
+	fmt.Println("hello =>", val, ok)
+
+	// In the map with value 0
+	val, ok = greetMap["world"]
+	fmt.Println("world =>", val, ok)
+
+	// Not in the map, default value 0
+	val, ok = greetMap["hi"]
+	fmt.Println("hi =>", val, ok)
+
+	fmt.Println()
+
+	// Deleting From Maps
+	// ------------------
+	fmt.Println("Deleting From Maps:")
+	delMap := map[string]int{
+		"hello": 5,
+		"world": 10,
+	}
+
+	fmt.Println("Before Delete:", delMap)
+	delete(delMap, "hello")
+	fmt.Println("After Delete:", delMap)
+
+	fmt.Println()
+
+	// Clearing a Map
+	// --------------
+	fmt.Println("Clearing a Map:")
+	clearMap := map[string]int{
+		"hello": 5,
+		"world": 10,
+	}
+
+	fmt.Println("Before Clear:", clearMap, "len =", len(clearMap))
+	clear(clearMap)
+	fmt.Println("After Clear:", clearMap, "len =", len(clearMap))
+
+	fmt.Println()
+
+	// Comparing 2 maps
+	mp1 := map[string]int{
+		"hello": 5,
+		"world": 5,
+	}
+	mp2 := map[string]int{
+		"hello": 5,
+		"world": 5,
+	}
+	mp3 := map[string]int{
+		"hello": 6,
+		"world": 5,
+	}
+
+	fmt.Println("mp1 =", mp1)
+	fmt.Println("mp2 =", mp2)
+	fmt.Println("mp3 =", mp3)
+	fmt.Println("maps.Equal(mp1, mp2): ", maps.Equal(mp1, mp2))
+	fmt.Println("maps.Equal(mp1, mp3): ", maps.Equal(mp1, mp3))
+
+	fmt.Println()
+
+	// Using map[KeyType]bool as set
+	intSet := map[int]bool{}
+	vals := []int{5, 10, 2, 5, 8, 7, 3, 9, 1, 2, 10}
+
+	for _, v := range vals {
+		intSet[v] = true
+	}
+
+	fmt.Println("vals =", vals, "len =", len(vals))
+	fmt.Println("intSet =", intSet, "len =", len(intSet))
+    
+	// Checking for element in the set
+	inIntSet5 := false
+	if intSet[5] {
+		inIntSet5 = true
+	}
+	fmt.Println("5 in intSet?", inIntSet5)
+
+	inIntSet200 := false
+	if intSet[200] {
+		inIntSet200 = true
+	}
+	fmt.Println("200 in intSet?", inIntSet200)
 
 	fmt.Println()
 }

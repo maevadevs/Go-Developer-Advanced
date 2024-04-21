@@ -33,7 +33,14 @@
   - [UTF-8](#utf-8)
 - [Maps](#maps)
   - [Comparison With Slices](#comparison-with-slices)
-  - [Map vs HashMap](#map-vs-hashmap)
+  - [Map vs Hash Map](#map-vs-hash-map)
+  - [Reading and Writing a Map](#reading-and-writing-a-map)
+  - [*Comma-Ok* Idiom](#comma-ok-idiom)
+  - [Built-In `delete()` Function](#built-in-delete-function)
+  - [Map: Built-In `clear()` Function](#map-built-in-clear-function)
+  - [Comparing Maps](#comparing-maps)
+  - [Using Maps As Sets](#using-maps-as-sets)
+- [Structs](#structs)
 
 ---
 
@@ -894,4 +901,185 @@ ages := make(map[int][string], 10)
 - ***Use Slice for list of data to be processed in sequential order***
 - ***Use Maps for organizing values using something other than sequential order***
 
-### Map vs HashMap
+### Map vs Hash Map
+
+- *Map*
+  - Data structure that associates one value to another
+  - Can be implemented in several ways
+- **In Go, *Map* is implemented as a *Hash Map* / *Hash Table***
+- [More details about Map in Go](https://www.youtube.com/watch?v=Tl7mi9QmLns)
+- The Go runtime implements its own Hash Algorithms for all types that are allowed to be keys
+
+### Reading and Writing a Map
+
+- Same principles as a `dict` in Python
+  - Writing: `map[Key] = Value`
+  - Reading: `map[Key]`
+- **NOTE: Cannot use `:=` to assign a value to a map key**
+
+```go
+totalWins := map[string]int{}
+
+// Writing to a Map
+totalWins["Orcas"] = 1
+totalWins["Lions"] = 2
+totalWins["Kittens"]++
+totalWins["Lions"] = 3
+
+// Reading a Map
+fmt.Println("totalWins[\"Orcas\"] =", totalWins["Orcas"])
+fmt.Println("totalWins[\"Lions\"] =", totalWins["Lions"])
+fmt.Println("totalWins[\"Kittens\"] =", totalWins["Kittens"])
+```
+
+- **NOTE: Trying to access a non-existing key returns the *Zero-Value* of the value type**
+- We can use `++` to increment numeric values of a map key
+  - This works even if a key does not exist
+  - Because a non-existing key returns a default *Zero-Value*
+
+### *Comma-Ok* Idiom
+
+- We sometimes need to know if a key is *really* in the map
+- ***Comma-Ok* idiom allows to differentiate between *a key that is in the map with zero-value* and *a key that does not exist***
+  - Assign the result of reading a map to 2 variables: `val, ok`
+  - The 2nd variable `ok` allows to check the existence of the key
+    - `true` if the key exist
+    - `false` if the key does not exist (default value)
+
+```go
+// Comma-Ok Idiom
+greetMap := map[string]int{
+    "hello": 5,
+    "world": 0,
+}
+fmt.Println(greetMap)
+
+// In the map with value 5
+val, ok := greetMap["hello"]
+fmt.Println("hello =>", val, ok)
+
+// In the map with value 0
+val, ok = greetMap["world"]
+fmt.Println("world =>", val, ok)
+
+// Not in the map, default value 0
+val, ok = greetMap["hi"]
+fmt.Println("hi =>", val, ok)
+```
+
+### Built-In `delete()` Function
+
+- Allows to delete an entry from the map
+  - Take a map an a key
+  - Removes the key-value pair from the map
+- **If the key is not found, nothing happens**
+- **If the map is `nil`, nothing happens**
+
+```go
+// Deleting From Maps
+delMap := map[string]int{
+    "hello": 5,
+    "world": 10,
+}
+
+fmt.Println("Before Delete:", delMap)
+delete(delMap, "hello")
+fmt.Println("After Delete:", delMap)
+```
+
+### Map: Built-In `clear()` Function
+
+- Allows to empty a map, similar with *slices*
+- *Unlike with `slice`, it also resets the map's length to `0`*
+
+```go
+// Clearing a Map
+clearMap := map[string]int{
+    "hello": 5,
+    "world": 10,
+}
+
+fmt.Println("Before Clear:", clearMap, len(clearMap))
+clear(clearMap, "hello")
+fmt.Println("After Clear:", clearMap, len(clearMap))
+```
+
+### Comparing Maps
+
+- Use the `maps` library (Since Go 1.21)
+  - Contains helper functions for working with maps
+
+Function|Description
+:-|:-
+`maps.Equal()`|- Takes 2 maps *with comparable elements*<br>- Return `true` if the maps are same length with all equal elements (both keys and values)<br>- Else, return `false`<br>- *The map elements must be comparable*
+`maps.EqualFunc()`|- Allows to pass a function argument to customize conditions for equality<br>- *The map elements do not have to be comparable*
+
+```go
+// Comparing 2 maps
+mp1 := map[string]int{
+    "hello": 5,
+    "world": 5,
+}
+mp2 := map[string]int{
+    "hello": 5,
+    "world": 5,
+}
+mp3 := map[string]int{
+    "hello": 6,
+    "world": 5,
+}
+
+fmt.Println("mp1 =", mp1)
+fmt.Println("mp2 =", mp2)
+fmt.Println("mp3 =", mp3)
+fmt.Println("maps.Equal(mp1, mp2): ", maps.Equal(mp1, mp2))
+fmt.Println("maps.Equal(mp1, mp3): ", maps.Equal(mp1, mp3))
+```
+
+### Using Maps As Sets
+
+- *Set*
+  - Contains *unique* unordered elements
+  - Fast-check vs checking a slice
+  - Some languages contains `set` data structure
+- **Go does not include a `set` data structure**
+- **But we can use `map` to simulate it**
+  - The keys of a map *must be unique*
+  - *We can use `map[KeyType]bool` as a set*
+
+```go
+// Using map[KeyType]bool as set
+intSet := map[int]bool{}
+vals := []int{5,10,2,5,8,7,3,9,1,2,10}
+
+for _, v := range vals {
+    intSet[v] = true
+}
+
+fmt.Println("vals =", vals, "len =", len(vals))
+fmt.Println("intSet =", intSet, "len =", len(intSet))
+
+// Checking for element in the set
+inIntSet5 := false
+if intSet[5] {
+    inIntSet5 = true
+}
+fmt.Println("5 in intSet?", inIntSet5)
+
+inIntSet200 := false
+if intSet[200] {
+    inIntSet200 = true
+}
+fmt.Println("200 in intSet?", inIntSet200)
+```
+
+- *For advanced set manipulations, it is better to implement a Data Structure yourself or use third-party modules*
+  - [golang-collections/collections](https://github.com/golang-collections/collections)
+  - [deckarep/golang-set](https://github.com/deckarep/golang-set)
+  - [emirpasic/Gods](https://github.com/emirpasic/Gods)
+- **NOTE: Using `struct{}` might be a better value instead of `bool`**
+  - Empty struct uses 0 byte
+  - But can make code clumsier
+  - Unless having a large set, the memory usage would not be too significant
+
+## Structs

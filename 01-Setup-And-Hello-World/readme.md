@@ -3,7 +3,7 @@
 ---
 
 - [Installing Go](#installing-go)
-  - [Detailed Installaton for Linux](#detailed-installaton-for-linux)
+  - [Detailed Installation for Linux](#detailed-installation-for-linux)
     - [Uninstalling Go from Linux](#uninstalling-go-from-linux)
   - [Detailed Installation for Windows](#detailed-installation-for-windows)
     - [Uninstalling Go from Windows](#uninstalling-go-from-windows)
@@ -41,7 +41,7 @@
   - No additional software required to run
   - Go apps can also be [packaged inside Docker images](https://blog.baeke.info/2021/03/28/distroless-or-scratch-for-go-apps/)
 
-### Detailed Installaton for Linux
+### Detailed Installation for Linux
 
 - Download latest `.tar.gz` file from [official website](https://go.dev/dl/) into your *Downloads* directory
 
@@ -81,7 +81,7 @@ sudo rm /etc/paths.d/go
   - `/etc/profile`
   - `$HOME/.bash_profile`
   - `$HOME/.profile`
-  - `$HOME/.bash_rc`
+  - `$HOME/.bashrc`
 
 ### Detailed Installation for Windows
 
@@ -123,7 +123,7 @@ sudo rm -rf /usr/local/go
 sudo rm /etc/paths.d/go
 ```
 
-- Edit `/etc/profile` or `$HOME/.bash_profile` or `$HOME/.profile` or `$HOME/.bash_rc`
+- Edit `/etc/profile` or `$HOME/.bash_profile` or `$HOME/.profile` or `$HOME/.bashrc`
 
 ## Commonly Used Go Commands
 
@@ -217,7 +217,7 @@ func main() {
 
 ### `main` Function
 
-- **All executable Go programs starts execution from `main` function in the `main` package**
+- **All executable Go programs start execution from `main` function in the `main` package**
 
 ### Build and Execution
 
@@ -358,7 +358,7 @@ func main() {
   - Type checking
   - Code navigation
   - Integrated debugging
-- There are [multiple options for Go IDEs and Advance Editors](https://go.dev/wiki/IDEsAndTextEditorPlugins)
+- There are [multiple options for Go IDEs and Advanced Editors](https://go.dev/wiki/IDEsAndTextEditorPlugins)
   - [VSCode](https://code.visualstudio.com/) + [Go Extension](https://marketplace.visualstudio.com/items?itemName=golang.Go)
   - [JetBrains GoLand](https://www.jetbrains.com/go)
   - [Vim](https://www.vim.org/)
@@ -397,6 +397,8 @@ Go: Install/Update Tools
   - Create a `makefile` in the project/module directory
   - Add the content for building the project
 - **NOTE: Make sure to use *tabs* for the whitespaces for indentation**
+- **NOTE: In VSCode, it is helpful to also install a Makefile-support extensions**
+  - The *Makefile Tools* by Microsoft is a good extension to have
 
 ```makefile
 # NOTE: Make sure all indentations use tabs

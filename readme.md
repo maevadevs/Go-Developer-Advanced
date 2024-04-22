@@ -73,3 +73,7 @@ These are notes from reading *Learning Go* book.
      - Comparing Maps
      - Using Maps As Sets
    - Structs
+     - Struct Definition and Declaration
+     - Struct Field Access
+     - Anonymou Struct
+     - Comparing And Converting Structs

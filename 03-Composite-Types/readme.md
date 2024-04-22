@@ -41,6 +41,11 @@
   - [Comparing Maps](#comparing-maps)
   - [Using Maps As Sets](#using-maps-as-sets)
 - [Structs](#structs)
+  - [Struct Definition and Declaration](#struct-definition-and-declaration)
+  - [Struct Field Access](#struct-field-access)
+  - [Anonymous Struct](#anonymous-struct)
+    - [When to Use Anonymous Struct](#when-to-use-anonymous-struct)
+  - [Comparing And Converting Structs](#comparing-and-converting-structs)
 
 ---
 
@@ -1083,3 +1088,187 @@ fmt.Println("200 in intSet?", inIntSet200)
   - Unless having a large set, the memory usage would not be too significant
 
 ## Structs
+
+- Maps have limitations
+  - Cannot constrain to only allow certain keys
+  - All values must be of the same type
+- Maps are not ideal to pass data between functions
+- **Related data should be group as `struct` instead**
+- **NOTE: `struct` is close to the concept of `class` in OOP**
+  - **However, Go is not an `OOP` language**
+  - Go does not support `class`
+  - But it support some features of OOP in a different way
+
+### Struct Definition and Declaration
+
+- **Defined with the keyword `type` and the type `struct`**
+  - Contain a list of typed fields
+  - No comma-separated, unlike with `map`
+- *Can be defined inside or outside functions, or any block-level*
+
+```go
+// Example of defining a struct
+type person struct {
+    fName   string
+    lName   string
+    dob     string
+    favNum  int
+    isAdult bool
+}
+```
+
+- Once defined, we can make use of the struct
+- **Zero-Value is a struct with the Zero-Value of each field-type**
+  - **Using *Struct-Literal* and *Struct With Zero-Value* are equivalent**
+  - Both initialize the struct with fields with zero-values
+
+```go
+// Declaring a struct with zero-value
+var fred person
+
+// Declaring a struct with struct literal
+bob := person{}
+```
+
+- **We can provide struct-literal with actual values**
+  - A value for every field must be specified
+  - Values are assigned in-order
+
+```go
+// Declaring a struct with struct literal and values
+julia := person{
+    "julia",
+    "smith",
+    "1969-01-01",
+    77,
+    true,
+}
+```
+
+- **It is preferable to use *named-fields***
+  - Not all fields have to be specified
+  - Values are assigned by field name
+  - Fields can be specified in any order
+  - *Unassigned fields default to their Zero-value*
+
+```go
+// Declaring a struct with struct literal and values, with named-fields
+john := person{
+    dob: "2023-01-01",
+    lName: "smith",
+    fName: "john",
+}
+```
+
+- ***WARNING: The 2 struct-literal styles cannot be mixed***
+  - **Recommended to always use *named-fields***
+  - More verbose but clearer
+  - More maintainable
+  - Has more advantages over *ordered*
+
+### Struct Field Access
+
+- **A struct field is accessed with a `.`**
+
+```go
+// Accessing a struct field
+bob.fName = "Bob"
+fmt.Println("bob.FName =", bob.fName)
+```
+
+### Anonymous Struct
+
+- We do not have to provide name to a struct
+- **We can assign the struct definition directly to a variable**
+- There is no difference of functionality between a *Named Struct* and an *Anonymous Struct*
+
+```go
+// Anonymous Struct
+pet := struct {
+    name  string
+    kind  string
+    breed string
+}{
+    name:  "fido",
+    kind:  "dog",
+    breed: "golden retriever",
+}
+```
+
+#### When to Use Anonymous Struct
+
+- For **Unmarshalling / Marshalling**
+  - Translating external data (*JSON, Protocol Buffer...*) to struct or vice-versa
+- For **Testing**
+  - Using anonymous structs for writing table-driven tests
+
+### Comparing And Converting Structs
+
+- **Comparability depends on the fields**
+  - If the fields are entirely *comparable*, then the struct is *comparable*
+  - **`slice` and `map` fields are not *comparable***
+- **There is no magic method to redefince `==` and `!=`**
+  - We can write our own functions
+- **Go does not allow between structs of different types**
+  - *Struct type conversion is possible but **only if the fields of both structs have the same name, order, and types***
+
+```go
+type firstPerson struct {
+    name string
+    age  int
+}
+type secondPerson struct {
+    name string
+    age  int
+}
+type thirdPerson struct {
+    age  int
+    name string
+}
+type fourthPerson struct {
+    fName string
+    age  int
+}
+type fifthPerson struct {
+    name string
+    age  int
+    dob  string
+}
+```
+
+- **We can use type-conversion from `firstPerson` instance to `secondPerson`**
+- We *cannot* do `firstPerson == secondPerson` because they are different types
+- We *cannot* use type-conversion from `firstPerson` instance to `thirdPerson` because the fields have different order
+- We *cannot* use type-conversion from `firstPerson` instance to `fourthPerson` because the field names are different
+- We *cannot* use type-conversion from `firstPerson` instance to `fourthPerson` because not all columns match
+- With *Anonymous Structs*
+  - *Anonymous Structs are compatible with any other structs **as long as the fields of both structs have the same name, order, and types***
+  - Can be compared without type-conversion as well with the same rule
+
+```go
+// Comparing Against Anonymous Struct
+type firstPerson struct {
+    name string
+    age  int
+}
+
+f := firstPerson{
+    name: "Bob",
+    age:  50,
+}
+
+g := struct {
+    name string
+    age  int
+}{
+    name: "Bob",
+    age:  50,
+}
+
+// Comparing
+fmt.Println("f == g?", f == g)
+
+// Using with each other as equivalent
+f = g
+fmt.Println("f =", f)
+```

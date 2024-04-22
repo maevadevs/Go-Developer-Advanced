@@ -572,6 +572,8 @@ func main() {
 	fmt.Println()
 
 	// Comparing 2 maps
+	// ----------------
+	fmt.Println("Comparing 2 maps:")
 	mp1 := map[string]int{
 		"hello": 5,
 		"world": 5,
@@ -594,6 +596,8 @@ func main() {
 	fmt.Println()
 
 	// Using map[KeyType]bool as set
+	// -----------------------------
+	fmt.Println("Using map[KeyType]bool as set:")
 	intSet := map[int]bool{}
 	vals := []int{5, 10, 2, 5, 8, 7, 3, 9, 1, 2, 10}
 
@@ -603,8 +607,12 @@ func main() {
 
 	fmt.Println("vals =", vals, "len =", len(vals))
 	fmt.Println("intSet =", intSet, "len =", len(intSet))
-    
+
+	fmt.Println()
+
 	// Checking for element in the set
+	// -------------------------------
+	fmt.Println("Checking for element in the set:")
 	inIntSet5 := false
 	if intSet[5] {
 		inIntSet5 = true
@@ -618,6 +626,98 @@ func main() {
 	fmt.Println("200 in intSet?", inIntSet200)
 
 	fmt.Println()
+
+	// Struct Definition and Declaration
+	// ---------------------------------
+	fmt.Println("Struct Definition and Declaration:")
+	type person struct {
+		fName   string
+		lName   string
+		dob     string
+		favNum  int
+		isAdult bool
+	}
+
+	// Declaring a struct with zero-value
+	var fred person
+	fmt.Println("fred =", fred)
+
+	// Declaring a struct with struct literal
+	bob := person{}
+	fmt.Println("bob =", bob)
+
+	// Declaring a struct with struct literal and values
+	julia := person{
+		"julia",
+		"smith",
+		"1969-01-01",
+		77,
+		true,
+	}
+	fmt.Println("julia =", julia)
+
+	// Declaring a struct with struct literal and values, with named-fields
+	john := person{
+		dob:   "2023-01-01",
+		lName: "smith",
+		fName: "john",
+	}
+	fmt.Println("john =", john)
+
+	fmt.Println()
+
+	// Struct field access
+	// -------------------
+	fmt.Println("Struct field access:")
+	bob.fName = "Bob"
+	fmt.Println("bob.fName =", bob.fName)
+
+	fmt.Println()
+
+	// Anonymous Struct
+	// ----------------
+	fmt.Println("Anonymous Struct:")
+	pet := struct {
+		name  string
+		kind  string
+		breed string
+	}{
+		name:  "fido",
+		kind:  "dog",
+		breed: "golden retriever",
+	}
+	fmt.Println("pet.name:", pet.name)
+	fmt.Println("pet.kind:", pet.kind)
+	fmt.Println("pet.breed:", pet.breed)
+
+	fmt.Println()
+
+	// Comparing Against Anonymous Struct
+	fmt.Println("Comparing Against Anonymous Struct:")
+	type firstPerson struct {
+		name string
+		age  int
+	}
+
+	f := firstPerson{
+		name: "Bob",
+		age:  50,
+	}
+
+	g := struct {
+		name string
+		age  int
+	}{
+		name: "Bob",
+		age:  50,
+	}
+
+	// Comparing
+	fmt.Println("f == g?", f == g)
+
+	// Using with each other as equivalent
+	f = g
+	fmt.Println("f =", f)
 }
 
 // FOR WINDOWS:

@@ -1,3 +1,3 @@
-module github.com/maevadevs/Go-Learning/Types-And-Declarations
+module github.com/maevadevs/Go-Developer-Advanced/Types-And-Declarations
 
 go 1.22.2

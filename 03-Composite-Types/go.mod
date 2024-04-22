@@ -1,3 +1,3 @@
-module github.com/maevadevs/Go-Learning/03-Composite-Types
+module github.com/maevadevs/Go-Developer-Advanced/Composite-Types
 
 go 1.22.2

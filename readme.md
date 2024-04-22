@@ -75,5 +75,5 @@ These are notes from reading *Learning Go* book.
    - Structs
      - Struct Definition and Declaration
      - Struct Field Access
-     - Anonymou Struct
+     - Anonymous Struct
      - Comparing And Converting Structs

@@ -78,3 +78,6 @@ These are notes from reading *Learning Go* book.
      - Anonymous Struct
      - Comparing And Converting Structs
 4. [Blocks, Shadows, and Control Structures](./04-Blocks-Shadows-Control-Structures/)
+    - Blocks
+    - Shadowing
+    - Universe Block

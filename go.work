@@ -4,4 +4,5 @@ use (
     ./01-Setup-And-Hello-World
     ./02-Types-And-Declarations
     ./03-Composite-Types
+    ./04-Blocks-Shadows-Control-Structures
 )

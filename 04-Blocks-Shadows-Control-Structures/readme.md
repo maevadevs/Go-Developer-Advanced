@@ -5,6 +5,17 @@
 - [Blocks](#blocks)
 - [Shadowing Variables](#shadowing-variables)
 - [The Universe Block](#the-universe-block)
+- [`if`](#if)
+- [`for`](#for)
+  - [Complete C-Style `for`](#complete-c-style-for)
+  - [Condition-Only `for` (`while`-Style)](#condition-only-for-while-style)
+  - [Infinite `for`](#infinite-for)
+    - [`break` and `continue`](#break-and-continue)
+  - [`for-range` Statement](#for-range-statement)
+    - [Iterating Over Maps](#iterating-over-maps)
+    - [Iterating Over Strings](#iterating-over-strings)
+    - [The `for-range` Value Is A Copy](#the-for-range-value-is-a-copy)
+  - [Labeling `for` Statements](#labeling-for-statements)
 
 ---
 
@@ -121,3 +132,379 @@ true := 100
 
 - **NOTE: `go vet` does not report shadowing as an issue**
 - But some 3rd-party tools can detect accidental shadowing
+
+## `if`
+
+- Similar to `if` in other languages
+- **But no parenthesis around the conditions**
+
+```go
+// Example of `if`
+// ---------------
+import "math/rand"
+
+n := rand.Intn(10)
+if n == 0 {
+    fmt.Println(n, ": That is too low!")
+} else if n > 5 {
+    fmt.Println(n, ": That is too big!")
+} else {
+    fmt.Println(n, ": That is a good number!")
+}
+```
+
+- Any variables declared within the `{}` are scoped within that block
+- **Any variables declared at the beginning of `if` are scoped to the `if`, `else if`, and `else` blocks**
+  - With this approach, the variable related to the condition only lives for the duration of the condition block
+  - Allows to create variables only when they are needed
+  - *Once the block ends, the variable is undefined*
+
+```go
+// Example of `if` With Scoped Variables
+// -------------------------------------
+import "math/rand"
+
+if m := rand.Intn(10); m == 0 {
+    fmt.Println(m, ": That is too low!")
+} else if n > 5 {
+    fmt.Println(m, ": That is too big!")
+} else {
+    fmt.Println(m, ": That is a good number!")
+}
+
+// This throws an error: m is undefined here
+// fmt.Println(m)
+```
+
+- **NOTE**
+  - We could put any simple statement before the comparison
+  - Not just variable declaration
+  - But don't do that
+  - Leave it for only declaring variables to be scoped for the `if-else` blocks
+  - Anything else would be confusing
+  - **Variable declared for the `if-else` block will shadow any existing outside variables**
+
+## `for`
+
+- `for` is the only loop construct available in Go
+- There are 4 ways of `for` loops
+  - Complete *C-Style `for`*
+  - *Condition-Only `for` (`while`-Style)*
+  - *Infinite `for`*
+  - *`for-range`*
+
+### Complete C-Style `for`
+
+- Similar format to other C-based languages
+
+```go
+for init; condition; increment {
+    body
+}
+```
+
+- Similar to `if`, there are no `()` around `init; condition; increment`
+- **`init`**
+  - *Must use `:=` to initialize the variable: `var` is not legal here*
+  - *Declared variable will shadow any existing variable*
+- **`condition`**
+  - Must be an expression that evaluates to a `bool`
+  - Checked immediately *before* each iteration of the loop
+  - If `true`, the loop-body executes
+- **`increment`**
+  - Typically something like `i++`
+  - Any assignment is also valid
+  - Runs immediately *after* each iteration of the loop
+
+```go
+// Example of C-Style for-loop
+// ---------------------------
+for i := 0; i < 10; i++ {
+    fmt.Printf("%d ", i)
+}
+```
+
+- **Any of the 3 header element of the loop can be left-out**
+- `init` can be based on a value calculated before the loop
+
+```go
+// Example of C-Style for-loop: No init
+// ------------------------------------
+i := 0
+for ; i < 10; i++ {
+    fmt.Printf("%d ", i)
+}
+```
+
+- `increment` can be based on something more complicated in the body
+
+```go
+// Example of C-Style for-loop: No increment
+// -----------------------------------------
+for i := 0; i < 10; {
+    fmt.Printf("%d ", i)
+    if i % 2 == 0 {
+        i++
+    } else {
+        i += 2
+    }
+}
+```
+
+- `condition` could be handled inside the loop using `if`
+
+```go
+// Example of C-Style for-loop: No condition
+// -----------------------------------------
+for i := 0; ; i++ {
+    if i == 10 {
+        break
+    }
+    fmt.Printf("%d ", i)
+}
+```
+
+### Condition-Only `for` (`while`-Style)
+
+- When both `init` and `increment` are removed, also remove all `;`
+- **This leaves `for` to look and act like a `while` statement**
+- The downside is that `i` is not scoped to the `for` block
+
+```go
+i := 0
+for i < 10 {
+    fmt.Printf("%d ", i)
+    i++
+}
+```
+
+### Infinite `for`
+
+- If we remove all `init`, `condition`, and `increment`, we get an *infinite for`*
+- This is an infinite loop
+
+```go
+// Example of an Infinite Loop
+// ---------------------------
+for {
+    fmt.Println("Hello!")
+}
+```
+
+#### `break` and `continue`
+
+- Infinite loops are not good programming by themselves
+- But sometimes, they can be useful when combined with `break` and `continue`
+- **We can break from the loop using `break`**
+  - Once reached, exits the loop immediately
+  - It can also be used with any other format of `for`
+- **NOTE**
+  - Go does not have a `do-while` loop
+  - **With *Infinite Loop*, `if`, and `break`, we can similate a `do-while` loop**
+
+```go
+// Simulating a Do-While Loop in Go
+// --------------------------------
+j := 0
+for {
+    fmt.Println("\tThis runs at least once")
+    j++
+    if j == 1 {
+        break
+    }
+}
+```
+
+- **`continue` allows to skip an iteration**
+  - Proceeds directly to the next iteration
+  - `continue` can make codes much easier to reason and understand
+  - It is also more idiomatic to use `continue`
+  - Go encourage short `if` bodies
+  - It can make the code easier to reason and understand
+
+```go
+// Fizzbuzz: Without Using `continue`
+// ----------------------------------
+for i := 1; i < 25; i++ {
+    if i%3 == 0 {
+        if i%5 == 0 {
+            fmt.Print("FizzBuzz ")
+        } else {
+            fmt.Print("Fizz ")
+        }
+    } else if i%5 == 0 {
+        fmt.Print("Buzz ")
+    } else {
+        fmt.Printf("%d ", i)
+    }
+}
+fmt.Println()
+
+// Fizzbuzz: With Using `continue`
+// ----------------------------------
+for i := 1; i < 25; i++ {
+    if i%3 == 0 && i%5 == 0 {
+        fmt.Print("FizzBuzz ")
+        continue
+    }
+    if i%3 == 0 {
+        fmt.Print("Fizz ")
+        continue
+    }
+    if i%5 == 0 {
+        fmt.Print("Buzz ")
+        continue
+    }
+    fmt.Printf("%d ", i)
+}
+fmt.Println()
+```
+
+### `for-range` Statement
+
+- Allows to iterate over elements contained in some container types
+- Similar to Python's `for x in range(n)`
+- Can be used with *strings, arrays, slices, maps, channels*
+- **Can only be used on *built-in compound types***
+  - Also user-defined types based on them
+
+```go
+// Using for-range With Slices
+// ---------------------------
+evenVals := []int{2, 4, 6, 8, 10, 12}
+for i, v := range evenVals {
+    fmt.Printf("%d/%d ", i, v)
+}
+```
+
+- **With `for-range`, we get 2 loop variables**
+  - The position of the data in the container
+  - The value at that position
+- *The idiomatic names of these variables depend on what is being iterated over*
+  - For Array/Slice/String: Typically `i`
+  - For Map/Struct: Typically `k`
+  - Second variable is typically `v`
+  - For simple loops, single-letter variables work fine
+  - For complex loops, be more descriptive
+- **If any of the variable is not going to be used, we can ignore it**
+  - If so, we assign it to `_` as a *discard variable*
+  - Otherwise, Go requires all declared variables to be used
+
+```go
+// Using for-range With Slices Without `i`
+// ---------------------------------------
+evenVals := []int{2, 4, 6, 8, 10, 12}
+for _, v := range evenVals {
+    fmt.Printf("%d ", v)
+}
+```
+
+- **If we just want the key, we can ignore `v` completely**
+  - Mostly used approach when a map is being used as a set
+  - Can also be used for iteraring over arrays and slices but rare
+
+```go
+// Using for-range With Slices Without `v`
+// ---------------------------------------
+uniqueNames := map[string]bool{
+    "Fred": true,
+    "Raul": true,
+    "John": true,
+}
+for k := range uniqueNames {
+    fmt.Printf("%s", k)
+}
+```
+
+#### Iterating Over Maps
+
+- **When iterating over Maps, the order is not guaranteed**
+- The order of keys and values will vary
+- This is actually a security feature
+  - People could write code that assumed the iteration order is constant
+  - This assumption can break codes at weird times
+  - Also, it could be attacked with a *Hash DoS* attack
+- 2 changes to the `map` implementation in Go
+  - Includes a random number generated every time a map variable is created
+  - Order of `for-range` over map is made to vary a bit each time
+- **Exception: `fmt.Println()` always output maps with keys in ascending order**
+
+```go
+// Map-Iteration-Order Varies
+// --------------------------
+m := map[string]int{
+    "a": 1,
+    "b": 2,
+    "c": 3,
+}
+// Looping 10 times over the map
+for i := 0; i < 10; i++ {
+    fmt.Printf("Loop iteration %d: ", i)
+    for k, v := range m {
+        fmt.Printf("%s:%d ", k, v)
+    }
+    fmt.Println()
+}
+```
+
+#### Iterating Over Strings
+
+- We can also use strings with `for-range`
+- `for-range` accesses the *runes* in a string in order
+  - `i` - Number of bytes
+  - `v` - The rune
+
+```go
+// Using for-range With Strings
+// ----------------------------
+greetings := []string{"Hello!", "Hi π!"}
+
+// Iterating over the slice
+fmt.Println("index\tchar\tstring(char)")
+for _, greeting := range greetings {
+    // Iterating over the string
+    for i, char := range greeting {
+        fmt.Println(i, "\t", char, "\t", string(char))
+    }
+    fmt.Println()
+}
+fmt.Println()
+```
+
+- **NOTE**
+  - The char value for `π` is 960, much larger than a byte
+  - Also, index 4 is skipped for `"Hi π!"`
+  - **Iterating over a string with `for-range` iterates over *runes*, not *bytes***
+  - **With `for-range`, multibytes runes UTF-8 representation are converted to an int32**
+    - The offset is incremented by the number of bytes in the rune
+    - **If a byte does not represent a valid UTF-8 value, the hex value is returned instead**
+
+#### The `for-range` Value Is A Copy
+
+- **Each time `for-range` iterates, it *copies* the value into the iteration variables**
+- ***Modifying the variables will not affect the values in the compound type***
+
+```go
+// Modifying for-range Loop Variables: No effect on Compound
+// ---------------------------------------------------------
+evenInts := []int{2, 4, 6, 8, 10}
+
+fmt.Println("Before the loop, evenInts =", evenInts)
+for i, v := range evenInts {
+    fmt.Print(i, "-", v, " ")
+    // Modifying i and v here has no effect on evenInts
+    v = 1000
+    i = 2000
+}
+fmt.Println()
+fmt.Println("At the end of the loop, evenInts =", evenInts)
+```
+
+- **NOTE**
+  - **Before Go 1.22, the variables are created once and reused**
+  - **Since Go 1.22, the variables are created for each iteration**
+  - This prevents some common bugs with goroutines
+  - This is a backward-breaking change
+  - Can enable behavior by specifying Go version in `go.mod`
+
+### Labeling `for` Statements

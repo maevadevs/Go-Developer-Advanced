@@ -81,3 +81,17 @@ These are notes from reading *Learning Go* book.
     - Blocks
     - Shadowing
     - Universe Block
+    - `if`
+    - `for`
+      - Complete C-Style `for`
+      - Condition-Only `for` (`while`-Style)
+      - Infinite `for`
+        - `break` and `continue`
+      - `for-range` Statement
+        - Iterating Over Maps
+        - Iterating Over Strings
+        - The `for-range` Value Is A Copy
+      - Labeling `for` Statements
+      - Choosing The Right `for` Statement
+    - `switch`
+      - Blank `switch`

@@ -246,6 +246,68 @@ func main() {
 	fmt.Println()
 	fmt.Println("At the end of the loop, evenInts =", evenInts)
 	fmt.Println()
+
+	// Using for-range With Labels
+	// ---------------------------
+	fmt.Println("Using for-range With Strings:")
+	greetings2 := []string{"Hello!", "Hi π!"}
+
+	// Iterating over the slice
+	fmt.Println("index\tbytes\tstring(rn)")
+outer:
+	for _, greeting := range greetings2 {
+		// Iterating over the string
+		for i, rn := range greeting {
+			fmt.Println(i, "\t", rn, "\t", string(rn))
+			if rn == 'l' {
+				// Go to label
+				continue outer
+			}
+		}
+		fmt.Println()
+	}
+
+	// Using switch in Go
+	// ------------------
+	fmt.Println("Using switch in Go:")
+	words := []string{"a", "cow", "smile", "gopher", "octops", "anthropologist"}
+	for _, word := range words {
+		// switch-scoped variable
+		switch size := len(word); size {
+		case 1, 2, 3, 4:
+			// Multiple matches
+			fmt.Println("-", word, "is a short word")
+		case 5:
+			// Case-scoped variable
+			wordLen := len(word)
+			fmt.Println("-", word, "is exactly the right length", wordLen)
+		case 6, 7, 8, 9:
+			// Empty cases do nothing
+			// Not cascading into default
+		default:
+			fmt.Println("-", word, "is too long")
+		}
+	}
+	fmt.Println()
+
+	// Using switch Within for-loop
+	// ----------------------------
+	fmt.Println("Using switch Within for-loop:")
+switchLoop:
+	for i := 0; i < 10; i++ {
+		switch i {
+		case 0, 2, 4, 6:
+			fmt.Println(i, "is even")
+		case 3:
+			fmt.Println(i, "is divisible by 3 but not by 2")
+		case 7:
+			fmt.Println(i, "-> Exiting the loop. Good bye!")
+			break switchLoop
+		default:
+			fmt.Println("-- You have reached the default case --")
+		}
+	}
+	fmt.Println()
 }
 
 // FOR WINDOWS:

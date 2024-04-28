@@ -16,6 +16,9 @@
     - [Iterating Over Strings](#iterating-over-strings)
     - [The `for-range` Value Is A Copy](#the-for-range-value-is-a-copy)
   - [Labeling `for` Statements](#labeling-for-statements)
+  - [Choosing The Right `for` Statement](#choosing-the-right-for-statement)
+- [`switch`](#switch)
+  - [Blank `switch`](#blank-switch)
 
 ---
 
@@ -508,3 +511,161 @@ fmt.Println("At the end of the loop, evenInts =", evenInts)
   - Can enable behavior by specifying Go version in `go.mod`
 
 ### Labeling `for` Statements
+
+- By default, `break` and `continue` applies to the closest `for`
+- For nested loops, we can manipulate at which point the loop picks up using *labels*
+- The label is always indented by `go fmt` to same-level as surrounding braces for the current block
+  - Easier to notice
+
+```go
+    // Using for-range With Labels
+    // ---------------------------
+    greetings2 := []string{"Hello!", "Hi π!"}
+
+    // Iterating over the slice
+    fmt.Println("index\tbytes\tstring(rn)")
+outerLabel:
+    for _, greeting := range greetings2 {
+        // Iterating over the string
+        for i, rn := range greeting {
+            fmt.Println(i, "\t", rn, "\t", string(rn))
+            if rn == 'l' {
+                // Go to outerLabel
+                continue outerLabel
+            }
+        }
+        fmt.Println()
+    }
+```
+
+- **NOTE: Nested `for`-loops with labels are rare**
+  - They are kinda similar to `goto` statement
+  - They are moslty used in the following way
+
+```go
+outerLabel:
+    for _, outerVal := range outereValues {
+        for _, innerVal := range outerVal {
+            if invalidSitation(innerVal) {
+                continue outerLabel
+            }
+        }
+    }
+```
+
+### Choosing The Right `for` Statement
+
+- **Most of the time, *`for-range`* is used**
+  - Best to use with strings
+  - Also works well with slices, maps, and channels
+  - Favor when working with built-in compound types
+  - Avoids great deal of boilerplate codes with the other `for` styles
+- **Use *C-style `for`* when iterating from a given first to last element**
+  - Easier to detect the start and end points
+- In general, use the styles that is easier to understand
+
+```go
+// for-range vs for C-Style
+// ------------------------
+evenVals := []int{2, 4, 6, 8, 10}
+
+// Using for-range
+for i, v := range evenVals {
+    if i == 0 or i == 1 {
+        continue
+    }
+    if i == len(evenVals)-1 {
+        break
+    }
+    fmt.Println(i, v)
+}
+
+// Using for C-Style
+for i := 2; i < len(evenVals)-1; i++ {
+    fmt.Println(i, evenVals[i])
+}
+```
+
+- **NOTE: This pattern does not work for skipping over the beginning of a string**
+  - A standard `for`-loop does not work well with multibyte characters
+  - **Need to use `for-range` to properly process runes instead of bytes**
+- ***Infinite-`for`* and *`while`-style* are used less frequently**
+  - *`while`-style* is useful when looping based on a calculated value
+  - *Infinite-`for`* can be used to simulate a `do-while` loop
+  - *Infinite-`for`* can be used to implement some *iterator* pattern
+
+## `switch`
+
+- Go has a `switch` statement
+- At first glance, looks very similar to other languages's `switch`
+  - But Go extends the values that can be switched than in other languages
+- **Similar to `if`, `()` are not needed around the condition**
+- **We can also declare variables to be scoped to the `switch` statement**
+- No `{}` around the body of each `case` or `default`
+  - It still support multiple lines though
+  - Considered part of the same block
+  - **New variables declared within a `case` are scoped to the case**
+- There is no need for `break` statement
+  - Each case is mutually-exclusive
+  - There is no *cascading* effect between successive `case`
+  - Similar to *Ruby* and *Pascal*
+  - **For multiple matches, separate the cases with commas**
+  - **If a `case` is empty, it does nothing**
+  - **But `break` can still be used to exit early**
+  - But using `break` might indicate the need to refactor
+
+```go
+// Using switch in Go
+// ------------------
+words := []string{"a", "cow", "smile", "gopher", "octops", "anthropologist"}
+for _, word := range words {
+    // switch-scoped variable
+    switch size := len(word); size {
+    case 1, 2, 3, 4:
+        // Multiple matches
+        fmt.Println("-", word, "is a short word")
+    case 5:
+        // Case-scoped variable
+        wordLen := len(word)
+        fmt.Println("-", word, "is exactly the right length", wordLen)
+    case 6, 7, 8, 9:
+        // Empty cases do nothing
+        // Not cascading into default
+    default:
+        fmt.Println("-", word, "is too long")
+    }
+}
+```
+
+- **`break` could also be used in tandem with `switch` inside `for`**
+  - Can be used to break out of the `for`-loop using label
+  - Without a `for`-label, it might try to break out of the `case` instead
+
+```go
+    // Using switch Within for-loop
+    // ----------------------------
+switchLoop:
+    for i := 0; i < 10; i++ {
+        switch i {
+        case 0, 2, 4, 6:
+            fmt.Println(i, "is even")
+        case 3:
+            fmt.Println(i, "is divisible by 3 but not by 2")
+        case 7:
+            fmt.Println(i, "-> Exiting the loop. Good bye!")
+            break switchLoop
+        default:
+            fmt.Println("-- You have reached the default case --")
+        }
+    }
+```
+
+- **NOTE: Go has a `fallthrough` keyword**
+  - Allows a `case` to *continue* unto the next `case`
+  - But this is not used often
+  - If `fallthrough` is needed, it might be good to restructure the code
+  - It is only used in very rare cases
+- **We can also switch on any *type* that can be compared with `==`**
+  - All built-in types except `slice`, `map`, `channel`, `func`, `struct`
+
+### Blank `switch`

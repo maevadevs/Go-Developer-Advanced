@@ -5,4 +5,5 @@ use (
     ./02-Types-And-Declarations
     ./03-Composite-Types
     ./04-Blocks-Shadows-Control-Structures
+    ./05-Functions
 )

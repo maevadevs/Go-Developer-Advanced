@@ -814,4 +814,4 @@ done:
   - In this case, using `goto` can improve understanding
   - *Example of real-world case: `floatBits()` method in `strconv.atof.go` in standard library*
 - **In general, try very hard to avoid using `goto`**
-  - **In the rare situation where it makes code more readable, it is an option**
+  - **In the rare situations where it makes code more readable, it is an option**

@@ -802,7 +802,7 @@ done:
     fmt.Println(a)
 ```
 
-- Some logic that we do not want to run in te middle of a function
+- Some logic that we do not want to run in the middle of a function
 - But we want to run at *some* ends of the function
 - **Though we could also handle this without using `goto`**
   - Set up a boolean flag and use `if` to check the flag
@@ -811,7 +811,7 @@ done:
   - Litering code with boolean flags is about the same as using `goto`
   - It is more verbose and can become confusing as well
   - Duplicating codes make is harder to maintain
-  - In thise case, using `goto` can improve understanding
+  - In this case, using `goto` can improve understanding
   - *Example of real-world case: `floatBits()` method in `strconv.atof.go` in standard library*
 - **In general, try very hard to avoid using `goto`**
   - **In the rare situation where it makes code more readable, it is an option**

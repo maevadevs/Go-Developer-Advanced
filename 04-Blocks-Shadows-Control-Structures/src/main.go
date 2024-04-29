@@ -308,6 +308,54 @@ switchLoop:
 		}
 	}
 	fmt.Println()
+
+	// Example of Blank Switch
+	// -----------------------
+	fmt.Println("Example of Blank Switch:")
+	words = []string{"Hi", "Salutation", "Hello"}
+
+	for _, word := range words {
+		switch wordLen := len(word); {
+		case wordLen < 5:
+			fmt.Println("-", word, ": is a short word")
+		case wordLen > 10:
+			fmt.Println("-", word, ": is too long")
+		default:
+			fmt.Println("-", word, ": is a good length")
+		}
+	}
+	fmt.Println()
+
+	// Equivalent
+	for _, word := range words {
+		wordLen := len(word)
+		switch {
+		case wordLen < 5:
+			fmt.Println("-", word, ": is a short word")
+		case wordLen > 10:
+			fmt.Println("-", word, ": is too long")
+		default:
+			fmt.Println("-", word, ": is a good length")
+		}
+	}
+	fmt.Println()
+
+	// Fizzbuzz: With Using `switch`
+	// -----------------------------
+	fmt.Println("Fizzbuzz: With Using `switch`")
+	for i := 1; i < 25; i++ {
+		switch {
+		case i%3 == 0 && i%5 == 0:
+			fmt.Print("FizzBuzz ")
+		case i%3 == 0:
+			fmt.Print("Fizz ")
+		case i%5 == 0:
+			fmt.Print("Buzz ")
+		default:
+			fmt.Printf("%d ", i)
+		}
+	}
+	fmt.Println()
 }
 
 // FOR WINDOWS:

@@ -95,3 +95,6 @@ These are notes from reading *Learning Go* book.
       - Choosing The Right `for` Statement
     - `switch`
       - Blank `switch`
+      - Choosing Between `if-else` and `switch`
+    - `goto`
+      - Use of `goto` in Go

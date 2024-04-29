@@ -19,6 +19,9 @@
   - [Choosing The Right `for` Statement](#choosing-the-right-for-statement)
 - [`switch`](#switch)
   - [Blank `switch`](#blank-switch)
+  - [Choosing Between `if-else` and `switch`](#choosing-between-if-else-and-switch)
+- [`goto`](#goto)
+  - [Use of `goto` in Go](#use-of-goto-in-go)
 
 ---
 
@@ -283,7 +286,7 @@ for i < 10 {
 
 ### Infinite `for`
 
-- If we remove all `init`, `condition`, and `increment`, we get an *infinite for`*
+- If we remove all `init`, `condition`, and `increment`, we get an *infinite `for`*
 - This is an infinite loop
 
 ```go
@@ -380,7 +383,7 @@ for i, v := range evenVals {
 }
 ```
 
-- **With `for-range`, we get 2 loop variables**
+- **With `for-range`, we get back 2 loop variables**
   - The position of the data in the container
   - The value at that position
 - *The idiomatic names of these variables depend on what is being iterated over*
@@ -669,3 +672,146 @@ switchLoop:
   - All built-in types except `slice`, `map`, `channel`, `func`, `struct`
 
 ### Blank `switch`
+
+- A regular switch only allows a condition to be compared against equality to a value
+- **We can use `switch` without specifying the value to compare**
+- Allows to use any boolean comparison for each case instead
+  - These are logical tests for each case
+  - But if the boolean expressions are all `==`, a regalar `switch` is better
+- We can also include a short variable declaration in the header of `switch`
+
+```go
+// Example of Blank Switch
+// -----------------------
+words = []string{"Hi", "Salutation", "Hello"}
+
+for _, word := range words {
+    switch wordLen := len(word); {
+    case wordLen < 5:
+        fmt.Println("-", word, ": is a short word")
+    case wordLen > 10:
+        fmt.Println("-", word, ": is too long")
+    default:
+        fmt.Println("-", word, ": is a good length")
+    }
+}
+fmt.Println()
+
+// Equivalent
+for _, word := range words {
+    wordLen := len(word)
+    switch {
+    case wordLen < 5:
+        fmt.Println("-", word, ": is a short word")
+    case wordLen > 10:
+        fmt.Println("-", word, ": is too long")
+    default:
+        fmt.Println("-", word, ": is a good length")
+    }
+}
+fmt.Println()
+```
+
+### Choosing Between `if-else` and `switch`
+
+- There is not much difference between `if-else` and blank `switch`
+- `switch` indicates a relationship between the values in each cases
+- This can help write clearer code
+
+```go
+// Fizzbuzz: With Using `switch`
+// -----------------------------
+for i := 1; i < 25; i++ {
+    switch {
+    case i%3 == 0 && i%5 == 0:
+        fmt.Print("FizzBuzz ")
+    case i%3 == 0:
+        fmt.Print("Fizz ")
+    case i%5 == 0:
+        fmt.Print("Buzz ")
+    default:
+        fmt.Printf("%d ", i)
+    }
+}
+fmt.Println()
+```
+
+- However, it is not idiomatic to do all sorts of unrelated comparisons in each `case`
+- **Each case should be related when using `switch`**
+- **If not, it is better to use `if-else`**
+- **NOTE: Favor blank `switch` when cases are related**
+  - Makes comparisons more visible
+  - Reinforce the cases to be related set of concerns
+
+## `goto`
+
+- This is Go's 4th control structure
+- But it is almost never used: Only in very special cases
+- [*`goto` statements are considered harmful*](https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf)
+  - It has been the *Black Sheep* of the programming community
+  - Allows to jump anywhere in a program
+  - Makes it very difficult to follow the logic of a program
+- **Most modern language do not include `goto` at all**
+  - In Go, it has some uses with limitations
+- **In Go, `goto` specifies a labeled line of code**
+  - Execution jumps to it
+  - *However, we cannot jump just anywhere*
+    - *Cannot skip over variable declarations*
+    - *Cannot jump into an inner or parallel block*
+
+```go
+// Limitations of goto in Go
+// -------------------------
+func main() {
+    a := 10
+    goto skip // Cannot skip over variable declarations
+    b := 20
+skip:
+    c := 30
+    fmt.Println(a, b, c)
+    if c > a {
+        goto inner // Cannot jump into an inner or parallel block
+    }
+    if a < b {
+    inner:
+        fmt.Println("a is less than b")
+    }
+}
+```
+
+### Use of `goto` in Go
+
+- Mostly, you should not use `goto`
+- Labeled `break` and `continue` should be enough for loops
+- Here is an example of a valid use of `goto`
+
+```go
+    // A Valid Reason To Use goto
+    // --------------------------
+    a := rand.Intn(10)
+    for a < 100 {
+        if a%5 == 0 {
+            goto done
+        }
+        a = a*2 + 1
+    }
+    fmt.Println("Do something when the loop completes normally")
+
+done:
+    fmt.Println("Do something when the loop completes any differently than normal")
+    fmt.Println(a)
+```
+
+- Some logic that we do not want to run in te middle of a function
+- But we want to run at *some* ends of the function
+- **Though we could also handle this without using `goto`**
+  - Set up a boolean flag and use `if` to check the flag
+  - Duplicate the code that runs after the loop
+- **However**
+  - Litering code with boolean flags is about the same as using `goto`
+  - It is more verbose and can become confusing as well
+  - Duplicating codes make is harder to maintain
+  - In thise case, using `goto` can improve understanding
+  - *Example of real-world case: `floatBits()` method in `strconv.atof.go` in standard library*
+- **In general, try very hard to avoid using `goto`**
+  - **In the rare situation where it makes code more readable, it is an option**

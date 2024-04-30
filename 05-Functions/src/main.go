@@ -4,7 +4,22 @@ import "fmt"
 
 // This is the main entry of the application.
 func main() {
-    fmt.Println("Hello world!")
+	fmt.Println()
+
+	// Example of calling a Function
+	// -----------------------------
+	fmt.Println("Example of calling a Function:")
+	result := div(100, 20)
+	fmt.Println("div(100, 20) =", result)
+}
+
+// Example of a Function
+// ---------------------
+func div(num int, denom int) int {
+	if denom == 0 {
+		return 0
+	}
+	return num / denom
 }
 
 // FOR WINDOWS:
@@ -26,5 +41,3 @@ func main() {
 //                          ./Functions/bin/Functions
 //  Try Build + Run:        make try
 //                          go build -o Functions/bin/Functions Functions/src/main.go && ./Functions/bin/Functions && rm ./Functions/bin/Functions
-
-

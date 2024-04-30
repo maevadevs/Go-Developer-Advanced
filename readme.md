@@ -98,3 +98,4 @@ These are notes from reading *Learning Go* book.
       - Choosing Between `if-else` and `switch`
     - `goto`
       - Use of `goto` in Go
+5. [Functions](./05-Functions/)

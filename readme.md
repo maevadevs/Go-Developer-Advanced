@@ -99,3 +99,5 @@ These are notes from reading *Learning Go* book.
     - `goto`
       - Use of `goto` in Go
 5. [Functions](./05-Functions/)
+    - Declaring and Calling Function
+    - Simulating Named and Optional Parameters

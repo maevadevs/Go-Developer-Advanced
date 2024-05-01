@@ -2,9 +2,7 @@
 
 ---
 
-These are notes from reading *Learning Go* book.
-
-- [Book Repo](https://github.com/learning-go-book-2e)
+These are in-depth notes from learning Go.
 
 1. [Setup and Hello World](./01-Setup-And-Hello-World/)
    - Installation: Linux, Windows, Mac
@@ -101,3 +99,6 @@ These are notes from reading *Learning Go* book.
 5. [Functions](./05-Functions/)
     - Declaring and Calling Function
     - Simulating Named and Optional Parameters
+    - Variadic Function and Slices
+    - Multiple Return Values
+      - Multiple Return Values are Multiple Values

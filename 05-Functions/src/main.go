@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 // This is the main entry of the application.
@@ -61,6 +62,7 @@ func main() {
 
 	// Example of Function With Named Return Values
 	// --------------------------------------------
+	fmt.Println("Example of Function With Named Return Values:")
 	resX, modY, errZ := divmodNamed(5, 2)
 	// Error-handling
 	if errZ != nil {
@@ -68,6 +70,67 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("divmodNamed(5, 2) =>", "resX =", resX, "modY =", modY)
+	fmt.Println()
+
+	// Example of Declaring a Function Variable
+	// ----------------------------------------
+	fmt.Println("Example of Declaring a Function Variable:")
+	// A function variable
+	var myFuncVar func(string) int
+
+	// Using the first case
+	myFuncVar = f1
+	res := myFuncVar("Hello")
+	fmt.Println("myFuncVar(\"Hello\") using f1:", res)
+
+	// Using the second case
+	myFuncVar = f2
+	res = myFuncVar("Hello")
+	fmt.Println("myFuncVar(\"Hello\") using f2:", res)
+	fmt.Println()
+
+	// Example of a Simple Calculator With Functions
+	// ---------------------------------------------
+	fmt.Println("Example of a Simple Calculator With Functions:")
+	opMap := map[string]func(int, int) int{
+		"+": add,
+		"-": sub,
+		"*": mul,
+		"/": divs,
+	}
+	expressions := [][]string{
+		{"2", "+", "3"},
+		{"2", "-", "3"},
+		{"2", "*", "3"},
+		{"2", "/", "3"},
+		{"2", "%", "3"},
+		{"two", "+", "three"},
+		{"5"},
+	}
+	for _, expr := range expressions {
+		if len(expr) != 3 {
+			fmt.Println("Invalid expression:", expr)
+			continue
+		}
+		p1, err := strconv.Atoi(expr[0])
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		op := expr[1]
+		opFunc, ok := opMap[op]
+		if !ok {
+			fmt.Println("Unsupported Operator:", op)
+			continue
+		}
+		p2, err := strconv.Atoi(expr[2])
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		result := opFunc(p1, p2)
+		fmt.Println(expr, "=", result)
+	}
 	fmt.Println()
 }
 
@@ -124,6 +187,27 @@ func divmodNamed(num, den int) (res int, mod int, err error) {
 	res, mod = num/den, num%den
 	return res, mod, nil
 }
+
+// Example of Declaring a Function Variable
+// ----------------------------------------
+func f1(a string) int {
+	return len(a)
+}
+
+func f2(a string) int {
+	sum := 0
+	for _, v := range a {
+		sum += int(v)
+	}
+	return sum
+}
+
+// Example of a Simple Calculator With Functions
+// ---------------------------------------------
+func add(i int, j int) int  { return i + j }
+func sub(i int, j int) int  { return i - j }
+func mul(i int, j int) int  { return i * j }
+func divs(i int, j int) int { return i / j }
 
 // FOR WINDOWS:
 //  To Run:                 make run-win

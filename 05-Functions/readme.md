@@ -11,6 +11,9 @@
   - [Named Return Values](#named-return-values)
     - [Inconveniences of Named Return Values](#inconveniences-of-named-return-values)
   - [Blank Return: Never Use Them](#blank-return-never-use-them)
+  - [Functions Are Values](#functions-are-values)
+  - [Function Type Declarations](#function-type-declarations)
+  - [Anonymous Functions](#anonymous-functions)
 
 ---
 
@@ -313,3 +316,138 @@ func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
 - But they are good in one situation
 
 ### Blank Return: Never Use Them
+
+- With named return values, it is possible to just write `return` without specifying the values to return
+  - Returns the last value assigned to the named return values
+  - If returning the zero-values, be sure they make sense
+  - `return` keyword is still required, else compile-time error
+- Blank return might appear handy
+  - But it is a bad idea because it makes is harder to understand the data flow
+  - **Never use blank return: Always specify what is being returend**
+
+### Functions Are Values
+
+- Functions in Go are values and can be passed around
+  - **Type Signature: `func` + Param Types + Return Type**
+  - Function can have the same type signature
+- **Since they are values, we can declare a function variable**
+  - Can be assigned any function that match the type signature
+  - Default Zero value is `nil`
+  - Attempting to run a function variable `nil` is a `panic`
+
+```go
+// Declaring a Function Variable
+// -----------------------------
+
+func main() {
+    // A function variable
+    var myFuncVar func(string) int
+
+    // Using the first case
+    myFuncVar = f1
+    res := myFuncVar("Hello")
+    fmt.Println("myFuncVar(\"Hello\") using f1:", res)
+
+    // Using the second case
+    myFuncVar = f2
+    res = myFuncVar("Hello")
+    fmt.Println("myFuncVar(\"Hello\") using f2:", res)
+}
+
+func f1(a string) int {
+    return len(a)
+}
+
+func f2(a string) int {
+    sum := 0
+    for _, v := range a {
+        sum += int(v)
+    }
+    return sum
+}
+```
+
+- Functions as values are very helpful in different scenarios
+
+```go
+// Example of a Simple Calculator With Functions
+// ---------------------------------------------
+func add(i int, j int) int { return i + j }
+func sub(i int, j int) int { return i - j }
+func mul(i int, j int) int { return i * j }
+func div(i int, j int) int { return i / j }
+
+func main() {
+    opMap := map[string]func(int, int) int {
+        "+": add,
+        "-": sub,
+        "*": mul,
+        "/": div,
+    }
+    expressions := [][]string {
+        {"2","+","3"},
+        {"2","-","3"},
+        {"2","*","3"},
+        {"2","/","3"},
+        {"2","%","3"},
+        {"two","+","three"},
+        {"5"},
+    }
+    for _, expr := range expressions {
+        if len(expr) != 3 {
+            fmt.Println("Invalid expression:", expr)
+            continue
+        }
+        p1, err := strconv.Atoi(expr[0])
+        if err != nil {
+            fmt.Println(err)
+            continue
+        }
+        op := expr[1]
+        opFunc, ok := opMap[op]
+        if !ok {
+            fmt.Println("Unsupported Operator:", op)
+            continue
+        }
+        p2, err := strconv.Atoi(expr[2])
+        if err != nil {
+            fmt.Println(err)
+            continue
+        }
+        result := opFunc(p1, p2)
+        fmt.Println(expr, "=", result)
+    }
+}
+```
+
+- `strconv.Atoi()` allows to convert a string to int
+  - Also return an `error` if the conversion fails
+- The type of `opFunc` is `func (int, int) int`
+- **Calling a function in a variable is the same as calling a regular function**
+- **NOTE: Do not write fragile programs**
+  - Make sure to check for special-cases and handle appropriately
+  - It might be tempting to not validate incoming data
+  - Doing so produce unstable and unmaintainable code
+  - Good error handling is what separate the pros from the amateurs
+
+### Function Type Declarations
+
+- We can use the `type` keyword to define a function type
+- **Any function that match the signature automatically meets the type**
+
+```go
+// Declaring a Function Type
+type opFuncType func(int, int) int
+
+// Using a Function Type
+opMap := map[string]opFuncType {
+    // ...
+}
+```
+
+- Advantages of declaring a function type
+  - Documentation
+  - Less repetition
+  - Easier to maintain
+
+### Anonymous Functions

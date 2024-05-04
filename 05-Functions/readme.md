@@ -9,6 +9,8 @@
   - [Multiple Return Values Are Multiple Values](#multiple-return-values-are-multiple-values)
   - [Ignoring Returned Values](#ignoring-returned-values)
   - [Named Return Values](#named-return-values)
+    - [Inconveniences of Named Return Values](#inconveniences-of-named-return-values)
+  - [Blank Return: Never Use Them](#blank-return-never-use-them)
 
 ---
 
@@ -240,3 +242,74 @@ fmt.Println("Hi")
 ```
 
 ### Named Return Values
+
+- Go also allows to specify names for the return values
+- **If we supply names to the return values, they become predeclared variables**
+  - We can use them in the function body to hold the final return values
+  - **The returned names must be surrounded by `()`, even if only one**
+  - *The names are initialized to their types' zero values*
+  - They can be returned before any explicit use or assignment
+- We can also name only some of the return values
+  - Use `_` as the name of any that should be nameless
+- **The names for the returned values are local to the function**
+  - Does not enforce any names outside the function
+  - We can assign them to any names outside the function
+
+```go
+// Example of Function With Named Return Values
+// --------------------------------------------
+func divmodNamed(num, den int) (res int, mod int, err error) {
+    if den == 0 {
+        err = errors.New("cannot divide by 0")
+        // Returning multiple values
+        return res, mod, err
+    }
+    res, mod = num / den, num % den
+    return res, mod, nil
+}
+
+func main() {
+    // Example of Function With Named Return Values
+    // --------------------------------------------
+    resX, modY, errZ := divmodNamed(5, 2)
+    // Error-handling
+    if errZ != nil {
+        fmt.Println(errZ)
+        os.Exit(1)
+    }
+    fmt.Println("divmodNamed(5, 2) =>", "resX =", resX, "modY =", modY)
+}
+```
+
+#### Inconveniences of Named Return Values
+
+- Shadowing
+  - It is possible to shadow with the names
+  - Ensure that outside variables are not shadowed by the local variables
+- They are not required to be returned
+  - We could return different values instead
+  - The compiler will not complain
+  - **The values of the `return` statement will always be returned**
+  - This can create confusion
+  - The Go compiler insert code that assigns any return value to the names
+  - The named return parameters declares the *intent*, but are *not required* to use them
+
+```go
+func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
+    res, mod = 20, 50
+    if den == 0 {
+        err = errors.New("cannot divide by 0")
+        // Actual return values
+        return 0, 0, err
+    }
+    // Actual return values
+    return num / den, num % den, nil
+}
+```
+
+- Named returns could be helpful for documentation
+- But they do not add additional values
+- They might create more issues instead
+- But they are good in one situation
+
+### Blank Return: Never Use Them

@@ -58,6 +58,17 @@ func main() {
 	}
 	fmt.Println("divmod(5, 2) =>", "ResDiv =", resDiv, "ResMod =", resMod)
 	fmt.Println()
+
+	// Example of Function With Named Return Values
+	// --------------------------------------------
+	resX, modY, errZ := divmodNamed(5, 2)
+	// Error-handling
+	if errZ != nil {
+		fmt.Println(errZ)
+		os.Exit(1)
+	}
+	fmt.Println("divmodNamed(5, 2) =>", "resX =", resX, "modY =", modY)
+	fmt.Println()
 }
 
 // Example of a Function
@@ -100,6 +111,18 @@ func divmod(num, den int) (int, int, error) {
 		return 0, 0, errors.New("cannot divide by 0")
 	}
 	return num / den, num % den, nil
+}
+
+// Example of Function With Named Return Values
+// --------------------------------------------
+func divmodNamed(num, den int) (res int, mod int, err error) {
+	if den == 0 {
+		err = errors.New("cannot divide by 0")
+		// Returning multiple values
+		return res, mod, err
+	}
+	res, mod = num/den, num%den
+	return res, mod, nil
 }
 
 // FOR WINDOWS:

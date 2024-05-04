@@ -6,7 +6,9 @@
 - [Simulating Named and Optional Parameters](#simulating-named-and-optional-parameters)
 - [Variadic Function and Slices](#variadic-function-and-slices)
 - [Multiple Return Values](#multiple-return-values)
-  - [Multiple Return Values are Multiple Values](#multiple-return-values-are-multiple-values)
+  - [Multiple Return Values Are Multiple Values](#multiple-return-values-are-multiple-values)
+  - [Ignoring Returned Values](#ignoring-returned-values)
+  - [Named Return Values](#named-return-values)
 
 ---
 
@@ -37,7 +39,7 @@ func div(num int, den int) int {
   - Function name
   - Input parameters: Param-name, Param-type
   - Return type
-- **Go is a typed languages**
+- **Go is a typed language**
   - Must specify the types of the parameters
   - The return types is specified between the input parameters and the function body
   - ***NOTE: When two or more consecutive input parameters are of the same type, we can specify the type once for all of them***
@@ -69,7 +71,7 @@ func main() {
 
 ## Simulating Named and Optional Parameters
 
-- Go does not have *Name Parameters* and *Optional Parameters*
+- Go does not have *Named Parameters* and *Optional Parameters*
 - **All function parameters must be supplied with arguments during call**
 - We can emulate named and optional parameters using *struct*
   - Define fields that match the desired parameters
@@ -143,8 +145,8 @@ func main() {
 }
 ```
 
-- We can supply any value or no values at all
-- We can also provider a slice, but we have to *spread* it using `...`
+- We can supply any value or no value at all
+- We can also provide a slice, but we have to *spread* it using `...`
   - **Without the *spread operator*, it is compile-time error**
 
 ## Multiple Return Values
@@ -152,7 +154,7 @@ func main() {
 - Go allows multiple return values
 - **The types of the return values are listed in `()`**
   - **All values must be returned**
-  - Do not put `()` around the returned values, esle compile-time error
+  - Do not put `()` around the returned values, else compile-time error
 - **We also return any associated errors**
   - **In Go, errors are values**
   - We use Go's multiple return value support to return an error
@@ -194,4 +196,47 @@ func main() {
 - Most of the time, we use `:=` to capture the multiple returned values
   - Allows to easily capture the values into separate variables
 
-### Multiple Return Values are Multiple Values
+### Multiple Return Values Are Multiple Values
+
+- It is not the same as returning a Tuple (like in Python)
+  - In Python, we can *collect* the values in a single variable
+  - Or we can assign them to multiple variables as well
+  - **But not in Go**
+- **In Go, we must assign each returned value individually**
+  - **Assigning multiple return values to a single variable is a compile-time error**
+
+```go
+// Example of Multiple Return Values
+// ---------------------------------
+// The following is an error
+results := divmod(34, 5)
+
+// The following is correct
+resDiv, resMod, err := divmod(34, 5)
+```
+
+### Ignoring Returned Values
+
+- Go does not allow *unused variables*
+- **If we do not want to use some of the return values, assign them to `_`**
+
+```go
+// Example of Ignoring Returned Value
+// ----------------------------------
+_, resMod, err := divmod(34, 5)
+```
+
+- *NOTE: It is also possible to ignore all the return values*
+  - We simply do not assign to any variable
+  - This is similar to calling `fmt.Println()`
+  - **`fmt.Println()` returns 2 values but it is idiomatic to ignore them**
+  - In all other case, explicitly ignore return values using `_`
+
+```go
+// Example of Ignoring All Returned Values
+// ---------------------------------------
+divmod(34, 5)
+fmt.Println("Hi")
+```
+
+### Named Return Values

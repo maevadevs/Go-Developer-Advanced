@@ -11,7 +11,7 @@
   - [Named Return Values](#named-return-values)
     - [Inconveniences of Named Return Values](#inconveniences-of-named-return-values)
   - [Blank Return: Never Use Them](#blank-return-never-use-them)
-  - [Functions Are Values](#functions-are-values)
+- [Functions Are Values](#functions-are-values)
   - [Function Type Declarations](#function-type-declarations)
   - [Anonymous Functions](#anonymous-functions)
 
@@ -325,7 +325,7 @@ func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
   - But it is a bad idea because it makes is harder to understand the data flow
   - **Never use blank return: Always specify what is being returend**
 
-### Functions Are Values
+## Functions Are Values
 
 - Functions in Go are values and can be passed around
   - **Type Signature: `func` + Param Types + Return Type**

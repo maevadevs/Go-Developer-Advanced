@@ -106,3 +106,6 @@ These are in-depth notes from learning Go.
       - Named Return Values
         - Inconveniences of Named Return Values
       - Blank Return: Never Use Them
+    - Functions Are Values
+      - Function Type Declarations
+      - Anonymous Functions

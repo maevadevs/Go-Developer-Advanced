@@ -102,3 +102,7 @@ These are in-depth notes from learning Go.
     - Variadic Function and Slices
     - Multiple Return Values
       - Multiple Return Values are Multiple Values
+      - Ignoring Returned Values
+      - Named Return Values
+        - Inconveniences of Named Return Values
+      - Blank Return: Never Use Them

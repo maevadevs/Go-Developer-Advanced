@@ -49,14 +49,12 @@ These are in-depth notes from learning Go.
      - Slice Access
      - Differences With Arrays
      - Slices Helper Functions From `slices`
-     - Built-In `len()` Function
-     - Built-In `append()` Function
+     - Built-In Functions: `len()`, `append()`
      - Length vs Capacity
-     - Built-In `make()` Function
-     - Built-In `clear()` Function
+     - Built-In Functions: `make()`, `clear()`
      - Choosing Slice Declaration
      - Subslicing Slice
-     - Built-In `copy()` Function
+     - Built-In Function: `copy()`
      - Converting Array To Slice: `copy()`
      - Converting Slice to Array: Type-Conversion
    - Strings, Runes, Bytes
@@ -66,8 +64,7 @@ These are in-depth notes from learning Go.
      - Map vs Hashmap
      - Reading and Writing a Map
      - *Comma-Ok* Idiom
-     - Built-In `delete()` Function
-     - Map: Built-In `clear()` Function
+     - Built-In Functions: `delete()`, `clear()`
      - Comparing Maps
      - Using Maps As Sets
    - Structs

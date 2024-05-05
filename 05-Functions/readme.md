@@ -16,7 +16,7 @@
   - [Anonymous Functions](#anonymous-functions)
 - [Closures](#closures)
   - [Benefits of Closures](#benefits-of-closures)
-- [Passing Functions As Parameters](#passing-functions-as-parameters)
+- [Passing Functions As Arguments](#passing-functions-as-arguments)
 - [Returning Functions From Functions](#returning-functions-from-functions)
 
 ---
@@ -326,14 +326,14 @@ func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
   - If returning the zero-values, be sure they make sense
   - `return` keyword is still required, else compile-time error
 - Blank return might appear handy
-  - But it is a bad idea because it makes is harder to understand the data flow
+  - But it is a bad idea because it makes it harder to understand the data flow
   - **Never use blank return: Always specify what is being returend**
 
 ## Functions Are Values
 
 - Functions in Go are values and can be passed around
   - **Type Signature: `func` + Param Types + Return Type**
-  - Function can have the same type signature
+  - Functions can have the same type signature
 - **Since they are values, we can declare a function variable**
   - Can be assigned any function that match the type signature
   - Default Zero value is `nil`
@@ -425,7 +425,7 @@ func main() {
 ```
 
 - `strconv.Atoi()` allows to convert a string to int
-  - Also return an `error` if the conversion fails
+  - Also returns an `error` if the conversion fails
 - The type of `opFunc` is `func (int, int) int`
 - **Calling a function in a variable is the same as calling a regular function**
 - **NOTE: Do not write fragile programs**
@@ -474,7 +474,7 @@ for i := range 5 {
 ```
 
 - *We do not have to assign an anonymous function to a variable*
-  - Can be written inline and call immediately
+  - Can be written inline and called immediately
   - But not something that we would normally do
   - If we are doing this approach, might as well just call the code
   - But this is typically used with `defer` and `go` routines
@@ -588,7 +588,7 @@ func main() {
 - **Makes some very useful patterns when passed around**
   - Allows to take variables within a function and use the values outside the function
 
-## Passing Functions As Parameters
+## Passing Functions As Arguments
 
 - **Functions are values: We can pass them as arguments to other functions**
   - *Treat the function as data*
@@ -618,7 +618,7 @@ fmt.Println("After Sorting By Last Name:", people)
 ```
 
 - A closure is passed to `sort.Slice()`
-  - `people` is *cpatured* within the closure
-- **Passing functions as parameters to other functions is useful for performing different operations on the same kind of data**
+  - `people` is *captured* within the closure
+- **Passing functions as arguments to other functions is useful for performing different operations on the same kind of data**
 
 ## Returning Functions From Functions

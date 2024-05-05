@@ -110,3 +110,4 @@ These are in-depth notes from learning Go.
       - Benefits of Closures
     - Passing Functions As Parameters
     - Returning Functions From Functions
+    - `defer`

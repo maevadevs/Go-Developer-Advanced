@@ -18,6 +18,7 @@
   - [Benefits of Closures](#benefits-of-closures)
 - [Passing Functions As Arguments](#passing-functions-as-arguments)
 - [Returning Functions From Functions](#returning-functions-from-functions)
+- [`defer`](#defer)
 
 ---
 
@@ -622,3 +623,30 @@ fmt.Println("After Sorting By Last Name:", people)
 - **Passing functions as arguments to other functions is useful for performing different operations on the same kind of data**
 
 ## Returning Functions From Functions
+
+- We can also return a closure from a function
+
+```go
+// Example of Function That Returns a Closure
+// ------------------------------------------
+func makeMult(base int) func(int) int {
+    return func(factor int) int {
+        return base * factor
+    }
+}
+
+base2Mult := makeMult(2)
+base3Mult := makeMult(3)
+fmt.Println("i\tbase2\tbase3")
+for i := range 5 {
+    fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i))
+}
+```
+
+- **Closures are very helpful in Go**
+  - Can be used to sort slices
+  - Can be used to efficiently search a sorted slice with `sort.Search`
+  - Returning closures is used when bulding middlware for web server
+  - Also used to implement resource cleanups with `defer`
+
+## `defer`

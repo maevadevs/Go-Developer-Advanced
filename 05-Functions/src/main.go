@@ -198,6 +198,17 @@ func main() {
 	})
 	fmt.Println("After Sorting By Age:", people)
 	fmt.Println()
+
+	// Example of Function That Returns a Closure
+	// ------------------------------------------
+	fmt.Println("Example of Function That Returns a Closure:")
+	base2Mult := makeMult(2)
+	base3Mult := makeMult(3)
+	fmt.Println("i\tbase2\tbase3")
+	for i := range 5 {
+		fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i))
+	}
+	fmt.Println()
 }
 
 // Example of a Function
@@ -274,6 +285,14 @@ func add(i int, j int) int  { return i + j }
 func sub(i int, j int) int  { return i - j }
 func mul(i int, j int) int  { return i * j }
 func divs(i int, j int) int { return i / j }
+
+// Example of Function That Returns a Closure
+// ------------------------------------------
+func makeMult(base int) func(int) int {
+	return func(factor int) int {
+		return base * factor
+	}
+}
 
 // FOR WINDOWS:
 //  To Run:                 make run-win

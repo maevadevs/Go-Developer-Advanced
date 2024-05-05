@@ -106,3 +106,7 @@ These are in-depth notes from learning Go.
     - Functions Are Values
       - Function Type Declarations
       - Anonymous Functions
+    - Closures
+      - Benefits of Closures
+    - Passing Functions As Parameters
+    - Returning Functions From Functions

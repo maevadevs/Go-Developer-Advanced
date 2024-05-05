@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -131,6 +132,71 @@ func main() {
 		result := opFunc(p1, p2)
 		fmt.Println(expr, "=", result)
 	}
+	fmt.Println()
+
+	// Example of Anonymous Function
+	// -----------------------------
+	fmt.Println("Example of Anonymous Function:")
+	f := func(j int) {
+		fmt.Println("Printing", j, "from inside an anonymous function")
+	}
+	for i := range 5 {
+		f(i)
+	}
+	fmt.Println()
+
+	// Example of Closure
+	// ------------------
+	fmt.Println("Example of Closure:")
+	a := 20
+	fmt.Println("Outside fa(), a =", a)
+	fa := func() {
+		fmt.Println("Inside fa() before assignment, a =", a)
+		a = 30
+		fmt.Println("Inside fa() after assignment, a =", a)
+	}
+	fa()
+	fmt.Println("Outside fa(), a =", a)
+	fmt.Println()
+
+	// Example of Closure With Shadow
+	// ------------------------------
+	fmt.Println("Example of Closure With Shadow:")
+	b := 20
+	fmt.Println("Outside fb(), b =", b)
+	fb := func() {
+		fmt.Println("Inside fb() before assignment, b =", b)
+		b := 30 // This assignment Shadows instead
+		fmt.Println("Inside fb() after assignment, b =", b)
+	}
+	fb()
+	fmt.Println("Outside fb(), b =", b)
+	fmt.Println()
+
+	// Example of Sorting Slice
+	// ------------------------
+	fmt.Println("Example of Sorting Slice")
+	type Person struct {
+		FirstName string
+		LastName  string
+		Age       int
+	}
+	people := []Person{
+		{"John", "Smith", 37},
+		{"Jeremy", "Trye", 18},
+		{"Jasmine", "Alter", 20},
+	}
+	fmt.Println("Before Sorting:", people)
+	// Sorting the slice by last name
+	sort.Slice(people, func(i int, j int) bool {
+		return people[i].LastName < people[j].LastName
+	})
+	fmt.Println("After Sorting By Last Name:", people)
+	// Sorting the slice by age
+	sort.Slice(people, func(i int, j int) bool {
+		return people[i].Age < people[j].Age
+	})
+	fmt.Println("After Sorting By Age:", people)
 	fmt.Println()
 }
 

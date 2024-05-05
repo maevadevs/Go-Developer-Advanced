@@ -14,6 +14,10 @@
 - [Functions Are Values](#functions-are-values)
   - [Function Type Declarations](#function-type-declarations)
   - [Anonymous Functions](#anonymous-functions)
+- [Closures](#closures)
+  - [Benefits of Closures](#benefits-of-closures)
+- [Passing Functions As Parameters](#passing-functions-as-parameters)
+- [Returning Functions From Functions](#returning-functions-from-functions)
 
 ---
 
@@ -451,3 +455,170 @@ opMap := map[string]opFuncType {
   - Easier to maintain
 
 ### Anonymous Functions
+
+- We can define new functions within a function and assign them to variables
+- We declare an anonymous function with `func()`
+  - Followed immediately by the input parameters, return values, and body
+  - It is a compile-time error to try to add a name
+- It is called like any other functions
+
+```go
+// Example of Anonymous Function
+// -----------------------------
+f := func(j int) {
+    fmt.Println("Printing", j, "from inside an anonymous function")
+}
+for i := range 5 {
+    f(i)
+}
+```
+
+- *We do not have to assign an anonymous function to a variable*
+  - Can be written inline and call immediately
+  - But not something that we would normally do
+  - If we are doing this approach, might as well just call the code
+  - But this is typically used with `defer` and `go` routines
+
+```go
+// Example of Inline Anonymous Function
+// ------------------------------------
+for i := range 5 {
+    func(j int) {
+        fmt.Println("Printing", j, "from inside an anonymous function")
+    }(i)
+}
+```
+
+- **NOTE: We can also declare package-scope variables that are assigned anonymous functions**
+
+```go
+// Examples of Package-Scope Variables With Anonymous Functions
+// ------------------------------------------------------------
+var (
+    add = func(i int, j int) int { return i + j }
+    sub = func(i int, j int) int { return i - j }
+    mul = func(i int, j int) int { return i * j }
+    div = func(i int, j int) int { return i / j }
+)
+
+func main() {
+    x := add(2, 3)
+    fmt.Println(x)
+}
+```
+
+- **NOTE: We can also re-assign the value of a Package-level anonymous function**
+
+```go
+// Examples of Re-assigning Package-Scope Variables With Anonymous Functions
+// -------------------------------------------------------------------------
+var (
+    add = func(i int, j int) int { return i + j }
+    sub = func(i int, j int) int { return i - j }
+    mul = func(i int, j int) int { return i * j }
+    div = func(i int, j int) int { return i / j }
+)
+
+func main() {
+    x := add(2, 3)
+    fmt.Println(x)
+    changeAdd()
+    y := add(2, 3)
+    fmt.Println(y)
+}
+
+func changeAdd() {
+    add = func(i int, j int) int { return i + j + j }
+}
+```
+
+- **NOTE: Be sure you need this capability before using Package-level anonymous function**
+  - Package-level states should be left immutable
+  - To make data-flow easier to understand
+  - If function changes while running, the data-flow can become very confusing
+
+## Closures
+
+- Functions declared inside functions
+- They are able to access and modify variables declared in the outer function
+- **We can read/write from/to the outside variables even though they are not passed explicitly**
+
+```go
+// Example of Closure
+// ------------------
+func main() {
+    a := 20
+    fmt.Println("Outside fa(), a =", a)
+    fa := func() {
+        fmt.Println("Inside fa() before assignment, a =", a)
+        a = 30
+        fmt.Println("Inside fa() after assignment, a =", a)
+    }
+    fa()
+    fmt.Println("Outside fa(), a =", a)
+    fmt.Println()
+}
+```
+
+- We can also shadow the variables if we assign with `:=`
+- **Be careful to use the correct assignment operator when working with closures**
+
+```go
+// Example of Closure With Shadow
+// ------------------------------
+func main() {
+    b := 20
+    fmt.Println("Outside fb(), b =", b)
+    fb := func() {
+        fmt.Println("Inside fb() before assignment, b =", b)
+        b := 30 // This assignment Shadows instead
+        fmt.Println("Inside fb() after assignment, b =", b)
+    }
+    fb()
+    fmt.Println("Outside fb(), b =", b)
+}
+```
+
+### Benefits of Closures
+
+- **Allows to limit a function's scope**
+  - We can *hide* the function if it is only local to the outer function
+- **Reduces the number of declarations at the Package-level**
+  - Can be used to make repeating logic more DRY inside of a function
+- **Makes some very useful patterns when passed around**
+  - Allows to take variables within a function and use the values outside the function
+
+## Passing Functions As Parameters
+
+- **Functions are values: We can pass them as arguments to other functions**
+  - *Treat the function as data*
+  - **We can pass *Closures* around: This is a very useful pattern**
+  - An example is *Sorting Slice* using `sort.Slice`
+    - **NOTE: This predates generics in Go**
+
+```go
+// Example of Sorting Slice
+// ------------------------
+type Person struct {
+    FirstName string
+    LastName  string
+    Age       int
+}
+people := []Person{
+    {"John", "Smith", 37},
+    {"Jeremy", "Trye", 50},
+    {"Jasmine", "Alter", 20},
+}
+fmt.Println("Before Sorting:", people)
+// Sorting the slice by last name
+sort.Slice(people, func(i int, j int) bool {
+    return people[i].LastName < people[j].LastName
+})
+fmt.Println("After Sorting By Last Name:", people)
+```
+
+- A closure is passed to `sort.Slice()`
+  - `people` is *cpatured* within the closure
+- **Passing functions as parameters to other functions is useful for performing different operations on the same kind of data**
+
+## Returning Functions From Functions

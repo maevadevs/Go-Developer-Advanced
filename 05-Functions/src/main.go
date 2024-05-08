@@ -212,11 +212,11 @@ func main() {
 	}
 	fmt.Println()
 
-	// Example of cat Command
-	// ----------------------
-	fmt.Println("Example of cat Command:")
-    // Make sure a filename was pass as argument
-    // Args[0] is the name of the program
+	// Example of defer With a cat Command
+	// -----------------------------------
+	fmt.Println("Example of defer With a cat Command:")
+	// Make sure a filename was pass as argument
+	// Args[0] is the name of the program
 	if len(os.Args) < 2 {
 		log.Fatal("no file specified")
 	}
@@ -226,9 +226,13 @@ func main() {
 		log.Fatal(err)
 	}
 	// Close the file after using it
-    // This must be run no matter any errors in the program
-	defer fl.Close()
-    // Read from the file
+	// This must be run no matter any errors in the program
+	defer func() {
+		fmt.Println("Defer in main() is called here")
+		fmt.Println()
+		fl.Close()
+	}()
+	// Read from the file
 	data := make([]byte, 2048)
 	for {
 		count, err := fl.Read(data)
@@ -240,6 +244,12 @@ func main() {
 			break
 		}
 	}
+	fmt.Println()
+
+	// Example of Using defer
+	// ----------------------
+	fmt.Println("Example of Using defer:")
+	deferExample()
 	fmt.Println()
 }
 
@@ -324,6 +334,22 @@ func makeMult(base int) func(int) int {
 	return func(factor int) int {
 		return base * factor
 	}
+}
+
+// Example of Using defer
+// ----------------------
+func deferExample() int {
+	a := 10
+	defer func(val int) {
+		fmt.Println("First value:", val)
+	}(a)
+	a = 20
+	defer func(val int) {
+		fmt.Println("Second value:", val)
+	}(a)
+	a = 30
+	fmt.Println("Exiting deferExample:", a)
+	return a
 }
 
 // FOR WINDOWS:

@@ -657,7 +657,7 @@ for i := range 5 {
 - **In Go, the cleanup code is attached to the function using `defer`**
   - We use `defer` to release resources
   - Normally, function calls are called right away
-  - **`defer` delays the invocation until the surrounding function exits**
+  - **`defer` delays the invocation until the enclosing function exits**
 
 ```go
 // Example of cat Command
@@ -675,7 +675,11 @@ if err != nil {
 }
 // Close the file after using it
 // This must be run no matter any errors in the program
-defer fl.Close()
+defer func() {
+    fmt.Println("Defer is called here")
+    fmt.Println()
+    fl.Close()
+}()
 // Read from the file
 data := make([]byte, 2048)
 for {
@@ -690,12 +694,80 @@ for {
 }
 ```
 
-- With `defer`:
+- With `defer`
   - We can use a function, method, or closure
   - We can defer multiple functions in a Go function
-    - They run in a *Last-In, Firt-Out* (LIFO) order
+    - **They run in a *Last-In, Firt-Out* (LIFO) order**
     - The last `defer` registered will run first
   - **Code within `defer` functions runs *after the `return` statement***
     - We can supply a function with input parameters to `defer`
     - The input parameters are evaluated immediately
     - Their values are stored until the function runs
+
+```go
+// Example of Using defer
+// ----------------------
+func deferExample() int {
+    a := 10
+    defer func(val int) {
+        fmt.Println("First value:", val)
+    }(a)
+    a = 20
+    defer func(val int) {
+        fmt.Println("Second value:", val)
+    }(a)
+    a = 30
+    fmt.Println("Exiting deferExample:", a)
+    return a
+}
+```
+
+- **NOTES**
+  - We read from a file by passing a slice of bytes to `fl.Read()`
+  - It returns the number of bytes that were read into the slice + error
+  - Also need to handle `EOF` marker to stop reading the file
+- We could supply a function that returns values to `defer`
+  - But there is no way to read those values
+
+```go
+func example() {
+    defer func() int {
+        return 2 // We cannot access/read this value
+    }()
+}
+```
+
+- **A deferred function can access/modify the return value of its enclosing functions**
+  - It is the best reason to use *Named Return Values*
+  - Allow code to take action based on an error
+  - `defer` can add contextual information to an error returned from a function
+  - It is essentially a closure
+
+```go
+// Example of handling DB transaction cleanups Using defer
+// -------------------------------------------------------
+func DoSomeInserts(ctx context.Context, db *sql.DB, val1, val2 string) (err error) {
+    tx, err := db.BeginTx(ctx, nil)
+    if err != nil {
+        return err
+    }
+    defer func() {
+        // We can access outside err from here
+        // This is essentially a closure
+        if err != nil {
+            tx.Rollback()
+        } else {
+            err = tx.Commit()
+        }
+    }()
+    _, err = tx.ExecContext(ctx, "INSERT INTO table (col) VALUES $1", val1)
+    if err != nil {
+        return err
+    }
+    // Use tx to do more DB inserts here
+    return nil
+}
+```
+
+- **NOTE: The standard library includes good support for databases**
+  - `database/sql`

@@ -35,12 +35,12 @@ build-win: vet
 # Target
 run: build
 	# Task: Build module then run in Linux
-	bin/Functions
+	bin/Functions $(ARGS)
 
 # Target
 run-win: build-win
 	# Task: Build module then run in Windows
-	bin\Functions.exe
+	bin\Functions.exe $(ARGS)
 
 # Target
 try: vet
@@ -59,5 +59,5 @@ try-win: vet
 		rm -f bin\Functions-Temp; \
 	fi
 	go build -o bin\Functions-Temp src\main.go
-	bin\Functions-Temp
+	bin\Functions-Temp $(ARGS)
 	rm -f bin\Functions-Temp

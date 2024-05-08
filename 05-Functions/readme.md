@@ -650,3 +650,52 @@ for i := range 5 {
   - Also used to implement resource cleanups with `defer`
 
 ## `defer`
+
+- Progams often create temporary resources that need to be cleaned up
+- The cleanup has to happen no matter the exit point of the function
+- We can think of this as the `finally` portion of other languages' error handlers
+- **In Go, the cleanup code is attached to the function using `defer`**
+  - We use `defer` to release resources
+  - Normally, function calls are called right away
+  - **`defer` delays the invocation until the surrounding function exits**
+
+```go
+// Example of cat Command
+// ----------------------
+fmt.Println("Example of cat Command:")
+// Make sure a filename was pass as argument
+// Args[0] is the name of the program
+if len(os.Args) < 2 {
+    log.Fatal("no file specified")
+}
+// Open the file: Read-only
+fl, err := os.Open(os.Args[1])
+if err != nil {
+    log.Fatal(err)
+}
+// Close the file after using it
+// This must be run no matter any errors in the program
+defer fl.Close()
+// Read from the file
+data := make([]byte, 2048)
+for {
+    count, err := fl.Read(data)
+    os.Stdout.Write(data[:count])
+    if err != nil {
+        if err != io.EOF {
+            log.Fatal(err)
+        }
+        break
+    }
+}
+```
+
+- With `defer`:
+  - We can use a function, method, or closure
+  - We can defer multiple functions in a Go function
+    - They run in a *Last-In, Firt-Out* (LIFO) order
+    - The last `defer` registered will run first
+  - **Code within `defer` functions runs *after the `return` statement***
+    - We can supply a function with input parameters to `defer`
+    - The input parameters are evaluated immediately
+    - Their values are stored until the function runs

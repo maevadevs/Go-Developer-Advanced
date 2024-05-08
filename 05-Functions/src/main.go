@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
+	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -207,6 +209,36 @@ func main() {
 	fmt.Println("i\tbase2\tbase3")
 	for i := range 5 {
 		fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i))
+	}
+	fmt.Println()
+
+	// Example of cat Command
+	// ----------------------
+	fmt.Println("Example of cat Command:")
+    // Make sure a filename was pass as argument
+    // Args[0] is the name of the program
+	if len(os.Args) < 2 {
+		log.Fatal("no file specified")
+	}
+	// Open the file: Read-only
+	fl, err := os.Open(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Close the file after using it
+    // This must be run no matter any errors in the program
+	defer fl.Close()
+    // Read from the file
+	data := make([]byte, 2048)
+	for {
+		count, err := fl.Read(data)
+		os.Stdout.Write(data[:count])
+		if err != nil {
+			if err != io.EOF {
+				log.Fatal(err)
+			}
+			break
+		}
 	}
 	fmt.Println()
 }

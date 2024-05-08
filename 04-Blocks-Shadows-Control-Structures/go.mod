@@ -1,3 +1,3 @@
 module github.com/maevadevs/Go-Learning/Blocks-Shadows-Control-Structures
 
-go 1.22.2
+go 1.22.3

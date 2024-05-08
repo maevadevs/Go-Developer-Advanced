@@ -49,7 +49,7 @@ try: vet
 		rm -f bin/Functions-Temp; \
 	fi
 	go build -o bin/Functions-Temp src/main.go
-	bin/Functions-Temp
+	bin/Functions-Temp $(ARGS)
 	rm -f bin/Functions-Temp
 
 # Target
@@ -61,5 +61,3 @@ try-win: vet
 	go build -o bin\Functions-Temp src\main.go
 	bin\Functions-Temp
 	rm -f bin\Functions-Temp
-
-

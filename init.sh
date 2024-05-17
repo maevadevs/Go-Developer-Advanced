@@ -85,9 +85,9 @@ else
     echo "\
 # NOTE: Make sure all indentations use tabs
 
-# DEFAULT_GOAL specify the default target
-# This is run when no target is specified
-.DEFAULT_GOAL := build
+# DEFAULT_GOAL specifies the default target
+# This is run when no target is provided during the call
+.DEFAULT_GOAL := try
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
@@ -109,43 +109,23 @@ vet: fmt
 
 # Target
 build: vet
-	# Task: Build module in Linux
+	# Task: Build module
 	go build -o bin/$OUT_FILE src/main.go
 
 # Target
-build-win: vet
-	# Task: Build module in Windows
-	go build -o bin\\$OUT_FILE.exe src\main.go
-
-# Target
 run: build
-	# Task: Build module then run in Linux
+	# Task: Build module then run
 	bin/$OUT_FILE
 
 # Target
-run-win: build-win
-	# Task: Build module then run in Windows
-	bin\\$OUT_FILE.exe
-
-# Target
 try: vet
-	# Task: Build module, run, then remove built binary in Linux
+	# Task: Build module, run, then remove built binary
 	if test -f bin/$OUT_FILE-Temp; then \\
 		rm -f bin/$OUT_FILE-Temp; \\
 	fi
 	go build -o bin/$OUT_FILE-Temp src/main.go
 	bin/$OUT_FILE-Temp
 	rm -f bin/$OUT_FILE-Temp
-
-# Target
-try-win: vet
-	# Task: Build module, run, then remove built binary in Windows
-	if test -f bin\\$OUT_FILE-Temp; then \\
-		rm -f bin\\$OUT_FILE-Temp; \\
-	fi
-	go build -o bin\\$OUT_FILE-Temp src\main.go
-	bin\\$OUT_FILE-Temp
-	rm -f bin\\$OUT_FILE-Temp
 
 " >> makefile;
 

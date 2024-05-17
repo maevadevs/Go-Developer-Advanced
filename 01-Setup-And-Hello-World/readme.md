@@ -498,5 +498,5 @@ System|Option
 :-|:-
 Windows|`chocolatey` can be used to install and update Go
 Mac|`brew` can be used to install and update Go
-Linux|- Move the current installaton in a backup location<br>- Download and unpack the new installation<br>- If all is good, delete the backup
+Linux|- Move the current installation in a backup location<br>- Download and unpack the new installation<br>- If all is good, delete the backup
 Others|Follow the installer's option for removing and re-installing

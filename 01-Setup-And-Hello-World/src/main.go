@@ -4,18 +4,19 @@ import "fmt"
 
 // This is the main entry of the application.
 func main() {
+	fmt.Println()
+	fmt.Println("A Simple Hello-World Program")
+	fmt.Println("----------------------------")
 	fmt.Println("Hello world!")
 	fmt.Printf("Hello again %s!\n", "world")
+	fmt.Println()
 }
 
-// FOR WINDOWS:
-//  To run:                 go run 01-Setup-And-Hello-World\src\main.go
-//  To compile:             go build -o 01-Setup-And-Hello-World\bin\Hello-World.exe 01-Setup-And-Hello-World\src\main.go
-//  To run after compile:   .\01-Setup-And-Hello-World\bin\Hello-World.exe
-//  Compile + Run:          go build -o 01-Setup-And-Hello-World\bin\Hello-World.exe 01-Setup-And-Hello-World\src\main.go && .\01-Setup-And-Hello-World\bin\Hello-World.exe
-
-// FOR LINUX:
-//  To run:                 go run 01-Setup-And-Hello-World/src/main.go
-//  To compile:             go build -o 01-Setup-And-Hello-World/bin/Hello-World 01-Setup-And-Hello-World/src/main.go
-//  To run after compile:   ./01-Setup-And-Hello-World/bin/Hello-World
-//  Compile + Run:          go build -o 01-Setup-And-Hello-World/bin/Hello-World 01-Setup-And-Hello-World/src/main.go && ./01-Setup-And-Hello-World/bin/Hello-World
+// AVAILABLE COMMANDS
+// ------------------
+//  make            Default to `make try`
+//  make fmt        Format all source files
+//  make vet        Verify any possible errors
+//  make build      Build module
+//  make run        Build module then run
+//  make try        Build module, run, then remove built binary

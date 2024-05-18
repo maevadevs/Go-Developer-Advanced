@@ -18,7 +18,7 @@ These are in-depth notes from learning Go.
    - VS Code Setup
    - `make` and Build Automation
    - Go Compatibility Promise
-2. [Types and Declarations](./02-Types-And-Declarations/)
+2. [Primitive Types and Declarations](./02-Primitive-Types-And-Declarations/)
    - Predeclared Types
    - Zero-Values
    - Literals: Integer, Float, Rune, String, Default Type

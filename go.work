@@ -2,7 +2,7 @@ go 1.22.3
 
 use (
     ./01-Setup-And-Hello-World
-    ./02-Types-And-Declarations
+    ./02-Primitive-Types-And-Declarations
     ./03-Composite-Types
     ./04-Blocks-Shadows-Control-Structures
     ./05-Functions

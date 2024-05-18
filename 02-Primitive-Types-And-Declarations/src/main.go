@@ -22,8 +22,8 @@ func main() {
 	fmt.Println(strings.Repeat("-", 100))
 	fmt.Println()
 
-	// Example of Integers
-	fmt.Println("Example of Integers:")
+	// Example of Integer Literals
+	fmt.Println("Example of Integer Literals:")
 
 	var age int = 45
 	var blue int = 0x0000ff
@@ -39,8 +39,8 @@ func main() {
 
 	fmt.Println()
 
-	// Example of Floats
-	fmt.Println("Example of Floats:")
+	// Example of Float Literals
+	fmt.Println("Example of Float Literals:")
 
 	var length float32 = 24.68
 	var avogadro float64 = 6.2214e23
@@ -54,8 +54,8 @@ func main() {
 
 	fmt.Println()
 
-	// Example of Runes
-	fmt.Println("Example of Runes:")
+	// Example of Rune Literals
+	fmt.Println("Example of Rune Literals:")
 
 	var gender rune = 'M'
 	var newline rune = '\n'
@@ -102,8 +102,8 @@ func main() {
 
 	fmt.Println()
 
-	// Example of Boolean Literals
-	fmt.Println("Example of Boolean Literals:")
+	// Example of Boolean
+	fmt.Println("Example of Boolean:")
 
 	// Declaration: Default to false
 	var flag bool
@@ -116,7 +116,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Complex Number
-	fmt.Println("Example of Complex Literals:")
+	fmt.Println("Example of Complex Number:")
 
 	x := complex(2.5, 3.1)
 	y := complex(10.2, 2)
@@ -156,6 +156,7 @@ func main() {
 	var someNum int = 100
 	// Declaration-Only with var
 	var myNum int
+	// Assignment after declaration
 	myNum = 77
 	// Multiple declaration and assignment
 	var userAge, favNum int = 26, 100
@@ -249,22 +250,11 @@ func main() {
 	fmt.Println()
 }
 
-// FOR WINDOWS:
-//  To Run:                 make run-win
-//                          go run 02-Types-And-Declarations\src\main.go
-//  To Build:               make build-win
-//                          go build -o 02-Types-And-Declarations\bin\Types.exe 02-Types-And-Declarations\src\main.go
-//  To Run after Build:     .\bin\Types.exe
-//                          .\02-Types-And-Declarations\bin\Types.exe
-//  Try Build + Run:        make try-win
-//                          go build -o 02-Types-And-Declarations\bin\Types.exe 02-Types-And-Declarations\src\main.go && .\02-Types-And-Declarations\bin\Types.exe && rm .\02-Types-And-Declarations\bin\Types.exe
-
-// FOR LINUX:
-//  To Run:                 make run
-//                          go run 02-Types-And-Declarations/src/main.go
-//  To Build:               make build
-//                          go build -o 02-Types-And-Declarations/bin/Types 02-Types-And-Declarations/src/main.go
-//  To Run after Build:     ./bin/Types
-//                          ./02-Types-And-Declarations/bin/Types
-//  Try Build + Run:        make try
-//                          go build -o 02-Types-And-Declarations/bin/Types 02-Types-And-Declarations/src/main.go && ./02-Types-And-Declarations/bin/Types && rm ./02-Types-And-Declarations/bin/Types
+// AVAILABLE COMMANDS
+// ------------------
+//  make            Default to `make try`
+//  make fmt        Format all source files
+//  make vet        Verify any possible errors
+//  make build      Build module
+//  make run        Build module then run
+//  make try        Build module, run, then remove built binary

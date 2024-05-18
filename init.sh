@@ -162,25 +162,14 @@ func main() {
     fmt.Println(\"Hello world!\")
 }
 
-// FOR WINDOWS:
-//  To Run:                 make run-win
-//                          go run $PROJECT_NAME\src\main.go
-//  To Build:               make build-win
-//                          go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go
-//  To Run after Build:     .\bin\\$OUT_FILE.exe
-//                          .\\$PROJECT_NAME\bin\\$OUT_FILE.exe
-//  Try Build + Run:        make try-win
-//                          go build -o $PROJECT_NAME\bin\\$OUT_FILE.exe $PROJECT_NAME\src\main.go && .\\$PROJECT_NAME\bin\\$OUT_FILE.exe && rm .\\$PROJECT_NAME\bin\\$OUT_FILE.exe
-
-// FOR LINUX:
-//  To Run:                 make run
-//                          go run $PROJECT_NAME/src/main.go
-//  To Build:               make build
-//                          go build -o $PROJECT_NAME/bin/$OUT_FILE $PROJECT_NAME/src/main.go
-//  To Run after Build:     ./bin/$OUT_FILE
-//                          ./$PROJECT_NAME/bin/$OUT_FILE
-//  Try Build + Run:        make try
-//                          go build -o $PROJECT_NAME/bin/$OUT_FILE $PROJECT_NAME/src/main.go && ./$PROJECT_NAME/bin/$OUT_FILE && rm ./$PROJECT_NAME/bin/$OUT_FILE
+// AVAILABLE COMMANDS
+// ------------------
+//  make            Default to \`make try\`
+//  make fmt        Format all source files
+//  make vet        Verify any possible errors
+//  make build      Build module
+//  make run        Build module then run
+//  make try        Build module, run, then remove built binary
 
 " >> src/main.go;
 

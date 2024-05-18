@@ -1,4 +1,4 @@
-# Types And Declarations
+# Primitive Types And Declarations
 
 ---
 
@@ -59,23 +59,24 @@
 ## Zero-Values
 
 - **Declared variables with no initial values are assigned default *Zero Values***
-  - Explicit *Zero Value*
+  - Explicit *Zero Value*, depending on the data type
   - Makes code clearer
   - Removes sources of bugs
   - [More details on the docs page](https://go.dev/ref/spec#The_zero_value)
 
 ## Literals
 
-- **Explicitly specified number, character, or string**
+- **Explicitly-specified number, character, or string**
 - 4 common kinds of literals
   - Integer literal
   - Float Literal
   - Rune Literal
   - String Literal
-- **Literals are considered *untyped***
+- **Literals are considered *untyped* but have default type**
   - Situations where the type is not explicitly declared but inferred from initial value
   - In those cases, Go uses the *default type* for a literal
-  - **If a type cannot be determined from an expression (e.g. Should `3` be used as a Float or an Integer?), the literal defaults to a default type**
+  - **If a type cannot be determined from an expression, the literal defaults to a default type**
+    - E.g. Should `3` be used as a Float or an Integer?
 
 ### Integer Literal
 
@@ -86,7 +87,7 @@
   - `0x` or `0X` => *Hexadecimal*
   - `0o` or `0O` => *Octal*
   - *NOTE: `0` by itself can also be used for Octal but it is confusing so do not use it*
-- **Optional `_` can be used as digits separator**
+- **Optional `_` can be used as digit-separator**
   - But cannot be at the beginning or end
   - Cannot be next to each other
   - Can be anywhere else in the number
@@ -103,8 +104,8 @@ import "fmt"
 
 // This is the main entry of the application.
 func main() {
-    // Example of Integers
-    fmt.Println("Example of Integers:")
+    // Example of Integer Literals
+    fmt.Println("Example of Integer Literals:")
 
     var age int = 45
     var blue int = 0x0000ff
@@ -139,8 +140,8 @@ import "fmt"
 
 // This is the main entry of the application.
 func main() {
-    // Example of Floats
-    fmt.Println("Example of Floats:")
+    // Example of Float Literals
+    fmt.Println("Example of Float Literals:")
 
     var length float32 = 24.68
     var avogadro float64 = 6.2214e23
@@ -156,9 +157,9 @@ func main() {
 
 ### Rune Literal
 
-- Represent a character
+- Represent a single *Unicode Codepoint*
 - Surrounded by single-quotes `''`
-  - **In Go, `'` and `"` are not interchangeable**
+- **In Go, `'` and `"` are not interchangeable**
   - `'` is for Runes
   - `"` is for Strings
 - Rune literals can be written in many ways
@@ -176,7 +177,7 @@ Single Unicode Character|`'a'`
   - Tab `\t`
   - Single-quote `\'`
   - Backslash `\\`
-- **Avoid using any of the numeric escapes for rune literals**
+- **Avoid using any of the numeric-escapes for rune literals**
   - Unless the context makes the code clearer
 
 ```go
@@ -186,8 +187,8 @@ import "fmt"
 
 // This is the main entry of the application.
 func main() {
-    // Example of Runes
-    fmt.Println("Example of Runes:")
+    // Example of Rune Literals
+    fmt.Println("Example of Rune Literals:")
 
     var gender rune = 'M'
     var newline rune = '\n'
@@ -277,8 +278,8 @@ import "fmt"
 
 // This is the main entry of the application.
 func main() {
-    // Example of Boolean Literals
-    fmt.Println("Example of Boolean Literals:")
+    // Example of Boolean
+    fmt.Println("Example of Boolean:")
 
     // Declaration: Default to false
     var flag bool
@@ -388,7 +389,7 @@ Integer Type|Range
 - 2 Floating-Point types
   - `float32`
   - `float64`
-- IEEE 754 standard
+- Match to IEEE 754 standard (single-precision and double-precision)
 - **Zero-Value = `0.0`**
 - **Literal Default Type: `float64`**
 
@@ -423,7 +424,7 @@ Float Type|Range|Precision
   - Subtraction `-` and `-=`
   - Multiplication `*` and `*=`
   - Division `/` and `/=`
-- **Float division has some properties**
+- **Float division has some specific properties**
   - Division of Non-Zero by `0` results in `±Inf`
   - Division of `0` by `0` results in `NaN`
 - Support usual comparison operators
@@ -482,7 +483,7 @@ import "fmt"
 // This is the main entry of the application.
 func main() {
     // Example of Complex Number
-    fmt.Println("Example of Complex Literals:")
+    fmt.Println("Example of Complex Number:")
 
     x := complex(2.5, 3.1)
     y := complex(10.2, 2)
@@ -512,8 +513,7 @@ func main() {
 ## Strings and Runes
 
 - String is a built-in data type
-- Supports Unicode
-  - We can put any unicode characters in strings
+- Supports Unicode - We can put any unicode characters in strings
 - Zero-Value is `""`
 - Default Type is `string`
 - **Strings are immutable**
@@ -526,11 +526,11 @@ func main() {
 
 ### Runes
 
-- Represent a single code-point
+- Represent a single *Unicode Codepoint*
 - Used for representing a character
 - Alias for `int32` type
   - *Characters* are represented as integer codepoints
-  - **But use `rune` for character, not `int32`**
+  - **But do use `rune` for character, not `int32`**
   - They are same for the compiler, but bad programming practice to mismatch
   - Helps to clarify the intent in the code
 - Default type is `rune`
@@ -545,9 +545,10 @@ var lNameInitial int32 = 'R'
 ## Explicit Type Conversion Required
 
 - Most languages have *Automatic Type Promotions/Upgrades*
+  - E.g. Bool -> Int -> Float -> String
 - But the rule to apply this can get complicated and lead to unexpected results
 - **Go does not allow *Automatic Type Promotions***
-  - **Type conversions must be explicit**
+  - **Type conversions must be explicit casts**
   - Even for integers and floats
 - Type conversion is done by calling the type as a function on the value
   - ***For any values that are not of the same type: At least one must be converted before they can be used together***
@@ -576,26 +577,26 @@ func main() {
 }
 ```
 
-- **Due to this strictness, we cannot treat other types as *booleans***
+- **Due to this strictness, we cannot treat other types as *booleans* either**
   - In other languages, some values are treated as *truthy* or *falsy*
   - **Go does not allow *truthy* and *falsy* values**
   - **No other types can be converted to booleans, either implicitly or explicitly**
-  - **Must use comparison operators to get back booleans**
+  - **Must always use comparison operators to get back booleans**
     - E.g. A typical check that is used a lot is `x != nil`
 
 ## Literals Are Untyped
 
 - We cannot add 2 integers of different types
-- But we can use integer *literals* as floating-point
+- **But we can use integer *literals* as floating-point**
+- **This is because literals are untyped**
+  - Their types are not enforced until needed
+  - This allows literals to be used with any compatible variables
 
 ```go
 var x float64 = 100
 var y float64 = 200.50 * 50
 ```
 
-- **Literals are untyped**
-  - Their types are not enforced until needed
-  - This allows literals to be used with any compatible variables
 - **However, this only works on compatible/similar types**
   - We cannot assign strings to numeric variables
   - Size limitations also exist
@@ -607,6 +608,7 @@ var y float64 = 200.50 * 50
 - Each style communicates about how the variable is used
 - *Variables can be declared at the package-level or function-level*
   - However, it is preferable to do so at the function-level as much as possible
+  - Keep usage of package-level variables to a minimum
 
 ### Long-Format Declaration With `var`
 
@@ -620,7 +622,7 @@ var x int = 100
 
 ### Short-Format Declaration With `var`
 
-- If the type of the value can be inferred, we can skip the type
+- If the type of the value can be inferred, we can skip specifying the type
 - *The type of the variable is inferred from the assigned value*
 - However, literals are *untyped* until used
 
@@ -637,7 +639,7 @@ var x = 100 // Inferred as int but untyped until used
 
 ```go
 // Declaration-Only with var
-var x int
+var x int // Default Zero-Value of int: 0
 ```
 
 ### Multiple Declaration
@@ -658,7 +660,7 @@ var age, favNum int
 ```
 
 - If assigning initial values, the variables can be of different types
-- The type of the variables are deduced from the assigned values
+- The types of the variables are deduced from the assigned values
 - However, literals are *untyped* until used
 
 ```go
@@ -672,7 +674,7 @@ var name, age, isAdult = "John", 26, true
 
 ```go
 var (
-    uFname, uLname string
+    uFname, uLname string // Default Zero-Value: ""
     uAge = 26
     uIsAdult bool = true
     uFavNum, uWorstNum = 7, -100
@@ -699,7 +701,7 @@ name, age, isAdult := "John", 26, true
 ```
 
 - **NOTE: `:=` can only be used for declaration, not for re-assignments**
-  - However, with multiple declarations, it can be used for re-assignment **if at least one variable is new**
+- However, with multiple declarations, it can be used for re-assignment **if at least one variable is new**
 
 ```go
 // Using := With Multiple Variables & Reassignment
@@ -716,7 +718,7 @@ name, age, isAdult := "Johnny", 26, true
 
 - **Choose what makes the intent clear**
   - `var` is more explicit but can be verbose
-  - `:=` is easy to understand but can be confusing if the value is not explicit
+  - `:=` is easy to understand but can be confusing if the value is not explicit (e.g. return from function call)
   - `var` is the only option for package-level variables
   - `:=` is the most common inside functions
   - Use declaration lists when declaring multiple variables
@@ -728,7 +730,7 @@ name, age, isAdult := "Johnny", 26, true
     - Prefer `var x byte = 20` over `x := byte(20)`
   - **Sometimes, `:=` creates a new variable than using an existing one (*Shadowing*)**
     - In those cases, it is better to use `var`
-- **NOTE: Only use the *Multiple declaration and assignment* style when assigning multiple values from a function return**
+- **NOTE: Only use *Multiple declaration and assignment* style when assigning multiple values from a function return**
 - **NOTE: Rarely declare variables outside functions**
   - Package-level variables is not a good idea
   - Can be difficult to track the changes made
@@ -785,7 +787,7 @@ func main() {
     - `true` / `false`
     - Strings
     - Runes
-    - Values for calling `complex()`, `real()`, `image()`, `len()`, `cap()`
+    - Values from calling `complex()`, `real()`, `image()`, `len()`, `cap()`
     - Expression with operator and preceding value
     - `iota`
   - **We cannot specify that a value calculated at runtime is immutable**
@@ -838,8 +840,8 @@ var i64 int64 = tConst
 ## Unused Variables
 
 - **Every *locally*-declared variables/constants must be used/read at least once**
-- It is a compile-time error if a declared variable is not used
-- As long as the variable is read once
+- It is a compile-time error if a declared variable is not used at least once
+- As long as the variable is read once, Go compiler will stop complaining
 
 ```go
 // This code will compile
@@ -865,7 +867,7 @@ func main() {
 // This code will compile
 package main
 
-var note string = "It will not complain if I am unused!"
+var note string = "It will not complain if I am unused because I am at package-level!"
 
 func main() {
     const PI = 10
@@ -900,7 +902,7 @@ func main() {
   - **`_` is mostly only used as a *discard* variable**
 - **NOTE: Do not use *all-caps* when naming constants**
   - **Keep `const` names the same as `var`**
-  - Go use the case of the first letter of a name to determine its accessibility (*private* vs *public*)
+  - Go uses the case of the first letter of a name to determine its accessibility (*private* vs *public*)
 - **Within functions, favor short names**
   - Smaller scope = Shorter name
   - Single-letters are common for `for` loops

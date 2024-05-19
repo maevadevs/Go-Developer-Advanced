@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-// Package-level Constants
+// Example of Package-level Constants
+// ----------------------------------
 const pi float64 = 3.1415
 
 const (
@@ -23,6 +24,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Integer Literals
+	// ---------------------------
 	fmt.Println("Example of Integer Literals:")
 
 	var age int = 45
@@ -40,6 +42,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Float Literals
+	// -------------------------
 	fmt.Println("Example of Float Literals:")
 
 	var length float32 = 24.68
@@ -55,6 +58,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Rune Literals
+	// ------------------------
 	fmt.Println("Example of Rune Literals:")
 
 	var gender rune = 'M'
@@ -79,6 +83,7 @@ func main() {
 	fmt.Println()
 
 	// Example of String Literals
+	// --------------------------
 	fmt.Println("Example of String Literals:")
 
 	// Regular string
@@ -103,6 +108,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Boolean
+	// ------------------
 	fmt.Println("Example of Boolean:")
 
 	// Declaration: Default to false
@@ -116,6 +122,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Complex Number
+	// -------------------------
 	fmt.Println("Example of Complex Number:")
 
 	x := complex(2.5, 3.1)
@@ -134,6 +141,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Type Conversion
+	// --------------------------
 	fmt.Println("Example of Type Conversion:")
 
 	var myInt int = 10
@@ -150,6 +158,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Variable Declarations
+	// --------------------------------
 	fmt.Println("Example of Variable Declarations:")
 
 	// Long-format declaration with var
@@ -195,6 +204,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Function-level Constants
+	// -----------------------------------
 	fmt.Println("Example of Function-level Constants:")
 
 	const greetingsConst = "Hello"
@@ -204,6 +214,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Package-level Constants
+	// ----------------------------------
 	fmt.Println("Example of Package-level Constants:")
 
 	fmt.Println("pi =", pi)
@@ -218,6 +229,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Untyped Constant
+	// ---------------------------
 	fmt.Println("Example of Untyped Constant:")
 
 	const uConst = 100
@@ -235,6 +247,7 @@ func main() {
 	fmt.Println()
 
 	// Example of Typed Constant
+	// -------------------------
 	fmt.Println("Example of Typed Constant:")
 
 	const tConst int64 = 100

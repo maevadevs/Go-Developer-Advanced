@@ -98,27 +98,21 @@
   - Hexadecimal and Binary are sometimes used for bit filters or networking and infrastructure applications
 
 ```go
-package main
+// Example of Integer Literals
+// ---------------------------
+fmt.Println("Example of Integer Literals:")
 
-import "fmt"
+var age int = 45
+var blue int = 0x0000ff
+var admin int = 0o777
+var billion int = 1_000_000_000
+var red int = 0xff_00_00
 
-// This is the main entry of the application.
-func main() {
-    // Example of Integer Literals
-    fmt.Println("Example of Integer Literals:")
-
-    var age int = 45
-    var blue int = 0x0000ff
-    var admin int = 0o777
-    var billion int = 1_000_000_000
-    var red int = 0xff_00_00
-
-    fmt.Println("age =", age)
-    fmt.Println("blue =", blue)
-    fmt.Println("admin =", admin)
-    fmt.Println("billion =", billion)
-    fmt.Println("red =", red)
-}
+fmt.Println("age =", age)
+fmt.Println("blue =", blue)
+fmt.Println("admin =", admin)
+fmt.Println("billion =", billion)
+fmt.Println("red =", red)
 ```
 
 ### Float Literal
@@ -134,25 +128,19 @@ func main() {
 - **In practice, use Base-10 to represent floats**
 
 ```go
-package main
+// Example of Float Literals
+// -------------------------
+fmt.Println("Example of Float Literals:")
 
-import "fmt"
+var length float32 = 24.68
+var avogadro float64 = 6.2214e23
+var hexaFloat float64 = 0x12.34p5
+var bankBalance float64 = 10_314.56
 
-// This is the main entry of the application.
-func main() {
-    // Example of Float Literals
-    fmt.Println("Example of Float Literals:")
-
-    var length float32 = 24.68
-    var avogadro float64 = 6.2214e23
-    var hexaFloat float64 = 0x12.34p5
-    var bankBalance float64 = 10_314.56
-
-    fmt.Println("length =", length)
-    fmt.Println("avogadro =", avogadro)
-    fmt.Println("hexaFloat =", hexaFloat)
-    fmt.Println("bankBalance =", bankBalance)
-}
+fmt.Println("length =", length)
+fmt.Println("avogadro =", avogadro)
+fmt.Println("hexaFloat =", hexaFloat)
+fmt.Println("bankBalance =", bankBalance)
 ```
 
 ### Rune Literal
@@ -181,34 +169,28 @@ Single Unicode Character|`'a'`
   - Unless the context makes the code clearer
 
 ```go
-package main
+// Example of Rune Literals
+// ------------------------
+fmt.Println("Example of Rune Literals:")
 
-import "fmt"
+var gender rune = 'M'
+var newline rune = '\n'
+var tab rune = '\t'
+var quote rune = '\''
+// As 8-Bit Octal Number
+var ninetySeven rune = '\141'
+// As 8-Bit Hexadecimal Number
+ninetySeven = '\x61'
+// As 16-Bit Hexadecimal Number
+ninetySeven = '\u0061'
+// 32-Bit Unicode Number
+ninetySeven = '\U00000061'
 
-// This is the main entry of the application.
-func main() {
-    // Example of Rune Literals
-    fmt.Println("Example of Rune Literals:")
-
-    var gender rune = 'M'
-    var newline rune = '\n'
-    var tab rune = '\t'
-    var quote rune = '\''
-    // As 8-Bit Octal Number
-    var ninetySeven rune = '\141'
-    // As 8-Bit Hexadecimal Number
-    ninetySeven = '\x61'
-    // As 16-Bit Hexadecimal Number
-    ninetySeven = '\u0061'
-    // 32-Bit Unicode Number
-    ninetySeven = '\U00000061'
-
-    fmt.Println("gender =", gender)
-    fmt.Println("newline =", newline)
-    fmt.Println("tab =", tab)
-    fmt.Println("quote =", quote)
-    fmt.Println("ninetySeven =", ninetySeven)
-}
+fmt.Println("gender =", gender)
+fmt.Println("newline =", newline)
+fmt.Println("tab =", tab)
+fmt.Println("quote =", quote)
+fmt.Println("ninetySeven =", ninetySeven)
 ```
 
 ### String Literal
@@ -231,34 +213,28 @@ func main() {
   - All characters are included as-is
 
 ```go
-package main
+// Example of String Literals
+// --------------------------
+fmt.Println("Example of String Literals:")
 
-import "fmt"
+// Regular string
+var greetings string = "Hello World!"
+// Using Escapes
+var greetingsLong string = "Greetings and \n\"Salutations\"!"
+var sysPath string = "C:\\\\Windows\\System32"
+// Using Raw String Literal
+var greetingsRaw string = `Greetings and
+"Salutations"!`
+var goPathRaw string = `https://go.dev`
+var rawStringWithBacktick string = `Backticks ` + "(`) " + `cannot appear in raw string.
+    For that, use "" to contain the ` + "(`)" + `, then concatenate.`
 
-// This is the main entry of the application.
-func main() {
-    // Example of String Literals
-    fmt.Println("Example of String Literals:")
-
-    // Regular string
-    var greetings string = "Hello World!"
-    // Using Escapes
-    var greetingsLong string = "Greetings and \n\"Salutations\"!"
-    var sysPath string = "C:\\\\Windows\\System32"
-    // Using Raw String Literal
-    var greetingsRaw string = `Greetings and
-    "Salutations"!`
-    var goPathRaw string = `https://go.dev`
-    var rawStringWithBacktick string = `Backticks ` + "(`) " + `cannot appear in raw string.
-        For that, use "" to contain the ` + "(`)" + `, then concatenate.`
-
-    fmt.Println("greetings =", greetings)
-    fmt.Println("greetingsLong =", greetingsLong)
-    fmt.Println("sysPath =", sysPath)
-    fmt.Println("greetingsRaw =", greetingsRaw)
-    fmt.Println("goPathRaw =", goPathRaw)
-    fmt.Println("rawStringWithBacktick =", rawStringWithBacktick)
-}
+fmt.Println("greetings =", greetings)
+fmt.Println("greetingsLong =", greetingsLong)
+fmt.Println("sysPath =", sysPath)
+fmt.Println("greetingsRaw =", greetingsRaw)
+fmt.Println("goPathRaw =", goPathRaw)
+fmt.Println("rawStringWithBacktick =", rawStringWithBacktick)
 ```
 
 - **NOTE: `\'` is not legal in string literals**
@@ -272,23 +248,17 @@ func main() {
 - Zero-Value is `false`
 
 ```go
-package main
+// Example of Boolean
+// ------------------
+fmt.Println("Example of Boolean:")
 
-import "fmt"
+// Declaration: Default to false
+var flag bool
+// Declaration and initialization
+isAdult := true
 
-// This is the main entry of the application.
-func main() {
-    // Example of Boolean
-    fmt.Println("Example of Boolean:")
-
-    // Declaration: Default to false
-    var flag bool
-    // Declaration and initialization
-    isAdult := true
-
-    fmt.Println("flag =", flag)
-    fmt.Println("isAdult =", isAdult)
-}
+fmt.Println("flag =", flag)
+fmt.Println("isAdult =", isAdult)
 ```
 
 ## Numeric Types
@@ -476,28 +446,22 @@ var complexNum = complex(20.5, 10.6)
 - `math/cmplx` has additional functions for manipulating Complex Numbers
 
 ```go
-package main
+// Example of Complex Number
+// -------------------------
+fmt.Println("Example of Complex Number:")
 
-import "fmt"
+x := complex(2.5, 3.1)
+y := complex(10.2, 2)
 
-// This is the main entry of the application.
-func main() {
-    // Example of Complex Number
-    fmt.Println("Example of Complex Number:")
-
-    x := complex(2.5, 3.1)
-    y := complex(10.2, 2)
-
-    fmt.Println("x =", x)
-    fmt.Println("y =", y)
-    fmt.Println("x + y =", x + y)
-    fmt.Println("x - y =", x - y)
-    fmt.Println("x * y =", x * y)
-    fmt.Println("x / y =", x / y)
-    fmt.Println("real(x) =", real(x))
-    fmt.Println("imag(x) =", imag(x))
-    fmt.Println("cmplx.Abs(x) =", cmplx.Abs(x))
-}
+fmt.Println("x =", x)
+fmt.Println("y =", y)
+fmt.Println("x + y =", x + y)
+fmt.Println("x - y =", x - y)
+fmt.Println("x * y =", x * y)
+fmt.Println("x / y =", x / y)
+fmt.Println("real(x) =", real(x))
+fmt.Println("imag(x) =", imag(x))
+fmt.Println("cmplx.Abs(x) =", cmplx.Abs(x))
 ```
 
 #### Go For Numerical Computing
@@ -555,26 +519,20 @@ var lNameInitial int32 = 'R'
   - The same applies for values of same type but different sizes (E.g. `int8` and `int32`)
 
 ```go
-package main
+// Example of Type Conversion
+// --------------------------
+fmt.Println("Example of Type Conversion:")
 
-import "fmt"
+var myInt int = 10
+var myFloat float64 = 30.2
 
-// This is the main entry of the application.
-func main() {
-    // Example of Type Conversion
-    fmt.Println("Example of Type Conversion:")
+// Explicit type conversion is required
+var mySumF float64 = float64(myInt) + myFloat
+var mySumI int = myInt + int(myFloat)
 
-    var myInt int = 10
-    var myFloat float64 = 30.2
-
-    // Explicit type conversion is required
-    var mySumF float64 = float64(myInt) + myFloat
-    var mySumI int = myInt + int(myFloat)
-
-    fmt.Printf("%d + %.1f\n", myInt, myFloat)
-    fmt.Println("mySumF =", mySumF)
-    fmt.Println("mySumI =", mySumI)
-}
+fmt.Printf("%d + %.1f\n", myInt, myFloat)
+fmt.Println("mySumF =", mySumF)
+fmt.Println("mySumI =", mySumI)
 ```
 
 - **Due to this strictness, we cannot treat other types as *booleans* either**
@@ -745,11 +703,8 @@ name, age, isAdult := "Johnny", 26, true
 - But re-assignments result in error
 
 ```go
-package main
-
-import "fmt"
-
-// Package-level Constants
+// Example of Package-level Constants
+// ----------------------------------
 const pi float64 = 3.1415
 const (
     idKey   = "id"
@@ -760,6 +715,7 @@ const total = 20 * 10
 // This is the main entry of the application.
 func main() {
     // Example of Function-level Constants
+    // -----------------------------------
     fmt.Println("Example of Function-level Constants:")
 
     const greetings = "Hello"
@@ -767,6 +723,7 @@ func main() {
     fmt.Println("greetings = ", greetings)
 
     // Example of Package-level Constants
+    // ----------------------------------
     fmt.Println("Example of Package-level Constants:")
 
     fmt.Println("pi = ", pi)
@@ -821,6 +778,7 @@ const total = x + y
 
 ```go
 // Example of Untyped Constant
+// ---------------------------
 const uConst = 100
 
 // Legal usage
@@ -829,6 +787,7 @@ var f float64 = uConst
 var b byte = uConst
 
 // Example of Typed Constant
+// -------------------------
 const tConst int64 = 100
 
 // Legal usage:

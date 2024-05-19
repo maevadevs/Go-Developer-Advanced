@@ -1,8 +1,8 @@
 # NOTE: Make sure all indentations use tabs
 
-# DEFAULT_GOAL specify the default target
-# This is run when no target is specified
-.DEFAULT_GOAL := build
+# DEFAULT_GOAL specifies the default target
+# This is run when no target is provided during the call
+.DEFAULT_GOAL := try
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
@@ -24,40 +24,20 @@ vet: fmt
 
 # Target
 build: vet
-	# Task: Build module in Linux
+	# Task: Build module
 	go build -o bin/Composite src/main.go
 
 # Target
-build-win: vet
-	# Task: Build module in Windows
-	go build -o bin\Composite.exe src\main.go
-
-# Target
 run: build
-	# Task: Build module then run in Linux
+	# Task: Build module then run
 	bin/Composite
 
 # Target
-run-win: build-win
-	# Task: Build module then run in Windows
-	bin\Composite.exe
-
-# Target
 try: vet
-	# Task: Build module, run, then remove built binary in Linux
+	# Task: Build module, run, then remove built binary
 	if test -f bin/Composite-Temp; then \
 		rm -f bin/Composite-Temp; \
 	fi
 	go build -o bin/Composite-Temp src/main.go
 	bin/Composite-Temp
 	rm -f bin/Composite-Temp
-
-# Target
-try-win: vet
-	# Task: Build module, run, then remove built binary in Windows
-	if test -f bin\Composite-Temp; then \
-		rm -f bin\Composite-Temp; \
-	fi
-	go build -o bin\Composite-Temp src\main.go
-	bin\Composite-Temp
-	rm -f bin\Composite-Temp

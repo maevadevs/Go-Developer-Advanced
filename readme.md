@@ -111,3 +111,14 @@ These are in-depth notes from learning Go.
     - Passing Functions As Parameters
     - Returning Functions From Functions
     - `defer`
+6. Pointers
+7. Types, Methods, Interfaces
+8. Generics
+9. Errors
+10. Modules, Packages, Imports
+11. Go Tooling
+12. Concurrency
+13. Standard Library
+14. Context
+15. Tests
+16. Reflect, Unsafe, Cgo

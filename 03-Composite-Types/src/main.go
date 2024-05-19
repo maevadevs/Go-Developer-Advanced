@@ -714,7 +714,7 @@ func main() {
 	fmt.Println()
 
 	// Comparing Against Anonymous Struct
-    // ----------------------------------
+	// ----------------------------------
 	fmt.Println("Comparing Against Anonymous Struct:")
 	type firstPerson struct {
 		name string

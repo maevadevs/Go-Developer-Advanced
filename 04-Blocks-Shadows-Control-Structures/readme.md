@@ -50,15 +50,15 @@
 
 - **Shadowing Variable**
   - A variable with the same name as another variable in the containing block
-  - **As long as the shadowing variable exist, the shadowed variable is inaccessible**
-- **The act of declaring a variable of the same name as the containing block creates a shadowing variable**
+  - **As long as the shadowing variable is in-scope, the shadowed variable is inaccessible**
+- **Declaring a variable of the same name as the one in the containing block creates a shadowing variable**
   - The shadowing variable is accessed with the name within the block it was declared
   - A closing `}` ends the scope of the shadowing variable
 
 ```go
 // Example of Variable Shadowing
 // -----------------------------
-x := 10
+x := 100
 
 fmt.Println("Outside the block, x is:", x)
 
@@ -75,8 +75,8 @@ fmt.Println("Outside the block again, x is back to:", x)
 
 - **Accessing the same variable after the end of the shadowing scope returns the previously-shadowed variable**
   - This variable did not disappear or got reassigned
-  - It was simply inacessible as long as the shadowing variable was in scope
-- **It is very easy to accidentaly shadow a variable when using `:=`**
+  - It was simply inacessible as long as the shadowing variable was in-scope
+- **WARNING: It is very easy to accidentaly shadow a variable when using `:=`**
   - We can use `:=` to create multiple variables at once
   - *Not all variables needs to be new when using `:=`, just one is enough*
   - **`:=` reuses only variables that are declared in the current block**
@@ -92,8 +92,9 @@ if x > 5 {
 fmt.Println("Outside the block, x =", x)
 ```
 
-- **When using `:=`, make sure outside variables with the same name does not exist, unless it is an intentional shadowing**
-- Also, be careful to not shadow package imports
+- **When using `:=`, make sure outside variables with the same name does not exist**
+  - **Unless it is an intentional shadowing**
+- **WARNING: Be careful to not shadow package imports**
   - E.g. `math`
   - Once shadowed, package imports are inaccessible until the end of the block
 
@@ -121,12 +122,14 @@ fmt.Println("Outside the block, math.Pi =", math.Pi)
 
 ## The Universe Block
 
-- Go is a small language: Only 25 keywords
-- The built-in types, constants, `nil`, and functions are not included in the list
+- Go is a small language
+  - Only 25 keywords
+  - The built-in types, constants, `nil`, and functions are not included in that list
   - Go considers them *Predeclared Identifiers*
-  - **They are defined in the *Universe Block*** - The block that contains all other blocks
-  - *These names can be shadowed in any other blocks*
-- **Never redefine any identifiers in the *Universe* Block**
+  - ***Predeclared Identifiers* are defined in the *Universe Block***
+    - The root block that contains all other blocks
+    - *These names can be shadowed in any other blocks*
+- **WARNING: Never redefine any identifiers in the *Universe* Block**
   - This can create some strange behaviors
   - Could also create some hard-to-find bugs
 
@@ -150,6 +153,7 @@ true := 100
 import "math/rand"
 
 n := rand.Intn(10)
+
 if n == 0 {
     fmt.Println(n, ": That is too low!")
 } else if n > 5 {
@@ -192,8 +196,8 @@ if m := rand.Intn(10); m == 0 {
 
 ## `for`
 
-- `for` is the only loop construct available in Go
-- There are 4 ways of `for` loops
+- **`for` is the only loop construct available in Go**
+- **But there are 4 ways of using `for` loops**
   - Complete *C-Style `for`*
   - *Condition-Only `for` (`while`-Style)*
   - *Infinite `for`*
@@ -306,15 +310,17 @@ for {
   - It can also be used with any other format of `for`
 - **NOTE**
   - Go does not have a `do-while` loop
-  - **With *Infinite Loop*, `if`, and `break`, we can similate a `do-while` loop**
+  - **With *Infinite Loop* + `if` + `break`, we can similate a `do-while` loop**
 
 ```go
 // Simulating a Do-While Loop in Go
 // --------------------------------
 j := 0
 for {
+    // do
     fmt.Println("\tThis runs at least once")
     j++
+    // while j != 1
     if j == 1 {
         break
     }
@@ -325,7 +331,7 @@ for {
   - Proceeds directly to the next iteration
   - `continue` can make codes much easier to reason and understand
   - It is also more idiomatic to use `continue`
-  - Go encourage short `if` bodies
+  - Go encourages short `if` bodies
   - It can make the code easier to reason and understand
 
 ```go
@@ -372,7 +378,7 @@ fmt.Println()
 - Similar to Python's `for x in range(n)`
 - Can be used with *strings, arrays, slices, maps, channels*
 - **Can only be used on *built-in compound types***
-  - Also user-defined types based on them
+  - Or user-defined types based on them
 
 ```go
 // Using for-range With Slices
@@ -426,7 +432,7 @@ for k := range uniqueNames {
 
 - **When iterating over Maps, the order is not guaranteed**
 - The order of keys and values will vary
-- This is actually a security feature
+  - This is actually a security feature
   - People could write code that assumed the iteration order is constant
   - This assumption can break codes at weird times
   - Also, it could be attacked with a *Hash DoS* attack
@@ -455,7 +461,7 @@ for i := 0; i < 10; i++ {
 
 #### Iterating Over Strings
 
-- We can also use strings with `for-range`
+- We can also use `for-range` on strings
 - `for-range` accesses the *runes* in a string in order
   - `i` - Number of bytes
   - `v` - The rune
@@ -468,7 +474,7 @@ greetings := []string{"Hello!", "Hi π!"}
 // Iterating over the slice
 fmt.Println("index\tchar\tstring(char)")
 for _, greeting := range greetings {
-    // Iterating over the string
+    // Iterating over the string => runes
     for i, char := range greeting {
         fmt.Println(i, "\t", char, "\t", string(char))
     }
@@ -508,7 +514,7 @@ fmt.Println("At the end of the loop, evenInts =", evenInts)
 
 - **NOTE**
   - **Before Go 1.22, the variables are created once and reused**
-  - **Since Go 1.22, the variables are created for each iteration**
+  - **Since Go 1.22, the variables are re-created for each iteration**
   - This prevents some common bugs with goroutines
   - This is a backward-breaking change
   - Can enable behavior by specifying Go version in `go.mod`
@@ -516,7 +522,7 @@ fmt.Println("At the end of the loop, evenInts =", evenInts)
 ### Labeling `for` Statements
 
 - By default, `break` and `continue` applies to the closest `for`
-- For nested loops, we can manipulate at which point the loop picks up using *labels*
+- For nested loops, we can manipulate which loop they break or continue from using *labels*
 - The label is always indented by `go fmt` to same-level as surrounding braces for the current block
   - Easier to notice
 
@@ -810,8 +816,9 @@ done:
 - **However**
   - Litering code with boolean flags is about the same as using `goto`
   - It is more verbose and can become confusing as well
-  - Duplicating codes make is harder to maintain
+  - Duplicating codes make it harder to maintain
   - In this case, using `goto` can improve understanding
   - *Example of real-world case: `floatBits()` method in `strconv.atof.go` in standard library*
+  - A better way would be to simply call a function
 - **In general, try very hard to avoid using `goto`**
   - **In the rare situations where it makes code more readable, it is an option**

@@ -16,7 +16,7 @@ func main() {
 	// -----------------------------
 	fmt.Println("Example of Variable Shadowing:")
 
-	x := 10
+	x := 100
 	fmt.Println("Outside the block, x is:", x)
 
 	if x > 5 {
@@ -64,6 +64,7 @@ func main() {
 	fmt.Println("Example of `if`:")
 
 	n := rand.Intn(10)
+
 	if n == 0 {
 		fmt.Println(n, ": That is too low!")
 	} else if n > 5 {
@@ -71,6 +72,7 @@ func main() {
 	} else {
 		fmt.Println(n, ": That is a good number!")
 	}
+
 	fmt.Println()
 
 	// Example of `if` With Scoped Variables
@@ -79,7 +81,7 @@ func main() {
 
 	if m := rand.Intn(10); m == 0 {
 		fmt.Println(m, ": That is too low!")
-	} else if n > 5 {
+	} else if m > 5 {
 		fmt.Println(m, ": That is too big!")
 	} else {
 		fmt.Println(m, ": That is a good number!")
@@ -116,8 +118,10 @@ func main() {
 
 	j := 0
 	for {
+		// do
 		fmt.Println("\tThis runs at least once")
 		j++
+		// while j != 1
 		if j == 1 {
 			break
 		}
@@ -225,7 +229,7 @@ func main() {
 	// Iterating over the slice
 	fmt.Println("index\tbytes\tstring(rn)")
 	for _, greeting := range greetings {
-		// Iterating over the string
+		// Iterating over the string => runes
 		for i, rn := range greeting {
 			fmt.Println(i, "\t", rn, "\t", string(rn))
 		}
@@ -254,14 +258,14 @@ func main() {
 
 	// Iterating over the slice
 	fmt.Println("index\tbytes\tstring(rn)")
-outer:
+outerLoop:
 	for _, greeting := range greetings2 {
 		// Iterating over the string
 		for i, rn := range greeting {
 			fmt.Println(i, "\t", rn, "\t", string(rn))
 			if rn == 'l' {
 				// Go to label
-				continue outer
+				continue outerLoop
 			}
 		}
 		fmt.Println()
@@ -358,22 +362,11 @@ switchLoop:
 	fmt.Println()
 }
 
-// FOR WINDOWS:
-//  To Run:                 make run-win
-//                          go run Blocks-Shadows-Control-Structures\src\main.go
-//  To Build:               make build-win
-//                          go build -o Blocks-Shadows-Control-Structures\bin\Bscs.exe Blocks-Shadows-Control-Structures\src\main.go
-//  To Run after Build:     .\bin\Bscs.exe
-//                          .\Blocks-Shadows-Control-Structures\bin\Bscs.exe
-//  Try Build + Run:        make try-win
-//                          go build -o Blocks-Shadows-Control-Structures\bin\Bscs.exe Blocks-Shadows-Control-Structures\src\main.go && .\Blocks-Shadows-Control-Structures\bin\Bscs.exe && rm .\Blocks-Shadows-Control-Structures\bin\Bscs.exe
-
-// FOR LINUX:
-//  To Run:                 make run
-//                          go run Blocks-Shadows-Control-Structures/src/main.go
-//  To Build:               make build
-//                          go build -o Blocks-Shadows-Control-Structures/bin/Bscs Blocks-Shadows-Control-Structures/src/main.go
-//  To Run after Build:     ./bin/Bscs
-//                          ./Blocks-Shadows-Control-Structures/bin/Bscs
-//  Try Build + Run:        make try
-//                          go build -o Blocks-Shadows-Control-Structures/bin/Bscs Blocks-Shadows-Control-Structures/src/main.go && ./Blocks-Shadows-Control-Structures/bin/Bscs && rm ./Blocks-Shadows-Control-Structures/bin/Bscs
+// AVAILABLE COMMANDS
+// ------------------
+//  make            Default to `make try`
+//  make fmt        Format all source files
+//  make vet        Verify any possible errors
+//  make build      Build module
+//  make run        Build module then run
+//  make try        Build module, run, then remove built binary

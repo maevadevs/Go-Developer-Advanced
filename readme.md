@@ -110,7 +110,7 @@ These are in-depth notes from learning Go.
     - Returning Functions From Functions
     - `defer`
     - Call By Value
-6. Pointers
+6. [Pointers](./06-Pointers/)
 7. Types, Methods, Interfaces
 8. Generics
 9. Errors

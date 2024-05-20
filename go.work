@@ -6,4 +6,5 @@ use (
     ./03-Composite-Types
     ./04-Blocks-Shadows-Control-Structures
     ./05-Functions
+    ./06-Pointers
 )

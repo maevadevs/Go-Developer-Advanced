@@ -115,7 +115,7 @@ build: vet
 # Target
 run: build
 	# Task: Build module then run
-	bin/$OUT_FILE
+	bin/$OUT_FILE \$(ARGS)
 
 # Target
 try: vet
@@ -124,10 +124,8 @@ try: vet
 		rm -f bin/$OUT_FILE-Temp; \\
 	fi
 	go build -o bin/$OUT_FILE-Temp src/main.go
-	bin/$OUT_FILE-Temp
-	rm -f bin/$OUT_FILE-Temp
-
-" >> makefile;
+	bin/$OUT_FILE-Temp \$(ARGS)
+	rm -f bin/$OUT_FILE-Temp" >> makefile;
 
     echo "Done."
     echo "";

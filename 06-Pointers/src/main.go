@@ -1,10 +1,26 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // This is the main entry of the application.
 func main() {
-	fmt.Println("Hello world!")
+	// Headers
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
+	fmt.Println()
+
+	// Pointer Operators
+	// -----------------
+	fmt.Println("Pointer Operators:")
+	var x int32 = 10         // Value-type int32
+	var pointerX *int32 = &x // Pointer-type to a type int32
+
+	fmt.Println("pointerX =", pointerX)   // Prints the memory address
+	fmt.Println("*pointerX =", *pointerX) // Prints the pointed value
+	fmt.Println()
 }
 
 // AVAILABLE COMMANDS

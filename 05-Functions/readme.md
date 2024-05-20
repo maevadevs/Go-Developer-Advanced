@@ -19,6 +19,7 @@
 - [Passing Functions As Arguments](#passing-functions-as-arguments)
 - [Returning Functions From Functions](#returning-functions-from-functions)
 - [`defer`](#defer)
+- [Go Is Call By Value](#go-is-call-by-value)
 
 ---
 
@@ -44,11 +45,12 @@ func div(num int, den int) int {
 }
 ```
 
-- **A function declaration has 4 parts**
+- **A function declaration has 5 parts**
   - Keyword `func`
   - Function name
   - Input parameters: Param-name, Param-type
   - Return type
+  - Body
 - **Go is a typed language**
   - Must specify the types of the parameters
   - The return types is specified between the input parameters and the function body
@@ -163,15 +165,15 @@ func main() {
 
 - Go allows multiple return values
 - **The types of the return values are listed in `()`**
-  - **All values must be returned**
-  - Do not put `()` around the returned values, else compile-time error
+  - **All listed values must be returned**
+  - Do not put `()` around the actual returned values, else compile-time error
 - **We also return any associated errors**
   - **In Go, errors are values**
   - We use Go's multiple return value support to return an error
-  - This is how error-handling is done in Go
-  - **If the function completes succesfully, return `nil` as the error**
-  - We check error by comparing it as `err != nil`
-  - *By convention, the error is always the last value*
+    - This is how error-handling is done in Go
+    - **If the function completes succesfully, return `nil` as the error**
+    - We check error by comparing it as `err != nil`
+    - *By convention, the error is always the last value*
 
 ```go
 import (
@@ -239,7 +241,7 @@ _, resMod, err := divmod(34, 5)
 - *NOTE: It is also possible to ignore all the return values*
   - We simply do not assign to any variable
   - This is similar to calling `fmt.Println()`
-  - **`fmt.Println()` returns 2 values but it is idiomatic to ignore them**
+  - **`fmt.Println()` normally returns 2 values but it is idiomatic to ignore them**
   - In all other case, explicitly ignore return values using `_`
 
 ```go
@@ -328,12 +330,12 @@ func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
   - `return` keyword is still required, else compile-time error
 - Blank return might appear handy
   - But it is a bad idea because it makes it harder to understand the data flow
-  - **Never use blank return: Always specify what is being returend**
+  - **Never use blank return: Always specify what is being returned**
 
 ## Functions Are Values
 
 - Functions in Go are values and can be passed around
-  - **Type Signature: `func` + Param Types + Return Type**
+  - **Type Signature: `func(ParamTypes) ReturnType`**
   - Functions can have the same type signature
 - **Since they are values, we can declare a function variable**
   - Can be assigned any function that match the type signature
@@ -458,7 +460,7 @@ opMap := map[string]opFuncType {
 ### Anonymous Functions
 
 - We can define new functions within a function and assign them to variables
-- We declare an anonymous function with `func()`
+- We declare an anonymous function with `func(ParamTypes) ReturnType`
   - Followed immediately by the input parameters, return values, and body
   - It is a compile-time error to try to add a name
 - It is called like any other functions
@@ -474,11 +476,11 @@ for i := range 5 {
 }
 ```
 
-- *We do not have to assign an anonymous function to a variable*
+- **We do not have to assign an anonymous function to a variable**
   - Can be written inline and called immediately
   - But not something that we would normally do
   - If we are doing this approach, might as well just call the code
-  - But this is typically used with `defer` and `go` routines
+  - **But this is typically used with `defer` and `go` routines**
 
 ```go
 // Example of Inline Anonymous Function
@@ -490,11 +492,11 @@ for i := range 5 {
 }
 ```
 
-- **NOTE: We can also declare package-scope variables that are assigned anonymous functions**
+- **NOTE: We can also declare package-scoped variables that are assigned anonymous functions**
 
 ```go
-// Examples of Package-Scope Variables With Anonymous Functions
-// ------------------------------------------------------------
+// Examples of Package-Scoped Variables With Anonymous Functions
+// -------------------------------------------------------------
 var (
     add = func(i int, j int) int { return i + j }
     sub = func(i int, j int) int { return i - j }
@@ -511,8 +513,8 @@ func main() {
 - **NOTE: We can also re-assign the value of a Package-level anonymous function**
 
 ```go
-// Examples of Re-assigning Package-Scope Variables With Anonymous Functions
-// -------------------------------------------------------------------------
+// Examples of Re-assigning Package-Scoped Variables With Anonymous Functions
+// --------------------------------------------------------------------------
 var (
     add = func(i int, j int) int { return i + j }
     sub = func(i int, j int) int { return i - j }
@@ -529,6 +531,7 @@ func main() {
 }
 
 func changeAdd() {
+    // `add` here refers to the package-level variable
     add = func(i int, j int) int { return i + j + j }
 }
 ```
@@ -552,7 +555,7 @@ func main() {
     fmt.Println("Outside fa(), a =", a)
     fa := func() {
         fmt.Println("Inside fa() before assignment, a =", a)
-        a = 30
+        a = 30 // The assignment modifies outside a
         fmt.Println("Inside fa() after assignment, a =", a)
     }
     fa()
@@ -572,7 +575,7 @@ func main() {
     fmt.Println("Outside fb(), b =", b)
     fb := func() {
         fmt.Println("Inside fb() before assignment, b =", b)
-        b := 30 // This assignment Shadows instead
+        b := 30 // This assignment shadows instead of modifying outside b
         fmt.Println("Inside fb() after assignment, b =", b)
     }
     fb()
@@ -583,7 +586,7 @@ func main() {
 ### Benefits of Closures
 
 - **Allows to limit a function's scope**
-  - We can *hide* the function if it is only local to the outer function
+  - We can *hide* the function if it is only local to the enclosing function
 - **Reduces the number of declarations at the Package-level**
   - Can be used to make repeating logic more DRY inside of a function
 - **Makes some very useful patterns when passed around**
@@ -648,25 +651,27 @@ for i := range 5 {
   - Can be used to efficiently search a sorted slice with `sort.Search`
   - Returning closures is used when bulding middlware for web server
   - Also used to implement resource cleanups with `defer`
+  - Typical pattern for *High-Order Functions*
 
 ## `defer`
 
-- Progams often create temporary resources that need to be cleaned up
-- The cleanup has to happen no matter the exit point of the function
-- We can think of this as the `finally` portion of other languages' error handlers
+- Progams often create temporary resources that need to be cleaned up later
+  - The cleanup has to happen no matter the exit point of the function
+  - We can think of this as the `finally` portion of other languages' error handlers
 - **In Go, the cleanup code is attached to the function using `defer`**
   - We use `defer` to release resources
   - Normally, function calls are called right away
   - **`defer` delays the invocation until the enclosing function exits**
+  - *Executed when either the surrounding function returns, reach the end, or panic*
 
 ```go
 // Example of cat Command
 // ----------------------
 fmt.Println("Example of cat Command:")
-// Make sure a filename was pass as argument
+// Make sure a filename was pass as argument: make try ARGS="<filename>""
 // Args[0] is the name of the program
 if len(os.Args) < 2 {
-    log.Fatal("no file specified")
+    log.Fatal("Error: No file was specified")
 }
 // Open the file: Read-only
 fl, err := os.Open(os.Args[1])
@@ -676,7 +681,7 @@ if err != nil {
 // Close the file after using it
 // This must be run no matter any errors in the program
 defer func() {
-    fmt.Println("Defer is called here")
+    fmt.Println("Defer in main() is called here")
     fmt.Println()
     fl.Close()
 }()
@@ -697,9 +702,9 @@ for {
 - With `defer`
   - We can use a function, method, or closure
   - We can defer multiple functions in a Go function
-    - **They run in a *Last-In, Firt-Out* (LIFO) order**
+    - **They run in a *Last-In, First-Out* (LIFO) order (Stack)**
     - The last `defer` registered will run first
-  - **Code within `defer` functions runs *after the `return` statement***
+  - **Code within `defer` functions runs *after the `return` statement of the enclosing function***
     - We can supply a function with input parameters to `defer`
     - The input parameters are evaluated immediately
     - Their values are stored until the function runs
@@ -707,6 +712,14 @@ for {
 ```go
 // Example of Using defer
 // ----------------------
+func main() {
+    // Example of Using defer
+    // ----------------------
+    fmt.Println("Example of Using defer:")
+    deferExample()
+    fmt.Println()
+}
+
 func deferExample() int {
     a := 10
     defer func(val int) {
@@ -724,9 +737,9 @@ func deferExample() int {
 
 - **NOTES**
   - We read from a file by passing a slice of bytes to `fl.Read()`
-  - It returns the number of bytes that were read into the slice + error
+  - It returns the number of bytes that were read into the slice and error
   - Also need to handle `EOF` marker to stop reading the file
-- We could supply a function that returns values to `defer`
+- We could also supply a function that returns values to `defer`
   - But there is no way to read those values
 
 ```go
@@ -746,7 +759,7 @@ func example() {
 ```go
 // Example of handling DB transaction cleanups Using defer
 // -------------------------------------------------------
-func DoSomeInserts(ctx context.Context, db *sql.DB, val1, val2 string) (err error) {
+func InsertIntoTable(ctx context.Context, db *sql.DB, val1, val2 string) (err error) {
     tx, err := db.BeginTx(ctx, nil)
     if err != nil {
         return err
@@ -771,3 +784,125 @@ func DoSomeInserts(ctx context.Context, db *sql.DB, val1, val2 string) (err erro
 
 - **NOTE: The standard library includes good support for databases**
   - `database/sql`
+- A function that allocates a resource should also return a closure to cleanup that resource
+
+```go
+// Example of Resouce Cleanup with defer
+// -------------------------------------
+func main() {
+    if len(os.Args) < 2 {
+        log.Fatal("no file specified")
+    }
+    // Get the file
+    f, closer, err := getFile(os.Args[1])
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer closer()
+    data := make([]byte, 2048)
+    for {
+        count, err := f.Read(data)
+        os.Stdout.Write(data[:count])
+        if err != nil {
+            if err != io.EOF {
+                log.Fatal(err)
+            }
+            break
+        }
+    }
+}
+
+// Open a file and returns a closure
+func getFile(name string) (*os.File, func(), error) {
+    file, err := os.Open(name)
+    if err != nil {
+        return nil, nil, err
+    }
+    return file, func() {
+        file.Close()
+    }, err
+}
+```
+
+- **NOTE: Using `defer` can feel strange than using `try-catch-finally`**
+  - But `try-catch-finally` creates an additional indentation
+  - Makes the code harder to read
+
+## Go Is Call By Value
+
+- **When a function is called with parameters, Go makes a copy of the passed parameters**
+- Modifying parameters inside a function body does not affect the passed arguments
+  - This is not just for primitive types
+  - Also applies to `struct`
+
+```go
+// Example of Call-By-Value
+// ------------------------
+type Person2 struct {
+    age  int
+    name string
+}
+
+func modifyFails(i int, s string, p Person2) {
+    // Attempting to modify the passed parameters
+    i = i * 2
+    s = "Goodbye"
+    p.name = "Bob"
+}
+
+func main() {
+    p := Person2{}
+    i := 2
+    s := "Hello"
+    // Modifying the passed parameters has no effect on the arguments
+    modifyFails(i, s, p)
+    fmt.Println(i, s, p)
+}
+```
+
+- **NOTE: This behavior is different for maps and slices**
+  - For *Maps*: Any changes made to a map parameter is reflected on the original map argument
+  - For *Slice*: We can modify the slice elements **but cannot lengthen the slice**
+  - **Applies for both maps and slices arguments or fields of structs**
+
+```go
+// Example of Map-Slice Modification Calls
+// ---------------------------------------
+func modifyMap(m map[int]string) {
+    m[2] = "hello"
+    m[3] = "goodbye"
+    delete(m, 1)
+}
+
+func modifySlice(s []int) {
+    for k, v := range s {
+        s[k] = v * 2
+    }
+    s = append(s, 10)
+}
+
+func main() {
+    mapMod := map[int]string{
+        1: "first",
+        2: "second",
+    }
+    modifyMap(mapMod)
+    fmt.Println(mapMod)
+
+    slcMod := []int{1, 2, 3}
+    modifySlice(slcMod)
+    fmt.Println(slcMod)
+    fmt.Println()
+}
+```
+
+- **Why do Maps and Slices behave differently?**
+  - Because they are both implemented with pointers
+  - **Every type in Go is a *Value-Type***
+  - **But sometimes, that value is a *Pointer***
+- *Pass-By-Value* is why Go's limited support for Constant is not a huge issue
+  - Calling a function does not modify the original variable
+  - Unless it is a slice or a map
+  - In general, this is a good thing: Easier flow of data
+- **However, sometimes we do need to modify the original value**
+  - In those cases, we use *Pointers*

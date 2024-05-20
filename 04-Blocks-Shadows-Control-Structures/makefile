@@ -34,7 +34,7 @@ run: build
 
 # Target
 try: vet
-	# Task: Build module, run, then remove built binary in Linux
+	# Task: Build module, run, then remove built binary
 	if test -f bin/Bscs-Temp; then \
 		rm -f bin/Bscs-Temp; \
 	fi

@@ -98,11 +98,9 @@ These are in-depth notes from learning Go.
     - Simulating Named and Optional Parameters
     - Variadic Function and Slices
     - Multiple Return Values
-      - Multiple Return Values are Multiple Values
       - Ignoring Returned Values
       - Named Return Values
-        - Inconveniences of Named Return Values
-      - Blank Return: Never Use Them
+      - Blank Return
     - Functions Are Values
       - Function Type Declarations
       - Anonymous Functions
@@ -111,6 +109,7 @@ These are in-depth notes from learning Go.
     - Passing Functions As Parameters
     - Returning Functions From Functions
     - `defer`
+    - Call By Value
 6. Pointers
 7. Types, Methods, Interfaces
 8. Generics

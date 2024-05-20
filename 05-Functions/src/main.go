@@ -8,10 +8,21 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 )
+
+// Example of Call-By-Value
+// ------------------------
+type Person2 struct {
+	age  int
+	name string
+}
 
 // This is the main entry of the application.
 func main() {
+	// Headers
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
 	fmt.Println()
 
 	// Example of calling a Function
@@ -49,6 +60,7 @@ func main() {
 	fmt.Println("addNums(1, 2, 3, 4, 5, 6, 7, 8, 9) =", x)
 	fmt.Println("addNums(21, 43, 65) =", y)
 	fmt.Println("addNums() =", z)
+	fmt.Println("nums =", nums)
 	fmt.Println("addNums(nums...) =", addNums(nums...))
 	fmt.Println()
 
@@ -139,11 +151,10 @@ func main() {
 	// Example of Anonymous Function
 	// -----------------------------
 	fmt.Println("Example of Anonymous Function:")
-	f := func(j int) {
-		fmt.Println("Printing", j, "from inside an anonymous function")
-	}
 	for i := range 5 {
-		f(i)
+		func(j int) {
+			fmt.Println("Printing", j, "from inside an anonymous function")
+		}(i)
 	}
 	fmt.Println()
 
@@ -152,12 +163,11 @@ func main() {
 	fmt.Println("Example of Closure:")
 	a := 20
 	fmt.Println("Outside fa(), a =", a)
-	fa := func() {
+	/*fa =*/ func() {
 		fmt.Println("Inside fa() before assignment, a =", a)
-		a = 30
+		a = 30 // The assignment modifies outside a
 		fmt.Println("Inside fa() after assignment, a =", a)
-	}
-	fa()
+	}()
 	fmt.Println("Outside fa(), a =", a)
 	fmt.Println()
 
@@ -168,7 +178,7 @@ func main() {
 	fmt.Println("Outside fb(), b =", b)
 	fb := func() {
 		fmt.Println("Inside fb() before assignment, b =", b)
-		b := 30 // This assignment Shadows instead
+		b := 30 // This assignment shadows instead of modifying outside b
 		fmt.Println("Inside fb() after assignment, b =", b)
 	}
 	fb()
@@ -206,19 +216,20 @@ func main() {
 	fmt.Println("Example of Function That Returns a Closure:")
 	base2Mult := makeMult(2)
 	base3Mult := makeMult(3)
-	fmt.Println("i\tbase2\tbase3")
-	for i := range 5 {
-		fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i))
+	base5Mult := makeMult(5)
+	fmt.Println("i\tbase2\tbase3\tbase5")
+	for i := range 10 {
+		fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i), "\t", base5Mult(i))
 	}
 	fmt.Println()
 
 	// Example of defer With a cat Command
 	// -----------------------------------
 	fmt.Println("Example of defer With a cat Command:")
-	// Make sure a filename was pass as argument
+	// Make sure a filename was pass as argument: make try ARGS="<filename>""
 	// Args[0] is the name of the program
 	if len(os.Args) < 2 {
-		log.Fatal("no file specified")
+		log.Fatal("Error: No file was specified")
 	}
 	// Open the file: Read-only
 	fl, err := os.Open(os.Args[1])
@@ -250,6 +261,34 @@ func main() {
 	// ----------------------
 	fmt.Println("Example of Using defer:")
 	deferExample()
+	fmt.Println()
+
+	// Example of Call-By-Value
+	// ------------------------
+	fmt.Println("Example of Call-By-Value:")
+	i := 2
+	s := "Hello"
+	p := Person2{}
+	// Modifying the passed parameters has no effect on the arguments
+	modifyFails(i, s, p)
+	fmt.Println(i, s, p)
+	fmt.Println()
+
+	// Example of Map-Slice Modification Calls
+	// ---------------------------------------
+	fmt.Println("Example of Map-Slice Modification Calls:")
+	mapMod := map[int]string{
+		1: "first",
+		2: "second",
+	}
+	fmt.Println("Before: mapMod =", mapMod)
+	modifyMap(mapMod)
+	fmt.Println("After: mapMod =", mapMod)
+
+	slcMod := []int{1, 2, 3}
+	fmt.Println("Before: slcMod =", slcMod)
+	modifySlice(slcMod)
+	fmt.Println("After: slcMod =", slcMod)
 	fmt.Println()
 }
 
@@ -352,22 +391,35 @@ func deferExample() int {
 	return a
 }
 
-// FOR WINDOWS:
-//  To Run:                 make run-win
-//                          go run Functions\src\main.go
-//  To Build:               make build-win
-//                          go build -o Functions\bin\Functions.exe Functions\src\main.go
-//  To Run after Build:     .\bin\Functions.exe
-//                          .\Functions\bin\Functions.exe
-//  Try Build + Run:        make try-win
-//                          go build -o Functions\bin\Functions.exe Functions\src\main.go && .\Functions\bin\Functions.exe && rm .\Functions\bin\Functions.exe
+// Example of Call-By-Value
+// ------------------------
+func modifyFails(i int, s string, p Person2) {
+	// Attempting to modify the passed parameters
+	i = i * 2
+	s = "Goodbye"
+	p.name = "Bob"
+}
 
-// FOR LINUX:
-//  To Run:                 make run
-//                          go run Functions/src/main.go
-//  To Build:               make build
-//                          go build -o Functions/bin/Functions Functions/src/main.go
-//  To Run after Build:     ./bin/Functions
-//                          ./Functions/bin/Functions
-//  Try Build + Run:        make try
-//                          go build -o Functions/bin/Functions Functions/src/main.go && ./Functions/bin/Functions && rm ./Functions/bin/Functions
+// Example of Map-Slice Modification Calls
+// ---------------------------------------
+func modifyMap(m map[int]string) {
+	m[2] = "hello"
+	m[3] = "goodbye"
+	delete(m, 1)
+}
+
+func modifySlice(s []int) {
+	for k, v := range s {
+		s[k] = v * 2
+	}
+	s = append(s, 10)
+}
+
+// AVAILABLE COMMANDS
+// ------------------
+//  make            Default to `make try`
+//  make fmt        Format all source files
+//  make vet        Verify any possible errors
+//  make build      Build module
+//  make run        Build module then run
+//  make try        Build module, run, then remove built binary

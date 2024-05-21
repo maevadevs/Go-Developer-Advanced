@@ -3,7 +3,8 @@
 ---
 
 - [Quick Pointer Primer](#quick-pointer-primer)
-- [Don't Fear Pointers](#dont-fear-pointers)
+- [Pointers Behavior Like Classes](#pointers-behavior-like-classes)
+- [Pointers Indicate Mutable Parameters](#pointers-indicate-mutable-parameters)
 
 ---
 
@@ -54,7 +55,7 @@ var pointerZ *string
   - Which is why their zero-values are the same
   - *Channel* and *Interface* are also implemented using Pointers
 - **Go's pointer syntax is partially borrowed from C/C++**
-  - But without painful memory management (Go is Garbage-Collected)
+  - But without painful memory management: Go is Garbage-Collected
   - Some pointer features in C/C++ are not allowed (E.g. *Pointer Arithmetics*)
 - *NOTE: Go has `unsafe` package for low-level operations*
   - But it is exceedingly rare to use `unsafe`
@@ -164,4 +165,76 @@ p := Person{
 - The constant is copied to the function as variable (param)
 - Variables have memory address
 
-## Don't Fear Pointers
+## Pointers Behavior Like Classes
+
+- Pointers might look intimidating
+- But they are actually the familiar behavior for classes in other languages
+- **In other languages, there is a behavior difference between primitives and classes**
+  - When primitives are assigned to another variable (aliased), change made to the other variable are not reflected
+  - The aliases do not share the same memory
+
+```py
+# Python
+x = 10
+y = x
+y = 20
+print(x) # prints 10
+```
+
+- This is not the case when an instance of a class is done the same
+  - Change in one variable also affect the other
+
+```py
+# Python
+class Foo:
+    def __init__(self, x):
+        self.x = x
+
+
+def outer():
+    f = Foo(10)
+    inner1(f)
+    print(f.x)
+    inner2(f)
+    print(f.x)
+    g = None
+    inner2(g)
+    print(g is None)
+
+
+def inner1(f):
+    f.x = 20
+
+
+def inner2(f):
+    f = Foo(30) # New instance: Local scope
+
+
+outer()
+# 20
+# 20
+# True
+```
+
+- The following scenario is true in other languages
+  - Pass an instance of a class to a function and change the value of a field
+    - **The change is reflected in the variable that was passed in**
+  - Reassign the parameter in the function
+    - **The change is *not* reflected in the variable that was passed in**
+  - Pass `nil`/`null`/`None` for a parameter value: Setting the parameter itself to a new value
+    - **Does not modify the variable in the calling function**
+- This is often explained that in other languages, *class instances are passed by reference*
+  - **But that is not true**
+  - Else, scenario 2 and 3 above would affect the variable
+  - *They are always pass-by-value, just as in Go*
+- **Hoewver, every instance of a class in these languages are implemented as Pointer**
+  - Class instance passed to a function => The copied value is the *Pointer*
+  - Changes made to one is reflected to the other (E.g. `f` above)
+  - **Re-assigning a new instance creates a separate instance/local variable (separate memory address)**
+- **The same behavior applies when using *Pointer Variables* in Go**
+  - But Go gives the choice to use pointers or values for both primitives and structs
+  - Most of the time, use values
+    - Make it easier to understand how and when the data is modified
+    - Also reduces the work of the Garbage Collector
+
+## Pointers Indicate Mutable Parameters

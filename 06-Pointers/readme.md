@@ -227,7 +227,7 @@ outer()
   - **But that is not true**
   - Else, scenario 2 and 3 above would affect the variable
   - *They are always pass-by-value, just as in Go*
-- **Hoewver, every instance of a class in these languages are implemented as Pointer**
+- **However, every instance of a class in these languages are implemented as Pointer**
   - Class instance passed to a function => The copied value is the *Pointer*
   - Changes made to one is reflected to the other (E.g. `f` above)
   - **Re-assigning a new instance creates a separate instance/local variable (separate memory address)**

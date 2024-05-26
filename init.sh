@@ -56,6 +56,56 @@ else
     echo "";
 fi
 
+# Create a .gitignore
+if test -f "$PROJECT_DIR/.gitignore"; then
+    echo "The .gitignore file already exist. Skipping creating a new .gitignore.";
+    echo "";
+else
+    echo "Creating a new .gitignore file...";
+    touch ".gitignore";
+    # Add default placeholder contents
+    echo "\
+# Project Specific
+bin/
+bin/*
+
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file (remove the comment below to include it)
+# go.work
+
+# VS Code
+.vscode
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+.vsix
+
+" >> .gitignore;
+
+    echo "Done."
+    echo "";
+fi
+
 # Create a readme.md with placeholder
 if test -f "$PROJECT_DIR/readme.md"; then
     echo "The readme.md file already exist. Skipping creating a new readme.md.";
@@ -138,6 +188,17 @@ if test -d "$PROJECT_DIR/src"; then
 else
     echo "Creating a new src directory...";
     mkdir -p "src";
+    echo "Done."
+    echo "";
+fi
+
+# Create a new "tests" folder if does not exist yet
+if test -d "$PROJECT_DIR/tests"; then
+    echo "The tests directory exist. Skipping creating a new tests directory.";
+    echo "";
+else
+    echo "Creating a new tests directory...";
+    mkdir -p "tests";
     echo "Done."
     echo "";
 fi

@@ -15,6 +15,9 @@ func main() {
 	fmt.Println("----------------------------")
 	fmt.Println("Hello world!")
 	fmt.Printf("Hello again %s!\n", "world")
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
+	fmt.Println()
 }
 
 // AVAILABLE COMMANDS

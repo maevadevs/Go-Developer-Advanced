@@ -101,6 +101,7 @@
 // Example of Integer Literals
 // ---------------------------
 fmt.Println("Example of Integer Literals:")
+fmt.Println("----------------------------")
 
 var age int = 45
 var blue int = 0x0000ff
@@ -131,6 +132,7 @@ fmt.Println("red =", red)
 // Example of Float Literals
 // -------------------------
 fmt.Println("Example of Float Literals:")
+fmt.Println("--------------------------")
 
 var length float32 = 24.68
 var avogadro float64 = 6.2214e23
@@ -172,6 +174,7 @@ Single Unicode Character|`'a'`
 // Example of Rune Literals
 // ------------------------
 fmt.Println("Example of Rune Literals:")
+fmt.Println("-------------------------")
 
 var gender rune = 'M'
 var newline rune = '\n'
@@ -216,24 +219,25 @@ fmt.Println("ninetySeven =", ninetySeven)
 // Example of String Literals
 // --------------------------
 fmt.Println("Example of String Literals:")
+fmt.Println("---------------------------")
 
 // Regular string
 var greetings string = "Hello World!"
 // Using Escapes
 var greetingsLong string = "Greetings and \n\"Salutations\"!"
-var sysPath string = "C:\\\\Windows\\System32"
+var winSysPath string = "C:\\Windows\\System32"
 // Using Raw String Literal
 var greetingsRaw string = `Greetings and
 "Salutations"!`
-var goPathRaw string = `https://go.dev`
+var winUserPath string = `C:\Users\<CurrentUserName>`
 var rawStringWithBacktick string = `Backticks ` + "(`) " + `cannot appear in raw string.
-    For that, use "" to contain the ` + "(`)" + `, then concatenate.`
+For that, use "" to contain the ` + "(`)" + `, then concatenate.`
 
 fmt.Println("greetings =", greetings)
 fmt.Println("greetingsLong =", greetingsLong)
-fmt.Println("sysPath =", sysPath)
+fmt.Println("winSysPath =", winSysPath)
 fmt.Println("greetingsRaw =", greetingsRaw)
-fmt.Println("goPathRaw =", goPathRaw)
+fmt.Println("winUserPath =", winUserPath)
 fmt.Println("rawStringWithBacktick =", rawStringWithBacktick)
 ```
 
@@ -251,6 +255,7 @@ fmt.Println("rawStringWithBacktick =", rawStringWithBacktick)
 // Example of Boolean
 // ------------------
 fmt.Println("Example of Boolean:")
+fmt.Println("-------------------")
 
 // Declaration: Default to false
 var flag bool
@@ -264,23 +269,27 @@ fmt.Println("isAdult =", isAdult)
 ## Numeric Types
 
 - 12 Numeric Types grouped into 3 categories
-  - 8 Integers
-    - `int8`
-    - `int16`
-    - `int32` / alias: `int`
-    - `int64` / alias: `int`
-    - `uint8` / alias: `byte`
-    - `uint16`
-    - `uint32` / alias: `uint`
-    - `uint64` / alias: `uint`
-  - 2 Special Integers
-    - `rune`
-    - `uintptr`
-  - 2 Floating-Points
-    - `float32`
-    - `float64`
-- Also a Complex Type: `complex`
 - Some are used more often than others
+- Also a Complex Type: `complex`
+
+**8 Integers**
+
+Signed|Unsigned
+:-|:-
+`int8`|`uint8` / alias: `byte`
+`int16`|`uint16`
+`int32` / alias: `int`|`uint32` / alias: `uint`
+`int64` / alias: `int`|`uint64` / alias: `uint`
+
+**2 Special Integers**
+
+- `rune`
+- `uintptr`
+
+**2 Floating-Points**
+
+- `float32`
+- `float64`
 
 ### Integer Types
 
@@ -313,7 +322,7 @@ Integer Type|Range
   - `amd64p32`
   - `mips64p32`
   - `mips64p321e`
-- **Comparing or operating between values of type `int`/`uint` and `int32`-`int64`/`uint32`-`uint64` is a compile-time error**
+- **Comparing or operating between values of type (`int` and `int32`/`int64`) or (`uint` and `uint32`/`uint64`) is a compile-time error**
   - Because `int` and `uint` are not consistent across platforms
   - **Explicit type-conversion is necessary to do so**
 - **NOTE: `rune` and `uintptr` are also *Special Integer Types***
@@ -327,7 +336,7 @@ Integer Type|Range
 3. In all other cases, use `int`
 
 - **NOTE: Some legacy codes might define 2 separate functions using `int64` and `uint64`**
-  - Those APIs were created before Go supported Generics
+  - Those APIs were created before Go started supporting Generics
   - E.g. Go Standard Library `strconv.FormatInt()` and `strconv.FormatUint()`
 
 #### Integer Operators
@@ -353,6 +362,7 @@ Integer Type|Range
   - BITWISE-OR `|` and `|=`
   - BITWISE-XOR `^` and `^=`
   - BITWISE-ANDNOT `&^` and `&^=`
+  - BITWISE-NOT `^`
 
 ### Floating-Point Types
 
@@ -373,7 +383,7 @@ Float Type|Range|Precision
 - Use `float64` unless needing compatibility
   - Helps mitigate accuracy issues with `float32`
   - Memory size should not be an issue unless profiler determines significant issues
-- **NOTE: In many cases, floating-point should not be used at all**
+- **NOTE: In many cases though, floating-point should not be used at all**
   - Huge range but only nearest approximation
   - Can only be used in situations where inexact values are acceptable: Graphics, Statistics, Scientific Operations
   - The rules of floating-points must be well understood
@@ -411,6 +421,7 @@ Float Type|Range|Precision
   - BITWISE-OR `|` and `|=`
   - BITWISE-XOR `^` and `^=`
   - BITWISE-ANDNOT `&^` and `&^=`
+  - BITWISE-NOT `^`
 
 ### Complex Type
 
@@ -449,16 +460,17 @@ var complexNum = complex(20.5, 10.6)
 // Example of Complex Number
 // -------------------------
 fmt.Println("Example of Complex Number:")
+fmt.Println("--------------------------")
 
 x := complex(2.5, 3.1)
 y := complex(10.2, 2)
 
 fmt.Println("x =", x)
 fmt.Println("y =", y)
-fmt.Println("x + y =", x + y)
-fmt.Println("x - y =", x - y)
-fmt.Println("x * y =", x * y)
-fmt.Println("x / y =", x / y)
+fmt.Println("x + y =", x+y)
+fmt.Println("x - y =", x-y)
+fmt.Println("x * y =", x*y)
+fmt.Println("x / y =", x/y)
 fmt.Println("real(x) =", real(x))
 fmt.Println("imag(x) =", imag(x))
 fmt.Println("cmplx.Abs(x) =", cmplx.Abs(x))
@@ -477,16 +489,20 @@ fmt.Println("cmplx.Abs(x) =", cmplx.Abs(x))
 ## Strings and Runes
 
 - String is a built-in data type
-- Supports Unicode - We can put any unicode characters in strings
+- Supports Unicode
+  - We can put any unicode characters in strings
+  - But we should not just add anything just because we can
 - Zero-Value is `""`
 - Default Type is `string`
 - **Strings are immutable**
 
 ### String Operators
 
-- We can use comparison operators: `==`, `!=`
-- Ordering operators: `>`, `>=`, `<`, `<=`
-- Concatenation: `+`, `+=`
+Type|Operator
+:-|:-
+Comparison Operator|`==` `!=`
+Ordering Operators|`>` `>=` `<` `<=`
+Concatenation|`+` `+=`
 
 ### Runes
 
@@ -496,7 +512,7 @@ fmt.Println("cmplx.Abs(x) =", cmplx.Abs(x))
   - *Characters* are represented as integer codepoints
   - **But do use `rune` for character, not `int32`**
   - They are same for the compiler, but bad programming practice to mismatch
-  - Helps to clarify the intent in the code
+  - Helps to clarify the intent of the code
 - Default type is `rune`
 
 ```go
@@ -516,12 +532,13 @@ var lNameInitial int32 = 'R'
   - Even for integers and floats
 - Type conversion is done by calling the type as a function on the value
   - ***For any values that are not of the same type: At least one must be converted before they can be used together***
-  - The same applies for values of same type but different sizes (E.g. `int8` and `int32`)
+  - **NOTE: The same applies for values of same type but different sizes (E.g. `int8` and `int32`)**
 
 ```go
 // Example of Type Conversion
 // --------------------------
 fmt.Println("Example of Type Conversion:")
+fmt.Println("--------------------------")
 
 var myInt int = 10
 var myFloat float64 = 30.2
@@ -564,7 +581,7 @@ var y float64 = 200.50 * 50
 
 - Go has different ways for declaring variables
 - Each style communicates about how the variable is used
-- *Variables can be declared at the package-level or function-level*
+- **Variables can be declared at the package-level or function-level**
   - However, it is preferable to do so at the function-level as much as possible
   - Keep usage of package-level variables to a minimum
 
@@ -580,13 +597,14 @@ var x int = 100
 
 ### Short-Format Declaration With `var`
 
-- If the type of the value can be inferred, we can skip specifying the type
+- If the type of the value can be inferred from a given value, we can skip specifying the type
 - *The type of the variable is inferred from the assigned value*
 - However, literals are *untyped* until used
+- The type of the variable is assigned as the *default type* of the literal
 
 ```go
 // Short-format declaration with var
-var x = 100 // Inferred as int but untyped until used
+var x = 100 // Inferred as int (default type of this literal)
 ```
 
 ### Declaration-Only With `var`
@@ -620,6 +638,7 @@ var age, favNum int
 - If assigning initial values, the variables can be of different types
 - The types of the variables are deduced from the assigned values
 - However, literals are *untyped* until used
+- The type of the variable is assigned as the *default type* of the literal
 
 ```go
 // Declaring and assigning multiples
@@ -632,10 +651,10 @@ var name, age, isAdult = "John", 26, true
 
 ```go
 var (
-    uFname, uLname string // Default Zero-Value: ""
-    uAge = 26
-    uIsAdult bool = true
-    uFavNum, uWorstNum = 7, -100
+    uFname, uLname     string      // Default Zero-Value: ""
+    uAge                      = 26 // Default type of 26: int
+    uIsAdult           bool   = true
+    uFavNum, uWorstNum        = 7, -100 // Default types: int
 )
 ```
 
@@ -690,7 +709,7 @@ name, age, isAdult := "Johnny", 26, true
     - In those cases, it is better to use `var`
 - **NOTE: Only use *Multiple declaration and assignment* style when assigning multiple values from a function return**
 - **NOTE: Rarely declare variables outside functions**
-  - Package-level variables is not a good idea
+  - Package-level variable is not a good idea
   - Can be difficult to track the changes made
   - Make it hard to understand the flow of the data in the program
   - Can lead to subtle bugs
@@ -717,23 +736,27 @@ func main() {
     // Example of Function-level Constants
     // -----------------------------------
     fmt.Println("Example of Function-level Constants:")
+    fmt.Println("------------------------------------")
 
-    const greetings = "Hello"
+    const greetingsConst = "Hello"
 
-    fmt.Println("greetings = ", greetings)
+    fmt.Println("greetingsConst =", greetingsConst)
+    fmt.Println()
 
     // Example of Package-level Constants
     // ----------------------------------
     fmt.Println("Example of Package-level Constants:")
+    fmt.Println("-----------------------------------")
 
-    fmt.Println("pi = ", pi)
-    fmt.Println("idKey = ", idKey)
-    fmt.Println("nameKey = ", nameKey)
-    fmt.Println("total = ", v)
+    fmt.Println("pi =", pi)
+    fmt.Println("idKey =", idKey)
+    fmt.Println("nameKey =", nameKey)
+    fmt.Println("total =", total)
 
     // This is an error: Constants are immutable
     // pi = pi + 1
-    // greetings = "Hi!"
+    // greetingsConst = "Hi!"
+    fmt.Println()
 }
 ```
 
@@ -751,7 +774,8 @@ func main() {
     - `const` is only a way to give names to literals
 
 ```go
-// This is an error
+// This is an error: Runtime calculation of total
+// total is not a constant at compile-time
 x := 5
 y := 6
 const total = x + y
@@ -765,11 +789,11 @@ const total = x + y
 
 ### Typed Const vs Untyped Const
 
-- Constants can be typed or untyped
+- ***Constants can be typed or untyped***
 - **Untyped Constant** is the same as literal
   - Has no type on its own
   - Has default type when type cannot be inferred
-- **Typed Constant** can be assigned directly only a *"variable"* of the same type
+- **Typed Constant** can be assigned directly only to a *"variable"* of the same type
   - The `const` variable must have an explicit type
 - **Usage depends on the intent**
   - Constants to be used with multiple numeric types => *Keep untyped*
@@ -779,6 +803,9 @@ const total = x + y
 ```go
 // Example of Untyped Constant
 // ---------------------------
+fmt.Println("Example of Untyped Constant:")
+fmt.Println("----------------------------")
+
 const uConst = 100
 
 // Legal usage
@@ -786,14 +813,25 @@ var i int = uConst
 var f float64 = uConst
 var b byte = uConst
 
+fmt.Println("uConst =", uConst)
+fmt.Println("i =", i)
+fmt.Println("f =", f)
+fmt.Println("b =", b)
+
 // Example of Typed Constant
 // -------------------------
-const tConst int64 = 100
+fmt.Println("Example of Typed Constant:")
+fmt.Println("--------------------------")
 
+const tConst int64 = 100
 // Legal usage:
-// Can only be assigned to int64
-// Asigning to any other type is a compile error
+// Can only be assigned to type int64
+// Assigning to any other type is a compile error
 var i64 int64 = tConst
+
+fmt.Println("tConst =", tConst)
+fmt.Println("i64 =", i64)
+fmt.Println()
 ```
 
 ## Unused Variables
@@ -820,10 +858,10 @@ func main() {
 - **NOTE: This rule does not apply to *constants* and *package-level variables***
   - It is better to avoid *package-level variables*
   - Constants in Go are calculated at compile-time (cannot have side-effects)
-  - Can be eliminated if unused: They are excluded from the compiled binary if unused
+    - They are excluded from the compiled binary if unused
 
 ```go
-// This code will compile
+// This code will compile and produce nothing
 package main
 
 var note string = "It will not complain if I am unused because I am at package-level!"
@@ -861,7 +899,7 @@ func main() {
   - **`_` is mostly only used as a *discard* variable**
 - **NOTE: Do not use *all-caps* when naming constants**
   - **Keep `const` names the same as `var`**
-  - Go uses the case of the first letter of a name to determine its accessibility (*private* vs *public*)
+  - **Go uses the case of the first letter of a name to determine its accessibility (*private* vs *public*)**
 - **Within functions, favor short names**
   - Smaller scope = Shorter name
   - Single-letters are common for `for` loops

@@ -26,6 +26,7 @@ func main() {
 	// Example of Integer Literals
 	// ---------------------------
 	fmt.Println("Example of Integer Literals:")
+	fmt.Println("----------------------------")
 
 	var age int = 45
 	var blue int = 0x0000ff
@@ -38,12 +39,12 @@ func main() {
 	fmt.Println("admin =", admin)
 	fmt.Println("billion =", billion)
 	fmt.Println("red =", red)
-
 	fmt.Println()
 
 	// Example of Float Literals
 	// -------------------------
 	fmt.Println("Example of Float Literals:")
+	fmt.Println("--------------------------")
 
 	var length float32 = 24.68
 	var avogadro float64 = 6.2214e23
@@ -54,12 +55,12 @@ func main() {
 	fmt.Println("avogadro =", avogadro)
 	fmt.Println("hexaFloat =", hexaFloat)
 	fmt.Println("bankBalance =", bankBalance)
-
 	fmt.Println()
 
 	// Example of Rune Literals
 	// ------------------------
 	fmt.Println("Example of Rune Literals:")
+	fmt.Println("-------------------------")
 
 	var gender rune = 'M'
 	var newline rune = '\n'
@@ -79,37 +80,37 @@ func main() {
 	fmt.Println("tab =", tab)
 	fmt.Println("quote =", quote)
 	fmt.Println("ninetySeven =", ninetySeven)
-
 	fmt.Println()
 
 	// Example of String Literals
 	// --------------------------
 	fmt.Println("Example of String Literals:")
+	fmt.Println("---------------------------")
 
 	// Regular string
 	var greetings string = "Hello World!"
 	// Using Escapes
 	var greetingsLong string = "Greetings and \n\"Salutations\"!"
-	var sysPath string = "C:\\\\Windows\\System32"
+	var winSysPath string = "C:\\Windows\\System32"
 	// Using Raw String Literal
 	var greetingsRaw string = `Greetings and
     "Salutations"!`
-	var goPathRaw string = `https://go.dev`
+	var winUserPath string = `C:\Users\<CurrentUserName>`
 	var rawStringWithBacktick string = `Backticks ` + "(`) " + `cannot appear in raw string.
     For that, use "" to contain the ` + "(`)" + `, then concatenate.`
 
 	fmt.Println("greetings =", greetings)
 	fmt.Println("greetingsLong =", greetingsLong)
-	fmt.Println("sysPath =", sysPath)
+	fmt.Println("winSysPath =", winSysPath)
 	fmt.Println("greetingsRaw =", greetingsRaw)
-	fmt.Println("goPathRaw =", goPathRaw)
+	fmt.Println("winUserPath =", winUserPath)
 	fmt.Println("rawStringWithBacktick =", rawStringWithBacktick)
-
 	fmt.Println()
 
 	// Example of Boolean
 	// ------------------
 	fmt.Println("Example of Boolean:")
+	fmt.Println("-------------------")
 
 	// Declaration: Default to false
 	var flag bool
@@ -118,12 +119,12 @@ func main() {
 
 	fmt.Println("flag =", flag)
 	fmt.Println("isAdult =", isAdult)
-
 	fmt.Println()
 
 	// Example of Complex Number
 	// -------------------------
 	fmt.Println("Example of Complex Number:")
+	fmt.Println("--------------------------")
 
 	x := complex(2.5, 3.1)
 	y := complex(10.2, 2)
@@ -137,12 +138,12 @@ func main() {
 	fmt.Println("real(x) =", real(x))
 	fmt.Println("imag(x) =", imag(x))
 	fmt.Println("cmplx.Abs(x) =", cmplx.Abs(x))
-
 	fmt.Println()
 
 	// Example of Type Conversion
 	// --------------------------
 	fmt.Println("Example of Type Conversion:")
+	fmt.Println("---------------------------")
 
 	var myInt int = 10
 	var myFloat float64 = 30.2
@@ -154,12 +155,12 @@ func main() {
 	fmt.Printf("%d + %.1f\n", myInt, myFloat)
 	fmt.Println("mySumF =", mySumF)
 	fmt.Println("mySumI =", mySumI)
-
 	fmt.Println()
 
 	// Example of Variable Declarations
 	// --------------------------------
 	fmt.Println("Example of Variable Declarations:")
+	fmt.Println("---------------------------------")
 
 	// Long-format declaration with var
 	var someNum int = 100
@@ -200,22 +201,22 @@ func main() {
 	fmt.Println("sName =", sName)
 	fmt.Println("sAge =", sAge)
 	fmt.Println("sIsAdult =", sIsAdult)
-
 	fmt.Println()
 
 	// Example of Function-level Constants
 	// -----------------------------------
 	fmt.Println("Example of Function-level Constants:")
+	fmt.Println("------------------------------------")
 
 	const greetingsConst = "Hello"
 
 	fmt.Println("greetingsConst =", greetingsConst)
-
 	fmt.Println()
 
 	// Example of Package-level Constants
 	// ----------------------------------
 	fmt.Println("Example of Package-level Constants:")
+	fmt.Println("-----------------------------------")
 
 	fmt.Println("pi =", pi)
 	fmt.Println("idKey =", idKey)
@@ -225,12 +226,12 @@ func main() {
 	// This is an error: Constants are immutable
 	// pi = pi + 1
 	// greetingsConst = "Hi!"
-
 	fmt.Println()
 
 	// Example of Untyped Constant
 	// ---------------------------
 	fmt.Println("Example of Untyped Constant:")
+	fmt.Println("----------------------------")
 
 	const uConst = 100
 
@@ -243,15 +244,14 @@ func main() {
 	fmt.Println("i =", i)
 	fmt.Println("f =", f)
 	fmt.Println("b =", b)
-
 	fmt.Println()
 
 	// Example of Typed Constant
 	// -------------------------
 	fmt.Println("Example of Typed Constant:")
+	fmt.Println("--------------------------")
 
 	const tConst int64 = 100
-
 	// Legal usage:
 	// Can only be assigned to type int64
 	// Assigning to any other type is a compile error
@@ -259,7 +259,9 @@ func main() {
 
 	fmt.Println("tConst =", tConst)
 	fmt.Println("i64 =", i64)
+	fmt.Println()
 
+	fmt.Println(strings.Repeat("-", 100))
 	fmt.Println()
 }
 

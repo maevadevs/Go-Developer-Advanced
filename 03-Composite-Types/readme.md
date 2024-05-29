@@ -106,11 +106,16 @@ arrE := [...]int{100, 200, 300}
 - **Arrays are equal if *same length and same values in the same order***
 
 ```go
-// Comparing arrays
+// Comparing Arrays
 // ----------------
-arrF := [...]int{1,2,3,4,5}
-var arrG = [5]int{1,2,3,4,5}
+fmt.Println("Comparing Arrays:")
+fmt.Println("-----------------")
 
+arrF := [...]int{1, 2, 3, 4, 5}
+arrG := [5]int{1, 2, 3, 4, 5}
+
+fmt.Println("arrF =", arrF)
+fmt.Println("arrG =", arrG)
 fmt.Println("arrF == arrG?", arrF == arrG)
 ```
 
@@ -120,9 +125,15 @@ fmt.Println("arrF == arrG?", arrF == arrG)
 - However, we can simulate them with *Array of Arrays*
 
 ```go
+// Multidimensional Array
+// ----------------------
+fmt.Println("Multidimensional Arrays:")
+fmt.Println("------------------------")
+
 // Array of array of integers: 5 x 5
-// ---------------------------------
-arrH = [5][5]int
+var arrH [5][5]int
+
+fmt.Println(arrH)
 ```
 
 ### Array Access
@@ -132,6 +143,9 @@ arrH = [5][5]int
 ```go
 // Array Access
 // ------------
+fmt.Println("Array Access:")
+fmt.Println("-------------")
+
 arrI := [3]int{10, 20, 30}
 
 // Accessing the values
@@ -139,30 +153,36 @@ fmt.Println("arrI[0] =", arrI[0])
 fmt.Println("arrI[1] =", arrI[1])
 fmt.Println("arrI[2] =", arrI[2])
 
-// Changing the values
+// Changing the array values
 arrI[0] = 15
 arrI[1] = 25
 arrI[2] = 35
 
+fmt.Println("After changing the array values:")
 fmt.Println("arrI =", arrI)
 ```
 
-- We cannot access beyond the length of the array: Compile-time error
+- We cannot access beyond the length of the array
+  - Compile-time error
   - **Out-of-bounds access will *panic* at runtime**
-- **We cannot access with negative index**: Compile-time error
+- **We cannot access with negative index**
+  - Compile-time error
 
 ### Getting Array Length
 
 - Use the built-in function `len()` to  get the length of an array
 
 ```go
-// Getting the length of an array
-// ------------------------------
+// Length of an array
+// ------------------
+fmt.Println("Length of An Array:")
+fmt.Println("-------------------")
+
 arrJ := [3]int{10, 20, 30}
 arrK := [...]int{15, 25, 35}
 
-fmt.Println("arrJ =", arrJ, "length =", len(arrJ))
-fmt.Println("arrK =", arrK, "length =", len(arrK))
+fmt.Println("arrJ =", arrJ, "=> length:", len(arrJ))
+fmt.Println("arrK =", arrK, "=> length:", len(arrK))
 ```
 
 ### Limitations: Why Arrays Are Rarely Used
@@ -171,6 +191,7 @@ fmt.Println("arrK =", arrK, "length =", len(arrK))
   - E.g. `[3]int` is different from `[4]int`
 - **We cannot use variable to specify the size**
   - Types must be resolved at compile-time
+  - Because `[n]type` is a type, it must be resolved at compile-time
 - **We cannot use type-conversion to convert arrays of different size to the same size**
   - We cannot write functions to work with arrays of any size
   - We cannot assign arrays of any sizes to the same variable
@@ -183,6 +204,7 @@ fmt.Println("arrK =", arrK, "length =", len(arrK))
 ## Slices
 
 - Most of the time, *Slices* are what we should use for a *sequence-based* data structure
+- **Slice is built on top of an underlying array**
 - **Slice length is dynamic: Can grow and shrink as needed**
 - **The slice length is NOT part of its type**
   - Removes the limitation from arrays
@@ -215,9 +237,13 @@ sliceB := []int{1, 5: 4, 6, 10, 100, 15}
 - However, we can simulate them with *Slice of Slices*
 
 ```go
+// Multidimensional Slice
+// ----------------------
+fmt.Println("Multidimensional Slices:")
+fmt.Println("------------------------")
+
 // Slice of slices of integers
-// ---------------------------
-// Default value is nil
+// Default value is a nil slice
 var sliceC [][]int
 
 // For better definition, we use make()
@@ -228,19 +254,26 @@ sliceC[0] = []int{1, 2, 3, 4}
 sliceC[1] = []int{5, 6, 7, 8}
 sliceC[2] = []int{9, 10, 11, 12}
 sliceC[3] = []int{13, 14, 15, 16}
+
+fmt.Println("sliceC =", sliceC)
 ```
 
 ### Slice Access
 
 - Same rules as with *Arrays*
   - Read and write via the `slice[index]` syntax
-  - We cannot access beyond the length of the slice: Compile-time error
-  - **We cannot access with negative index**: Compile-time error
+- We cannot access beyond the length of the slice
+  - Compile-time error
   - **Out-of-bounds access will *panic* at runtime**
+- **We cannot access with negative index**
+  - Compile-time error
 
 ```go
 // Slice Access
 // ------------
+fmt.Println("Slice Access:")
+fmt.Println("-------------")
+
 sliceD := []int{10, 20, 30}
 
 // Accessing the values
@@ -262,21 +295,24 @@ fmt.Println("sliceD =", sliceD)
 
 #### The Zero-Value for slice is `nil`
 
+- The Zero-Value of array is the Zero-Value of its type
+- The Zero-Value of slice is `nil`
+
 ```go
-// Declaring a slice with zero-value: nil
+// Declaring a slice with Zero-Value: nil
 // --------------------------------------
 var sliceNil []int
 ```
 
 - **`nil` is slightly different than `null` in other languages**
-  - `nil` is an identifier that represent lack of value for some types
+  - `nil` is an identifier that represents lack of value for some types
   - **`nil` is untyped**: Can be used for different types
 - ***A `nil` slice contains nothing***
 
 #### Slices Are Not Comparable With `==`
 
 - **Using `==` and `!=` on 2 slices result in compile-time error**
-- We can only use `slice == nil`
+- We can only use `slice == nil` or `slice != nil`
 
 ```go
 // Checking if slice is nil
@@ -299,20 +335,23 @@ Function|Description
 ```go
 // Using Slices Helper Functions: slices
 // -------------------------------------
-import (
-    "fmt"
-    "slices"
-)
+fmt.Println("Using Slices Helper Functions:")
+fmt.Println("------------------------------")
 
 sliceX := []int{1, 2, 3, 4, 5}
 sliceY := []int{1, 2, 3, 4, 5}
 sliceZ := []int{1, 2, 3, 4, 5, 6}
 sliceS := []string{"a", "b", "c"}
 
+fmt.Println("sliceX =", sliceX)
+fmt.Println("sliceY =", sliceY)
+fmt.Println("sliceZ =", sliceZ)
+fmt.Println("sliceS =", sliceS)
+
 fmt.Println("slices.Equal(sliceX, sliceY) ?", slices.Equal(sliceX, sliceY))
 fmt.Println("slices.Equal(sliceX, sliceZ) ?", slices.Equal(sliceX, sliceZ))
 // This one will not compile: Different types for each elements
-fmt.Println("slices.Equal(sliceX, sliceS) ?", slices.Equal(sliceX, sliceS))
+// fmt.Println("slices.Equal(sliceX, sliceS) ?", slices.Equal(sliceX, sliceS))
 ```
 
 - **NOTE: `reflect` package contains a `DeepEqual` function that can compare almost anything**
@@ -356,14 +395,24 @@ fmt.Println("sliceF =", sliceF, "length =", len(sliceF))
 ```go
 // Appending to a slice
 // --------------------
+fmt.Println("Appending to a Slice:")
+fmt.Println("---------------------")
+
 // Appending to a nil slice
 var sliceG []int
-sliceG = append(sliceG, 100)
-
 // Appending to an existing slice
 sliceH := []int{1, 2, 3, 4, 5}
+
+fmt.Println("Before: sliceG =", sliceG)
+fmt.Println("Before: sliceH =", sliceH)
+
+sliceG = append(sliceG, 100)
 // We can append more than 1 value at once
 sliceH = append(sliceH, 6, 7, 8, 9)
+// Appending one slice to another
+
+fmt.Println("After: sliceG =", sliceG)
+fmt.Println("After: sliceH =", sliceH)
 ```
 
 - We can also append one slice unto another
@@ -373,7 +422,12 @@ sliceH = append(sliceH, 6, 7, 8, 9)
 ```go
 // Extending a slice with another slice
 // ------------------------------------
+fmt.Println("Extending a Slice:")
+fmt.Println("------------------")
+
 sliceH = append(sliceH, sliceG...)
+
+fmt.Println("Extending sliceH with sliceG =", sliceH)
 ```
 
 ### Length vs Capacity
@@ -393,7 +447,7 @@ sliceH = append(sliceH, sliceG...)
     - The slice is updated to refer to the new backing array
     - The updated slice is returned
     - **NOTE: Slice is a reference type**
-- **For this reason, growing a slice is expensive and can cause performance hit**
+- **For this reason, growing a slice is expensive and can cause performance hit: $O(n)$**
   - Allocate new memory
   - Copy all contents from old memory to new memory
   - Garbage collection
@@ -420,6 +474,9 @@ $$
 ```go
 // Appending and Slice Capacity
 // ----------------------------
+fmt.Println("Appending and Slice Capacity:")
+fmt.Println("-----------------------------")
+
 var xSlice []int
 fmt.Println("Slice\t\t\tLen\tCap")
 fmt.Println(xSlice, "\t\t\t", len(xSlice), "\t", cap(xSlice))
@@ -493,7 +550,7 @@ sliceJ := make([]int, 5, 10)
 ```
 
 - We can also make a slice of length `0` but with a specified capacity
-  - **Using this approach allows to use `append()` to the slice**
+  - **Using this approach allows to use `append()` to the slice as usual**
 
 ```go
 // Declaring a slice using make()
@@ -506,6 +563,30 @@ sliceK = append(sliceK, 1, 2, 3, 4, 5)
   - If done via constant, it is a compile-time error
   - If done via variables, it is a runtime error
 
+```go
+// Declaring a slice using make()
+// ------------------------------
+fmt.Println("Declaring a slice using make():")
+fmt.Println("-------------------------------")
+
+// Length: 5, Capacity: 5
+sliceI := make([]int, 5)
+// Length: 5, Capacity: 10
+sliceJ := make([]int, 5, 10)
+// Length: 0, Capacity: 10
+sliceK := make([]int, 0, 10)
+
+fmt.Println("Before Append:")
+fmt.Println("\tsliceI =", sliceI, "len(sliceI) =", len(sliceI), "cap(sliceI) =", cap(sliceI))
+fmt.Println("\tsliceJ =", sliceJ, "len(sliceJ) =", len(sliceJ), "cap(sliceJ) =", cap(sliceJ))
+fmt.Println("\tsliceK =", sliceK, "len(sliceK) =", len(sliceK), "cap(sliceK) =", cap(sliceK))
+
+sliceK = append(sliceK, 1, 2, 3, 4, 5)
+
+fmt.Println("After Append to sliceK:")
+fmt.Println("\tsliceK =", sliceK, "len(sliceK) =", len(sliceK), "cap(sliceK) =", cap(sliceK))
+```
+
 ### Built-In `clear()` Function
 
 - `clear()` resets all elements in a slice back to the zero-value
@@ -515,14 +596,20 @@ sliceK = append(sliceK, 1, 2, 3, 4, 5)
 
 ```go
 // Resetting slice using clear()
+// -----------------------------
+fmt.Println("Resetting slice using clear():")
+fmt.Println("------------------------------")
+
 sliceL := []string{"first", "second", "third"}
 sliceLInt := []int{100, 200, 300}
-fmt.Println("Before:", sliceL, len(sliceL))
-fmt.Println("Before:", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
+fmt.Println("Before:")
+fmt.Println("\tsliceL =", sliceL, "len =", len(sliceL), "cap =", cap(sliceL))
+fmt.Println("\tsliceLInt =", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
 clear(sliceL)
 clear(sliceLInt)
-fmt.Println("After:", sliceL, len(sliceL))
-fmt.Println("After:", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
+fmt.Println("After:")
+fmt.Println("\tsliceL =", sliceL, "len =", len(sliceL), "cap =", cap(sliceL))
+fmt.Println("\tsliceLInt =", sliceLInt, "len =", len(sliceLInt), "cap =", cap(sliceLInt))
 ```
 
 ### Which Slice Declarations To Use
@@ -576,7 +663,10 @@ data := []int{1, 2, 3, 4, 5}
 ```go
 // Subslicing slice
 // ----------------
-sliceM := []string{"a","b","c","d"}
+fmt.Println("Subslicing slice:")
+fmt.Println("-----------------")
+
+sliceM := []string{"a", "b", "c", "d"}
 subM1 := sliceM[:2]
 subM2 := sliceM[1:]
 subM3 := sliceM[1:3]
@@ -591,6 +681,7 @@ fmt.Println("sliceM[:] =", subM4)
 
 - ***WARNING: Slicing a slice does not make a separate copy***
   - Assigning the slice of the slice to a variable create an alias to the original slice variable
+  - **This is because they will share the same underlying array**
   - The original slice and subslices are all linked
   - **Changing an element in one variable affects all other aliases**
 
@@ -613,15 +704,20 @@ fmt.Println("subM4 =", subM4)
   - ***This can cause slices and subslices to append and overwrite each other's data***
 
 ```go
-// Slice of Slice with append()
-fmt.Println("Slice of slice with append()")
-fmt.Println("BEFORE:", "sliceM", cap(sliceM), sliceM)
-fmt.Println("BEFORE:", "subM1", cap(subM1), subM1)
+// Slice of slice with append()
+// ----------------------------
+fmt.Println("Slice of slice with append():")
+fmt.Println("-----------------------------")
+
+fmt.Println("BEFORE:")
+fmt.Println("\tsliceM", "cap =", cap(sliceM), sliceM)
+fmt.Println("\tsubM1", "cap =", cap(subM1), subM1)
 
 subM1 = append(subM1, "zz")
 
-fmt.Println("AFTER:", "sliceM", cap(sliceM), sliceM)
-fmt.Println("AFTER:", "subM1", cap(subM1), subM1)
+fmt.Println("AFTER:")
+fmt.Println("\tsliceM", "cap =", cap(sliceM), sliceM)
+fmt.Println("\tsubM1", "cap =", cap(subM1), subM1)
 ```
 
 - To avoid this issue, either:
@@ -629,29 +725,47 @@ fmt.Println("AFTER:", "subM1", cap(subM1), subM1)
   - **Always use *full slice expression* with `append()`**
     - Includes a 3rd part
     - *Indicates last position in the capacity of the original slice that is available for the subslice*
-    - *Subtract the starting offset from this number to get the subslice capacity*
+    - **Subtract the starting offset from this number to get the subslice capacity**
+    - $x-SubsliceStartingOffset=SubliceCapacity$ => $x=SubliceCapacity+SubsliceStartingOffset$
+    - The $SubliceCapacity$ is determined by the `start:end` part of the slice
 - Makes clear how much memory is shared between original slice and subslice
 
 ```go
 // Full Slice Expressions
+// ----------------------
+fmt.Println("Full Slice Expressions:")
+fmt.Println("-----------------------")
+
 sliceN := make([]string, 0, 5)
 sliceN = append(sliceN, "a", "b", "c", "d", "e")
-subN1 := sliceN[:2:2]
+subN1 := sliceN[1:4:4]
 subN2 := sliceN[2:4:4]
 
+fmt.Println("sliceN =", sliceN)
+fmt.Println("subN1 =", subN1)
+fmt.Println("subN2 =", subN2)
 fmt.Println("Capacities:", cap(sliceN), cap(subN1), cap(subN2))
 
 subN1 = append(subN1, "i", "j", "k")
 sliceN = append(sliceN, "x", "y")
 subN2 = append(subN2, "z", "zz")
 
+fmt.Println("Operations:")
+fmt.Println("\tappend(subN1, \"i\", \"j\", \"k\")")
+fmt.Println("\tappend(sliceN, \"x\", \"y\")")
+fmt.Println("\tappend(subN2, \"z\", \"zz\")")
+
 fmt.Println("sliceN =", sliceN)
 fmt.Println("subN1 =", subN1)
 fmt.Println("subN2 =", subN2)
 ```
 
-- Both `subN1` and `subN2` have a capacity of `2`
-- **After limiting the capacities of the subslices to their lengths, appending to the subslices would now force to create new slices for them, which breaks the aliases with the other subslices**
+- `subN1` has  capacity of `3` (`4 - 1`)
+- `subN2` has a capacity of `2` (`4 - 2`)
+- We are basically limiting the capacity of the sublice to its length
+  - **By doing so, appending to the subslices would now force to create new slices for them**
+  - **This breaks the aliases with the other subslices**
+  - **However, they still share underlying array until after a first `append()` is executed**
 - ***NOTE:***
   - ***If possible, avoid modifying slices after they have been sliced or produced by slicing***
   - **Else, use the *Full-slice expression* to prevent `append()` from sharing capacity**
@@ -659,22 +773,24 @@ fmt.Println("subN2 =", subN2)
 
 ### Built-In `copy()` Function
 
-- Allows to create a subslice independant of the original slice
+- **Allows to create a subslice independant of the original slice**
 - Takes 2 parameters:
-  - `destination` slice
-  - `source` slice
-- Copies as many values as possible from source to destination
+  - `dest` slice
+  - `src` slice
+- Copies as many values as possible from `src` to `dest`
   - Limited by whichever slice is smaller
   - **Capacities do not matter: Only the lengths**
   - Specifying capacity with 0-length for the destination will not work
-- Returns the number of elements copied
+- **Returns the number of elements copied**
 
 ```go
-// Slice Copy
-// ----------
+// Slicing Copy
+// ------------
 fmt.Println("Slicing copy:")
-sliceO := []int{1, 2, 3, 4}
-sliceP := make([]int, 4)
+fmt.Println("-------------")
+
+sliceO := []int{1, 2, 3, 4, 5}
+sliceP := make([]int, 10)
 
 fmt.Println("Before Copying:", "src =", sliceO, "dest =", sliceP)
 num := copy(sliceP, sliceO)
@@ -697,13 +813,17 @@ fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceQ, "copied", num, 
 - **NOTE: We do not have to assign the return of `copy()` if we do not need it**
 
 ```go
-// Copying from middle of slice
-// ----------------------------
+// Copying subset from the middle of slice
+// ---------------------------------------
 fmt.Println("Copying subset from the middle of slice:")
+fmt.Println("----------------------------------------")
+
 // Length of the destination slice can be derived from the subslice
+// If the return value is not need, ignore
 sliceR := make([]int, len(sliceO[2:]))
 copy(sliceR, sliceO[2:])
-fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceR, "copied")
+
+fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceR)
 ```
 
 - We can copy between 2 slices that cover overlapping sections of an underlying slice
@@ -712,8 +832,10 @@ fmt.Println("After Copying:", "src =", sliceO, "dest =", sliceR, "copied")
 // Overlapping copies
 // ------------------
 fmt.Println("Overlapping copies:")
+fmt.Println("-------------------")
+
 num = copy(sliceO[:3], sliceO[1:])
-fmt.Println("After Copying:", "src =", sliceO, "copied", "dest =", num, "elements")
+fmt.Println("After Copying:", sliceO, "copied", num, "elements")
 ```
 
 - **NOTE: We can use `copy()` on arrays as well**
@@ -723,15 +845,17 @@ fmt.Println("After Copying:", "src =", sliceO, "copied", "dest =", num, "element
 // Using copy() with arrays
 // ------------------------
 fmt.Println("Using copy() with arrays:")
-sliceS := []int{1,2,3,4} // Slice
-arrL := [4]int{5,6,7,8} //  Array
-sliceT := make([]int, 2)
+fmt.Println("-------------------------")
 
-fmt.Println("Before copying:", sliceS, arrL, sliceT)
-copy(sliceT, arrL[:])
-fmt.Println("After copying from array:", sliceT, arrL)
-copy(arrL[:], sliceS)
-fmt.Println("After copying into array:", arrL, sliceS)
+sliceT := []int{1, 2, 3, 4} // Slice
+arrL := [4]int{5, 6, 7, 8}  // Array
+sliceU := make([]int, 2)
+
+fmt.Println("Before copying:", sliceT, arrL, sliceU)
+copy(sliceU, arrL[:])
+fmt.Println("After copying from array:", sliceU, arrL)
+copy(arrL[:], sliceT)
+fmt.Println("After copying into array:", arrL, sliceT)
 ```
 
 ## Converting Array To Slice
@@ -747,14 +871,19 @@ fmt.Println("After copying into array:", arrL, sliceS)
 ```go
 // Converting Array To Slice
 // -------------------------
+fmt.Println("Converting array to slice:")
+fmt.Println("--------------------------")
 
-// With memory-sharing issue
 bArray := [4]int{100, 200, 300, 400}
-bSlice := bArray[:]
+fmt.Println("bArray Before =", bArray)
 
-// Without memory-sharing issue
-var bSlice = make([]int, len(bArray[:]))
+bSlice := make([]int, len(bArray[:]))
 copy(bSlice, bArray[:])
+bSlice[0] = 10000 // No memory-sharing after using copy()
+bArray[3] = 40000 // No memory-sharing after using copy()
+
+fmt.Println("bArray =", bArray)
+fmt.Println("bSlice =", bSlice)
 ```
 
 ## Converting Slice To Array
@@ -769,10 +898,15 @@ copy(bSlice, bArray[:])
 // Converting Slice to Array
 // -------------------------
 fmt.Println("Converting slice to array:")
+fmt.Println("--------------------------")
+
 cSlice := []int{10, 20, 30, 40}
+fmt.Println("cSlice Before =", cSlice)
+
 cArray := [4]int(cSlice)
 smallArray := [2]int(cSlice)
-cSlice[0] = 100 // No memory-sharing
+cSlice[0] = 10000 // No memory-sharing
+cArray[3] = 40000 // No memory-sharing
 fmt.Println("cSlice =", cSlice)
 fmt.Println("cArray =", cArray)
 fmt.Println("smallArray =", smallArray)
@@ -807,11 +941,20 @@ arrayPtr := (*[4]int)(slice)
 ```go
 // Example of Strings
 // ------------------
+fmt.Println("Example of Strings:")
+fmt.Println("-------------------")
+
 var strA string = "Hello there!"
 var strASub1 byte = strA[6]
 var strASub2 string = strA[4:7]
 var strASub3 string = strA[:5]
 var strASub4 string = strA[6:]
+
+fmt.Println("strA =", strA)
+fmt.Println("strASub1 =", strASub1)
+fmt.Println("strASub2 =", strASub2)
+fmt.Println("strASub3 =", strASub3)
+fmt.Println("strASub4 =", strASub4)
 ```
 
 - **Since strings are immutable, they do not have the modification issue as with slices**
@@ -825,11 +968,20 @@ var strASub4 string = strA[6:]
 ```go
 // String Code-point Issue
 // -----------------------
-var strB string = "Hello 😊!"
+fmt.Println("Example of Strings With Code-Point Issues:")
+fmt.Println("------------------------------------------")
+
+var strB string = "Hello 😊!" // 😊 takes 4 bytes
 var strBSub1 byte = strB[6]
 var strBSub2 string = strB[4:7]
 var strBSub3 string = strB[:5]
 var strBSub4 string = strB[6:]
+
+fmt.Println("strB =", strB, "len =", len(strB)) // len() returns the number of bytes
+fmt.Println("strBSub1 =", strBSub1)
+fmt.Println("strBSub2 =", strBSub2)
+fmt.Println("strBSub3 =", strBSub3)
+fmt.Println("strBSub4 =", strBSub4)
 ```
 
 - We can get the length of a string using the `len()` function
@@ -846,7 +998,11 @@ var strBSub4 string = strB[6:]
 ```go
 // Length of String Issue
 // ----------------------
+fmt.Println("Length of String Issue:")
+fmt.Println("-----------------------")
+
 var strC string = "Hello 😊!"
+fmt.Println("strC =", strC)
 // len() returns the number of bytes, not runes
 fmt.Println("len(strC) =", len(strC))
 ```
@@ -860,13 +1016,25 @@ fmt.Println("len(strC) =", len(strC))
 
 ```go
 // Strings, runes, bytes type conversion
+// -------------------------------------
+fmt.Println("Strings, runes, bytes type conversion:")
+fmt.Println("--------------------------------------")
+
 var charA rune = 'a'
-stringA := string(charA)
 var charB byte = 'b'
+stringA := string(charA)
 stringB := string(charB)
 stringC := "Hello 😊!"
 var bytesStringC []byte = []byte(stringC)
 var runesStringC []rune = []rune(stringC)
+
+fmt.Println("charA =", charA)
+fmt.Println("charB =", charB)
+fmt.Println("stringA =", stringA)
+fmt.Println("stringB =", stringB)
+fmt.Println("stringC =", stringC)
+fmt.Println("bytesStringC =", bytesStringC)
+fmt.Println("runesStringC =", runesStringC)
 ```
 
 - **NOTE: `go vet` blocks `string(someInt)`**
@@ -874,12 +1042,13 @@ var runesStringC []rune = []rune(stringC)
   - This is because the integer is interpreted as ASCII code
   - E.g. `string(65)` becomes `"A"`, not `"65"`
   - **It is not a good idea to convert an integer into a string with `string()`**
+  - For that case, use `strconv.Itoa()` instead
 
 ### UTF-8
 
 - The most commonly-used encoding for Unicode
 - **Unicode uses a total of 4 bytes/32-bits for each codepoint ("character")**
-  - UTF-32 - strict 4-bytes codepoint, but waste space
+  - UTF-32 - Strict 4-bytes codepoint, but waste space
   - UTF-16 - One or two 2-bytes codepoint, but also waste space
   - UTF-8
     - 1-byte codepoint for value below 128 (Most English characters in ASCII)
@@ -971,7 +1140,15 @@ ages := make(map[int][string], 10)
 - **NOTE: Cannot use `:=` to assign a value to a map key**
 
 ```go
+// Reading & Writing to Maps
+// -------------------------
+fmt.Println("Reading and Writing to Maps:")
+fmt.Println("----------------------------")
+
 totalWins := map[string]int{}
+
+fmt.Println("Before:")
+fmt.Println("totalWins =", totalWins)
 
 // Writing to a Map
 totalWins["Orcas"] = 1
@@ -980,6 +1157,7 @@ totalWins["Kittens"]++
 totalWins["Lions"] = 3
 
 // Reading a Map
+fmt.Println("After:")
 fmt.Println("totalWins[\"Orcas\"] =", totalWins["Orcas"])
 fmt.Println("totalWins[\"Lions\"] =", totalWins["Lions"])
 fmt.Println("totalWins[\"Kittens\"] =", totalWins["Kittens"])
@@ -1003,6 +1181,10 @@ fmt.Println("totalWins[\"Kittens\"] =", totalWins["Kittens"])
 
 ```go
 // Comma-Ok Idiom
+// --------------
+fmt.Println("Comma-Ok Idiom:")
+fmt.Println("---------------")
+
 greetMap := map[string]int{
     "hello": 5,
     "world": 0,
@@ -1032,6 +1214,10 @@ fmt.Println("hi =>", val, ok)
 
 ```go
 // Deleting From Maps
+// ------------------
+fmt.Println("Deleting From Maps:")
+fmt.Println("-------------------")
+
 delMap := map[string]int{
     "hello": 5,
     "world": 10,
@@ -1050,14 +1236,19 @@ fmt.Println("After Delete:", delMap)
 
 ```go
 // Clearing a Map
+// --------------
+fmt.Println("Clearing a Map:")
+fmt.Println("---------------")
+
 clearMap := map[string]int{
     "hello": 5,
     "world": 10,
 }
 
-fmt.Println("Before Clear:", clearMap, len(clearMap))
-clear(clearMap, "hello")
-fmt.Println("After Clear:", clearMap, len(clearMap))
+fmt.Println("Before Clear:", clearMap, "len =", len(clearMap))
+clear(clearMap)
+fmt.Println("After Clear:", clearMap, "len =", len(clearMap))
+fmt.Println()
 ```
 
 ### Comparing Maps
@@ -1072,6 +1263,10 @@ Function|Description
 
 ```go
 // Comparing 2 maps
+// ----------------
+fmt.Println("Comparing 2 maps:")
+fmt.Println("-----------------")
+
 mp1 := map[string]int{
     "hello": 5,
     "world": 5,
@@ -1097,36 +1292,52 @@ fmt.Println("maps.Equal(mp1, mp3): ", maps.Equal(mp1, mp3))
 - *Set*
   - Contains *unique* unordered elements
   - Fast-check vs checking a slice
-  - Some languages contains `set` data structure
+  - Some languages contains `set` data structure (E.g. Python)
 - **Go does not include a `set` data structure**
 - **But we can use `map` to simulate it**
   - The keys of a map *must be unique*
   - *We can use `map[KeyType]bool` as a set*
+  - *Or use `map[KeyType]string` with `""` as value*
 
 ```go
-// Using map[KeyType]bool as set
-intSet := map[int]bool{}
-vals := []int{5,10,2,5,8,7,3,9,1,2,10}
+// Using map[KeyType]bool as Set
+// -----------------------------
+fmt.Println("Using map[KeyType]bool as Set:")
+fmt.Println("------------------------------")
 
+intSet := map[int]bool{}
+intSet2 := map[int]string{}
+vals := []int{5, 10, 2, 1, 5, 8, 7, 3, 9, 8, 1, 2, 10}
 for _, v := range vals {
     intSet[v] = true
+    intSet2[v] = ""
 }
 
 fmt.Println("vals =", vals, "len =", len(vals))
 fmt.Println("intSet =", intSet, "len =", len(intSet))
+fmt.Println("intSet2 =", intSet2, "len =", len(intSet2))
+```
 
+- To check for the existence of the value in the set, we can:
+  - Use the value if boolean
+  - Use the `Comma-Ok` idiom
+
+```go
 // Checking for element in the set
-inIntSet5 := false
-if intSet[5] {
-    inIntSet5 = true
-}
-fmt.Println("5 in intSet?", inIntSet5)
+// -------------------------------
+fmt.Println("Checking for element in the set:")
+fmt.Println("--------------------------------")
 
-inIntSet200 := false
-if intSet[200] {
-    inIntSet200 = true
+// Using Boolean as Value
+inIntSet := false
+if intSet[5] {
+    inIntSet = true
 }
-fmt.Println("200 in intSet?", inIntSet200)
+fmt.Println("5 in intSet?", inIntSet)
+
+// Using the Comma-Ok Idiom
+_, inIntSet2 := intSet2[2000]
+fmt.Println("2000 in intSet2?", inIntSet2)
 ```
 
 - *For advanced set manipulations, it is better to implement a Data Structure yourself or use third-party modules*
@@ -1143,7 +1354,7 @@ fmt.Println("200 in intSet?", inIntSet200)
 - Maps have limitations
   - Cannot constrain to only allow certain keys
   - All values must be of the same type
-- Maps are not ideal to pass data between functions
+  - Maps are not ideal to pass data between functions
 - **Related data should be grouped as `struct` instead**
 - **NOTE: `struct` is close to the concept of `class` in OOP**
   - **However, Go is not an OOP language**
@@ -1153,13 +1364,15 @@ fmt.Println("200 in intSet?", inIntSet200)
 ### Struct Definition and Declaration
 
 - **Defined with the keyword `type` and the type `struct`**
+  - `struct` is a value-type
   - Contain a list of typed fields
-  - No comma-separated, unlike with `map`
-- *Can be defined inside or outside functions, or any block-level*
+  - Not comma-separated, unlike with `map`
+- **Can be defined inside or outside functions, or any block-level**
+- **NOTE: Capitalized names are public, Lowercase names are private**
 
 ```go
 // Example of defining a struct
-type person struct {
+type Person struct {
     fName   string
     lName   string
     dob     string
@@ -1174,11 +1387,11 @@ type person struct {
   - Both initialize the struct with fields with zero-values
 
 ```go
-// Declaring a struct with zero-value
-var fred person
+// Declaring a struct with zero-values
+var fred Person
 
-// Declaring a struct with struct literal
-bob := person{}
+// Declaring a struct with struct literal (zero-values)
+bob := Person{}
 ```
 
 - **We can provide struct-literal with actual values**
@@ -1187,7 +1400,7 @@ bob := person{}
 
 ```go
 // Declaring a struct with struct literal and values
-julia := person{
+julia := Person{
     "julia",
     "smith",
     "1969-01-01",
@@ -1200,12 +1413,12 @@ julia := person{
   - Not all fields have to be specified
   - Values are assigned by field name
   - Fields can be specified in any order
-  - *Unassigned fields default to their Zero-value*
+  - ***Unassigned fields default to their Zero-value***
 
 ```go
 // Declaring a struct with struct literal and values, with named-fields
-john := person{
-    dob: "2023-01-01",
+john := Person{
+    dob:   "2023-01-01",
     lName: "smith",
     fName: "john",
 }
@@ -1222,19 +1435,27 @@ john := person{
 - **A struct field is accessed with a `.`**
 
 ```go
-// Accessing a struct field
+// Struct field access
+// -------------------
+fmt.Println("Struct field access:")
+fmt.Println("--------------------")
+
 bob.fName = "Bob"
-fmt.Println("bob.FName =", bob.fName)
+fmt.Println("bob.fName =", bob.fName)
 ```
 
 ### Anonymous Struct
 
 - We do not have to provide a name to a struct
 - **We can assign the struct definition directly to a variable**
-- There is no difference of functionality between a *Named Struct* and an *Anonymous Struct*
+- **There is no difference of functionality between a *Named Struct* and an *Anonymous Struct***
 
 ```go
 // Anonymous Struct
+// ----------------
+fmt.Println("Anonymous Struct:")
+fmt.Println("-----------------")
+
 pet := struct {
     // Struct Definition
     name  string
@@ -1246,6 +1467,10 @@ pet := struct {
     kind:  "dog",
     breed: "golden retriever",
 }
+
+fmt.Println("pet.name:", pet.name)
+fmt.Println("pet.kind:", pet.kind)
+fmt.Println("pet.breed:", pet.breed)
 ```
 
 #### When to Use Anonymous Struct
@@ -1302,6 +1527,10 @@ type fifthPerson struct {
 
 ```go
 // Comparing Against Anonymous Struct
+// ----------------------------------
+fmt.Println("Comparing Against Anonymous Struct:")
+fmt.Println("-----------------------------------")
+
 type firstPerson struct {
     name string
     age  int

@@ -37,12 +37,12 @@
   - Parameters of functions
   - Local variables of functions
 - **Block** - Each place where a declaration occurs
-- **Package Block** - Anything declared outside of a function
-- **File Block** - Names that can be used with `import`
+  - **Package Block** - Anything declared outside of a function
+  - **File Block** - Names that can be used with `import`
 - **All variables defined at the top-level of a function are in a block**
   - This includes *Function Parameters*
 - **Any set of `{}` within a function defines another block**
-  - Control structures define block of their own
+  - **Control structures also define block of their own**
 - **We can access identifiers defined in an outer block from within an inner block**
   - With same identifier names but different block, the name is *shadowed*
 
@@ -58,17 +58,17 @@
 ```go
 // Example of Variable Shadowing
 // -----------------------------
+fmt.Println("Example of Variable Shadowing:")
+fmt.Println("------------------------------")
+
 x := 100
-
 fmt.Println("Outside the block, x is:", x)
-
 if x > 5 {
     fmt.Println("\tInside the block before shadowing, x is:", x)
     // This variable is shadowing the outside variable
     x := 5
     fmt.Println("\tInside the block after shadowing, x is:", x)
 }
-
 // When the scope of the block ends, the shadow also ends
 fmt.Println("Outside the block again, x is back to:", x)
 ```
@@ -78,15 +78,18 @@ fmt.Println("Outside the block again, x is back to:", x)
   - It was simply inacessible as long as the shadowing variable was in-scope
 - **WARNING: It is very easy to accidentaly shadow a variable when using `:=`**
   - We can use `:=` to create multiple variables at once
-  - *Not all variables needs to be new when using `:=`, just one is enough*
+  - *Not all variables need to be new when using `:=`, just one is enough*
   - **`:=` reuses only variables that are declared in the current block**
 
 ```go
 // Example of Variable Shadowing With :=
 // -------------------------------------
+fmt.Println("Example of Variable Shadowing With :=")
+fmt.Println("-------------------------------------")
+
 if x > 5 {
     x, y := 5, 20
-    fmt.Println("Inside the block, x =", x, "and y =", y)
+    fmt.Println("\tInside the block, x =", x, "and y =", y)
 }
 
 fmt.Println("Outside the block, x =", x)
@@ -106,8 +109,10 @@ import (
 
 // Example of Shadowing Package Names
 // ----------------------------------
-pi := math.Pi
+fmt.Println("Example of Shadowing Package Names:")
+fmt.Println("-----------------------------------")
 
+pi := math.Pi
 if float64(x) > pi {
     math := "oops!"
 
@@ -124,7 +129,7 @@ fmt.Println("Outside the block, math.Pi =", math.Pi)
 
 - Go is a small language
   - Only 25 keywords
-  - The built-in types, constants, `nil`, and functions are not included in that list
+  - **The built-in types, constants, `nil`, and functions are not included in that list**
   - Go considers them *Predeclared Identifiers*
   - ***Predeclared Identifiers* are defined in the *Universe Block***
     - The root block that contains all other blocks
@@ -215,7 +220,8 @@ for init; condition; increment {
 
 - Similar to `if`, there are no `()` around `init; condition; increment`
 - **`init`**
-  - *Must use `:=` to initialize the variable: `var` is not legal here*
+  - *Must use `:=` to initialize the variable*
+  - `var` is not legal here
   - *Declared variable will shadow any existing variable*
 - **`condition`**
   - Must be an expression that evaluates to a `bool`
@@ -229,9 +235,13 @@ for init; condition; increment {
 ```go
 // Example of C-Style for-loop
 // ---------------------------
+fmt.Println("Example of C-Style for-loop:")
+fmt.Println("----------------------------")
+
 for i := 0; i < 10; i++ {
     fmt.Printf("%d ", i)
 }
+fmt.Println()
 ```
 
 - **Any of the 3 header element of the loop can be left-out**
@@ -281,11 +291,17 @@ for i := 0; ; i++ {
 - The downside is that `i` is not scoped to the `for` block
 
 ```go
+// Example of Condition-Only for-loop (while-Style)
+// ------------------------------------------------
+fmt.Println("Example of Condition-Only for-loop (while-Style):")
+fmt.Println("-------------------------------------------------")
+
 i := 0
 for i < 10 {
     fmt.Printf("%d ", i)
     i++
 }
+fmt.Println()
 ```
 
 ### Infinite `for`
@@ -315,6 +331,9 @@ for {
 ```go
 // Simulating a Do-While Loop in Go
 // --------------------------------
+fmt.Println("Simulating a Do-While Loop in Go:")
+fmt.Println("---------------------------------")
+
 j := 0
 for {
     // do
@@ -325,6 +344,7 @@ for {
         break
     }
 }
+fmt.Println()
 ```
 
 - **`continue` allows to skip an iteration**
@@ -337,6 +357,9 @@ for {
 ```go
 // Fizzbuzz: Without Using `continue`
 // ----------------------------------
+fmt.Println("Fizzbuzz: Without Using `continue`:")
+fmt.Println("-----------------------------------")
+
 for i := 1; i < 25; i++ {
     if i%3 == 0 {
         if i%5 == 0 {
@@ -351,9 +374,13 @@ for i := 1; i < 25; i++ {
     }
 }
 fmt.Println()
+fmt.Println()
 
 // Fizzbuzz: With Using `continue`
 // ----------------------------------
+fmt.Println("Fizzbuzz: With Using `continue`:")
+fmt.Println("--------------------------------")
+
 for i := 1; i < 25; i++ {
     if i%3 == 0 && i%5 == 0 {
         fmt.Print("FizzBuzz ")
@@ -377,22 +404,27 @@ fmt.Println()
 - Allows to iterate over elements contained in some container types
 - Similar to Python's `for x in range(n)`
 - Can be used with *strings, arrays, slices, maps, channels*
-- **Can only be used on *built-in compound types***
+  - **Can only be used on *built-in compound types***
   - Or user-defined types based on them
 
 ```go
 // Using for-range With Slices
 // ---------------------------
+fmt.Println("Using for-range With Slices:")
+fmt.Println("----------------------------")
+
 evenVals := []int{2, 4, 6, 8, 10, 12}
 for i, v := range evenVals {
-    fmt.Printf("%d/%d ", i, v)
+    fmt.Printf("%d:%d ", i, v)
 }
+fmt.Println()
+fmt.Println()
 ```
 
 - **With `for-range`, we get back 2 loop variables**
   - The position of the data in the container
   - The value at that position
-- *The idiomatic names of these variables depend on what is being iterated over*
+- **The idiomatic names of these variables depend on what is being iterated over**
   - For Array/Slice/String: Typically `i`
   - For Map/Struct: Typically `k`
   - Second variable is typically `v`
@@ -405,10 +437,15 @@ for i, v := range evenVals {
 ```go
 // Using for-range With Slices Without `i`
 // ---------------------------------------
-evenVals := []int{2, 4, 6, 8, 10, 12}
-for _, v := range evenVals {
+fmt.Println("Using for-range With Slices Without `i`:")
+fmt.Println("----------------------------------------")
+
+evenVals2 := []int{2, 4, 6, 8, 10, 12}
+for _, v := range evenVals2 {
     fmt.Printf("%d ", v)
 }
+fmt.Println()
+fmt.Println()
 ```
 
 - **If we just want the key, we can ignore `v` completely**
@@ -418,20 +455,25 @@ for _, v := range evenVals {
 ```go
 // Using for-range With Slices Without `v`
 // ---------------------------------------
+fmt.Println("Using for-range With Slices Without `v`:")
+fmt.Println("----------------------------------------")
+
 uniqueNames := map[string]bool{
     "Fred": true,
     "Raul": true,
     "John": true,
 }
 for k := range uniqueNames {
-    fmt.Printf("%s", k)
+    fmt.Printf("%s ", k)
 }
+fmt.Println()
+fmt.Println()
 ```
 
 #### Iterating Over Maps
 
 - **When iterating over Maps, the order is not guaranteed**
-- The order of keys and values will vary
+  - *The order of keys and values will vary for each run*
   - This is actually a security feature
   - People could write code that assumed the iteration order is constant
   - This assumption can break codes at weird times
@@ -462,7 +504,7 @@ for i := 0; i < 10; i++ {
 #### Iterating Over Strings
 
 - We can also use `for-range` on strings
-- `for-range` accesses the *runes* in a string in order
+- `for-range` accesses the **runes** in a string in order
   - `i` - Number of bytes
   - `v` - The rune
 
@@ -499,9 +541,12 @@ fmt.Println()
 ```go
 // Modifying for-range Loop Variables: No effect on Compound
 // ---------------------------------------------------------
-evenInts := []int{2, 4, 6, 8, 10}
+fmt.Println("Modifying for-range Loop Variables: No effect on Compound:")
+fmt.Println("----------------------------------------------------------")
 
+evenInts := []int{2, 4, 6, 8, 10}
 fmt.Println("Before the loop, evenInts =", evenInts)
+
 for i, v := range evenInts {
     fmt.Print(i, "-", v, " ")
     // Modifying i and v here has no effect on evenInts
@@ -510,6 +555,7 @@ for i, v := range evenInts {
 }
 fmt.Println()
 fmt.Println("At the end of the loop, evenInts =", evenInts)
+fmt.Println()
 ```
 
 - **NOTE**
@@ -522,25 +568,28 @@ fmt.Println("At the end of the loop, evenInts =", evenInts)
 ### Labeling `for` Statements
 
 - By default, `break` and `continue` applies to the closest `for`
-- For nested loops, we can manipulate which loop they break or continue from using *labels*
+- **For nested loops, we can manipulate which loop they would break or continue from using *labels***
 - The label is always indented by `go fmt` to same-level as surrounding braces for the current block
   - Easier to notice
 
 ```go
     // Using for-range With Labels
     // ---------------------------
+    fmt.Println("Using for-range With Labels:")
+    fmt.Println("----------------------------")
+
     greetings2 := []string{"Hello!", "Hi π!"}
 
     // Iterating over the slice
     fmt.Println("index\tbytes\tstring(rn)")
-outerLabel:
+outerLoop:
     for _, greeting := range greetings2 {
         // Iterating over the string
         for i, rn := range greeting {
             fmt.Println(i, "\t", rn, "\t", string(rn))
             if rn == 'l' {
-                // Go to outerLabel
-                continue outerLabel
+                // Go to label
+                continue outerLoop
             }
         }
         fmt.Println()
@@ -565,7 +614,7 @@ outerLabel:
 ### Choosing The Right `for` Statement
 
 - **Most of the time, *`for-range`* is used**
-  - Best to use with strings
+  - Best to use with strings: *Loop over runes/chars instead of bytes*
   - Also works well with slices, maps, and channels
   - Favor when working with built-in compound types
   - Avoids great deal of boilerplate codes with the other `for` styles
@@ -597,6 +646,7 @@ for i := 2; i < len(evenVals)-1; i++ {
 
 - **NOTE: This pattern does not work for skipping over the beginning of a string**
   - A standard `for`-loop does not work well with multibyte characters
+  - **A standard `for`-loop *loops over bytes instead of runes/chars***
   - **Need to use `for-range` to properly process runes instead of bytes**
 - ***Infinite-`for`* and *`while`-style* are used less frequently**
   - *`while`-style* is useful when looping based on a calculated value
@@ -609,12 +659,12 @@ for i := 2; i < len(evenVals)-1; i++ {
 - At first glance, looks very similar to other languages's `switch`
   - But Go extends the values that can be switched than in other languages
 - **Similar to `if`, `()` are not needed around the condition**
-- **We can also declare variables to be scoped to the `switch` statement**
+  - **We can also declare variables to be scoped to the `switch` statement**
 - No `{}` around the body of each `case` or `default`
   - It still support multiple lines though
   - Considered part of the same block
   - **New variables declared within a `case` are scoped to the case**
-- There is no need for `break` statement
+- *There is no need for `break` statements*
   - Each case is mutually-exclusive
   - There is no *cascading* effect between successive `case`
   - Similar to *Ruby* and *Pascal*
@@ -626,15 +676,18 @@ for i := 2; i < len(evenVals)-1; i++ {
 ```go
 // Using switch in Go
 // ------------------
+fmt.Println("Using switch in Go:")
+fmt.Println("-------------------")
+
 words := []string{"a", "cow", "smile", "gopher", "octops", "anthropologist"}
 for _, word := range words {
-    // switch-scoped variable
+    // switch-scoped variable: size
     switch size := len(word); size {
     case 1, 2, 3, 4:
         // Multiple matches
         fmt.Println("-", word, "is a short word")
     case 5:
-        // Case-scoped variable
+        // Case-scoped variable: wordLen
         wordLen := len(word)
         fmt.Println("-", word, "is exactly the right length", wordLen)
     case 6, 7, 8, 9:
@@ -644,6 +697,7 @@ for _, word := range words {
         fmt.Println("-", word, "is too long")
     }
 }
+fmt.Println()
 ```
 
 - **`break` could also be used in tandem with `switch` inside `for`**
@@ -653,8 +707,11 @@ for _, word := range words {
 ```go
     // Using switch Within for-loop
     // ----------------------------
+    fmt.Println("Using switch Within for-loop:")
+    fmt.Println("-----------------------------")
+
 switchLoop:
-    for i := 0; i < 10; i++ {
+    for i := range 10 {
         switch i {
         case 0, 2, 4, 6:
             fmt.Println(i, "is even")
@@ -664,9 +721,10 @@ switchLoop:
             fmt.Println(i, "-> Exiting the loop. Good bye!")
             break switchLoop
         default:
-            fmt.Println("-- You have reached the default case --")
+            fmt.Println("----- You have reached the default case -----")
         }
     }
+    fmt.Println()
 ```
 
 - **NOTE: Go has a `fallthrough` keyword**
@@ -685,10 +743,14 @@ switchLoop:
   - These are logical tests for each case
   - But if the boolean expressions are all `==`, a regalar `switch` is better
 - We can also include a short variable declaration in the header of `switch`
+  - The variable is scoped to the `switch` body
 
 ```go
 // Example of Blank Switch
 // -----------------------
+fmt.Println("Example of Blank Switch:")
+fmt.Println("------------------------")
+
 words = []string{"Hi", "Salutation", "Hello"}
 
 for _, word := range words {
@@ -727,6 +789,9 @@ fmt.Println()
 ```go
 // Fizzbuzz: With Using `switch`
 // -----------------------------
+fmt.Println("Fizzbuzz: With Using `switch`")
+fmt.Println("-----------------------------")
+
 for i := 1; i < 25; i++ {
     switch {
     case i%3 == 0 && i%5 == 0:
@@ -743,8 +808,8 @@ fmt.Println()
 ```
 
 - However, it is not idiomatic to do all sorts of unrelated comparisons in each `case`
-- **Each case should be related when using `switch`**
-- **If not, it is better to use `if-else`**
+  - **Each case should be related when using `switch`**
+  - **If not, it is better to use `if-else`**
 - **NOTE: Favor blank `switch` when cases are related**
   - Makes comparisons more visible
   - Reinforce the cases to be related set of concerns
@@ -808,8 +873,8 @@ done:
     fmt.Println(a)
 ```
 
-- Some logic that we do not want to run in the middle of a function
-- But we want to run at *some* ends of the function
+- Allows to handle some logic that we do not want to run in the middle of a function
+  - But we want to run at *some* ends of the function
 - **Though we could also handle this without using `goto`**
   - Set up a boolean flag and use `if` to check the flag
   - Duplicate the code that runs after the loop
@@ -818,7 +883,8 @@ done:
   - It is more verbose and can become confusing as well
   - Duplicating codes make it harder to maintain
   - In this case, using `goto` can improve understanding
-  - *Example of real-world case: `floatBits()` method in `strconv.atof.go` in standard library*
+  - *Example of real-world case:*
+    - *`floatBits()` method in `strconv.atof.go` in standard library*
   - A better way would be to simply call a function
 - **In general, try very hard to avoid using `goto`**
   - **In the rare situations where it makes code more readable, it is an option**

@@ -4,21 +4,23 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"strings"
 )
 
 // This is the main entry of the application.
 func main() {
+	// Headers
 	fmt.Println()
-	fmt.Println("-------------------------------------------------------------")
+	fmt.Println(strings.Repeat("-", 100))
 	fmt.Println()
 
 	// Example of Variable Shadowing
 	// -----------------------------
 	fmt.Println("Example of Variable Shadowing:")
+	fmt.Println("------------------------------")
 
 	x := 100
 	fmt.Println("Outside the block, x is:", x)
-
 	if x > 5 {
 		fmt.Println("\tInside the block before shadowing, x is:", x)
 		// This variable is shadowing the outside variable
@@ -32,6 +34,7 @@ func main() {
 	// Example of Variable Shadowing With :=
 	// -------------------------------------
 	fmt.Println("Example of Variable Shadowing With :=")
+	fmt.Println("-------------------------------------")
 
 	if x > 5 {
 		x, y := 5, 20
@@ -44,9 +47,9 @@ func main() {
 	// Example of Shadowing Package Names
 	// ----------------------------------
 	fmt.Println("Example of Shadowing Package Names:")
+	fmt.Println("-----------------------------------")
 
 	pi := math.Pi
-
 	if float64(x) > pi {
 		math := "oops!"
 
@@ -62,6 +65,7 @@ func main() {
 	// Example of `if`
 	// ---------------
 	fmt.Println("Example of `if`:")
+	fmt.Println("----------------")
 
 	n := rand.Intn(10)
 
@@ -72,12 +76,12 @@ func main() {
 	} else {
 		fmt.Println(n, ": That is a good number!")
 	}
-
 	fmt.Println()
 
 	// Example of `if` With Scoped Variables
 	// -------------------------------------
 	fmt.Println("Example of `if` With Scoped Variables:")
+	fmt.Println("--------------------------------------")
 
 	if m := rand.Intn(10); m == 0 {
 		fmt.Println(m, ": That is too low!")
@@ -93,6 +97,7 @@ func main() {
 	// Example of C-Style for-loop
 	// ---------------------------
 	fmt.Println("Example of C-Style for-loop:")
+	fmt.Println("----------------------------")
 
 	for i := 0; i < 10; i++ {
 		fmt.Printf("%d ", i)
@@ -103,6 +108,7 @@ func main() {
 	// Example of Condition-Only for-loop (while-Style)
 	// ------------------------------------------------
 	fmt.Println("Example of Condition-Only for-loop (while-Style):")
+	fmt.Println("-------------------------------------------------")
 
 	i := 0
 	for i < 10 {
@@ -115,6 +121,7 @@ func main() {
 	// Simulating a Do-While Loop in Go
 	// --------------------------------
 	fmt.Println("Simulating a Do-While Loop in Go:")
+	fmt.Println("---------------------------------")
 
 	j := 0
 	for {
@@ -131,6 +138,7 @@ func main() {
 	// Fizzbuzz: Without Using `continue`
 	// ----------------------------------
 	fmt.Println("Fizzbuzz: Without Using `continue`:")
+	fmt.Println("-----------------------------------")
 
 	for i := 1; i < 25; i++ {
 		if i%3 == 0 {
@@ -146,10 +154,12 @@ func main() {
 		}
 	}
 	fmt.Println()
+	fmt.Println()
 
 	// Fizzbuzz: With Using `continue`
 	// ----------------------------------
 	fmt.Println("Fizzbuzz: With Using `continue`:")
+	fmt.Println("--------------------------------")
 
 	for i := 1; i < 25; i++ {
 		if i%3 == 0 && i%5 == 0 {
@@ -172,9 +182,11 @@ func main() {
 	// Using for-range With Slices
 	// ---------------------------
 	fmt.Println("Using for-range With Slices:")
+	fmt.Println("----------------------------")
+
 	evenVals := []int{2, 4, 6, 8, 10, 12}
 	for i, v := range evenVals {
-		fmt.Printf("%d/%d ", i, v)
+		fmt.Printf("%d:%d ", i, v)
 	}
 	fmt.Println()
 	fmt.Println()
@@ -182,6 +194,8 @@ func main() {
 	// Using for-range With Slices Without `i`
 	// ---------------------------------------
 	fmt.Println("Using for-range With Slices Without `i`:")
+	fmt.Println("----------------------------------------")
+
 	evenVals2 := []int{2, 4, 6, 8, 10, 12}
 	for _, v := range evenVals2 {
 		fmt.Printf("%d ", v)
@@ -192,6 +206,8 @@ func main() {
 	// Using for-range With Slices Without `v`
 	// ---------------------------------------
 	fmt.Println("Using for-range With Slices Without `v`:")
+	fmt.Println("----------------------------------------")
+
 	uniqueNames := map[string]bool{
 		"Fred": true,
 		"Raul": true,
@@ -206,6 +222,8 @@ func main() {
 	// Map-Iteration-Order Varies
 	// --------------------------
 	fmt.Println("Map-Iteration-Order Varies:")
+	fmt.Println("---------------------------")
+
 	m := map[string]int{
 		"a": 1,
 		"b": 2,
@@ -224,6 +242,8 @@ func main() {
 	// Using for-range With Strings
 	// ----------------------------
 	fmt.Println("Using for-range With Strings:")
+	fmt.Println("-----------------------------")
+
 	greetings := []string{"Hello!", "Hi π!"}
 
 	// Iterating over the slice
@@ -239,8 +259,11 @@ func main() {
 	// Modifying for-range Loop Variables: No effect on Compound
 	// ---------------------------------------------------------
 	fmt.Println("Modifying for-range Loop Variables: No effect on Compound:")
+	fmt.Println("----------------------------------------------------------")
+
 	evenInts := []int{2, 4, 6, 8, 10}
 	fmt.Println("Before the loop, evenInts =", evenInts)
+
 	for i, v := range evenInts {
 		fmt.Print(i, "-", v, " ")
 		// Modifying i and v here has no effect on evenInts
@@ -253,7 +276,9 @@ func main() {
 
 	// Using for-range With Labels
 	// ---------------------------
-	fmt.Println("Using for-range With Strings:")
+	fmt.Println("Using for-range With Labels:")
+	fmt.Println("----------------------------")
+
 	greetings2 := []string{"Hello!", "Hi π!"}
 
 	// Iterating over the slice
@@ -274,15 +299,17 @@ outerLoop:
 	// Using switch in Go
 	// ------------------
 	fmt.Println("Using switch in Go:")
+	fmt.Println("-------------------")
+
 	words := []string{"a", "cow", "smile", "gopher", "octops", "anthropologist"}
 	for _, word := range words {
-		// switch-scoped variable
+		// switch-scoped variable: size
 		switch size := len(word); size {
 		case 1, 2, 3, 4:
 			// Multiple matches
 			fmt.Println("-", word, "is a short word")
 		case 5:
-			// Case-scoped variable
+			// Case-scoped variable: wordLen
 			wordLen := len(word)
 			fmt.Println("-", word, "is exactly the right length", wordLen)
 		case 6, 7, 8, 9:
@@ -297,8 +324,10 @@ outerLoop:
 	// Using switch Within for-loop
 	// ----------------------------
 	fmt.Println("Using switch Within for-loop:")
+	fmt.Println("-----------------------------")
+
 switchLoop:
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		switch i {
 		case 0, 2, 4, 6:
 			fmt.Println(i, "is even")
@@ -308,7 +337,7 @@ switchLoop:
 			fmt.Println(i, "-> Exiting the loop. Good bye!")
 			break switchLoop
 		default:
-			fmt.Println("-- You have reached the default case --")
+			fmt.Println("----- You have reached the default case -----")
 		}
 	}
 	fmt.Println()
@@ -316,6 +345,8 @@ switchLoop:
 	// Example of Blank Switch
 	// -----------------------
 	fmt.Println("Example of Blank Switch:")
+	fmt.Println("------------------------")
+
 	words = []string{"Hi", "Salutation", "Hello"}
 
 	for _, word := range words {
@@ -347,6 +378,8 @@ switchLoop:
 	// Fizzbuzz: With Using `switch`
 	// -----------------------------
 	fmt.Println("Fizzbuzz: With Using `switch`")
+	fmt.Println("-----------------------------")
+
 	for i := 1; i < 25; i++ {
 		switch {
 		case i%3 == 0 && i%5 == 0:
@@ -359,6 +392,10 @@ switchLoop:
 			fmt.Printf("%d ", i)
 		}
 	}
+	fmt.Println()
+	// Footers
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
 	fmt.Println()
 }
 

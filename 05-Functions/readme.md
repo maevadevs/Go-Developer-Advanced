@@ -26,7 +26,7 @@
 ## Declaring and Calling Function
 
 - Go functions are similar to functions in other languages
-- But similar with control structures, Go adds its own features on functions
+- But Go adds its own features on functions
   - Some are good improvements
   - Some are experimental to avoid
 - **Every Go program starts execution from the `main()` function**
@@ -37,6 +37,8 @@
 ```go
 // Example of a Function
 // ---------------------
+
+// Divide an integer by another integer.
 func div(num int, den int) int {
     if den == 0 {
         return 0
@@ -48,12 +50,19 @@ func div(num int, den int) int {
 - **A function declaration has 5 parts**
   - Keyword `func`
   - Function name
-  - Input parameters: Param-name, Param-type
+  - Input parameters: Param-name + Param-type
   - Return type
   - Body
-- **Go is a typed language**
+
+```go
+func div(num int, den int) int {
+    ...
+}
+```
+
+- **NOTE: Go is a typed language**
   - Must specify the types of the parameters
-  - The return types is specified between the input parameters and the function body
+  - The return type is specified between the input parameters and the function body
   - ***NOTE: When two or more consecutive input parameters are of the same type, we can specify the type once for all of them***
 
 ```go
@@ -67,7 +76,7 @@ func div(num, den int) int {
   - If a function does not return a value, `return` can be removed
     - We do not provide the type of the return
     - `return` can still be used for exiting the function early
-    - But used by itself, without returning any value
+    - But must be used by itself, without returning any value
 - **The main function has no input parameters or return values**
   - When a function has no input parameters, use empty parentheses `()`
 
@@ -76,7 +85,11 @@ func div(num, den int) int {
 func main() {
     // Example of calling a Function
     // -----------------------------
+    fmt.Println("Example of calling a Function:")
+    fmt.Println("------------------------------")
+
     result := div(100, 20)
+
     fmt.Println("div(100, 20) =", result)
 }
 ```
@@ -85,19 +98,21 @@ func main() {
 
 - Go does not have *Named Parameters* and *Optional Parameters*
 - **All function parameters must be supplied with arguments during call**
-- We can emulate named and optional parameters using *struct*
+- We can simulate named and optional parameters using *struct*
   - Define fields that match the desired parameters
   - Pass the struct to the function
 
 ```go
 // Example of a Function With Optional and Named Parameters
 // --------------------------------------------------------
+
 type FuncParams struct {
     FirstName string
     LastName  string
     Age       int
 }
 
+// A test function for Optional and Named Parameters.
 func MyFunc(params FuncParams) error {
     // Do something
     fmt.Println("Passed parameters:", params)
@@ -105,6 +120,11 @@ func MyFunc(params FuncParams) error {
 }
 
 func main() {
+    // Example of a Function With Optional and Named Parameters
+    // --------------------------------------------------------
+    fmt.Println("Example of a Function With Optional and Named Parameters:")
+    fmt.Println("---------------------------------------------------------")
+
     // Call MyFunc() one way
     MyFunc(FuncParams{
         LastName: "Smith",
@@ -122,7 +142,7 @@ func main() {
 - **In practice, this is not a limitation**
   - A function should not have more than a few parameters
   - Named and optional parameters are mostly useful when function has a lot of parameters
-  - If so, the function might be too complicated
+  - If so, the function might be too complicated and should be simplified
 
 ## Variadic Function and Slices
 
@@ -132,10 +152,15 @@ func main() {
   - Indicate with `...` before the parameter type
   - *The variable becomes a slice of the indicated type*
   - It can be used just like any other slice
+- We can supply any argument value or no value at all
+  - We can also provide a slice, but we have to *spread* it using `sliceName...` for the argument
+  - **Without the *spread operator*, it is compile-time error**
 
 ```go
 // Example of a Variadic Function
 // ------------------------------
+
+// Add multiple integers and return their sum.
 func addNums(nums ...int) int {
     var res int
     for _, n := range nums {
@@ -145,6 +170,11 @@ func addNums(nums ...int) int {
 }
 
 func main() {
+    // Example of a Variadic Function
+    // ------------------------------
+    fmt.Println("Example of a Variadic Function:")
+    fmt.Println("-------------------------------")
+
     x := addNums(1, 2, 3, 4, 5, 6, 7, 8, 9)
     y := addNums(21, 43, 65)
     z := addNums()
@@ -153,13 +183,10 @@ func main() {
     fmt.Println("addNums(1, 2, 3, 4, 5, 6, 7, 8, 9) =", x)
     fmt.Println("addNums(21, 43, 65) =", y)
     fmt.Println("addNums() =", z)
+    fmt.Println("nums =", nums)
     fmt.Println("addNums(nums...) =", addNums(nums...))
 }
 ```
-
-- We can supply any value or no value at all
-- We can also provide a slice, but we have to *spread* it using `...`
-  - **Without the *spread operator*, it is compile-time error**
 
 ## Multiple Return Values
 
@@ -174,6 +201,8 @@ func main() {
     - **If the function completes succesfully, return `nil` as the error**
     - We check error by comparing it as `err != nil`
     - *By convention, the error is always the last value*
+- Most of the time, we use `:=` to capture the multiple returned values
+  - Allows to easily capture the values into separate variables
 
 ```go
 import (
@@ -184,9 +213,10 @@ import (
 
 // Example of Function With Multiple Return Values
 // -----------------------------------------------
+
+// Divide an integer by anoter integer and return the result and the mod.
 func divmod(num, den int) (int, int, error) {
     if den == 0 {
-        // Returning multiple values
         return 0, 0, errors.New("cannot divide by 0")
     }
     return num / den, num % den, nil
@@ -195,8 +225,10 @@ func divmod(num, den int) (int, int, error) {
 func main() {
     // Example of Function With Multiple Return Values
     // -----------------------------------------------
+    fmt.Println("Example of Function With Multiple Return Values:")
+    fmt.Println("------------------------------------------------")
+
     resDiv, resMod, err := divmod(5, 2)
-    // Error-handling
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
@@ -204,9 +236,6 @@ func main() {
     fmt.Println("divmod(5, 2) =>", "ResDiv =", resDiv, "ResMod =", resMod)
 }
 ```
-
-- Most of the time, we use `:=` to capture the multiple returned values
-  - Allows to easily capture the values into separate variables
 
 ### Multiple Return Values Are Multiple Values
 
@@ -238,11 +267,12 @@ resDiv, resMod, err := divmod(34, 5)
 _, resMod, err := divmod(34, 5)
 ```
 
-- *NOTE: It is also possible to ignore all the return values*
+- **NOTE: It is also possible to ignore all the return values**
   - We simply do not assign to any variable
   - This is similar to calling `fmt.Println()`
-  - **`fmt.Println()` normally returns 2 values but it is idiomatic to ignore them**
-  - In all other case, explicitly ignore return values using `_`
+    - **`fmt.Println()` normally returns 2 values**
+    - **But it is idiomatic to ignore them**
+  - Otherwise, explicitly ignore return values using `_`
 
 ```go
 // Example of Ignoring All Returned Values
@@ -256,31 +286,42 @@ fmt.Println("Hi")
 - Go also allows to specify names for the return values
 - **If we supply names to the return values, they become predeclared variables**
   - We can use them in the function body to hold the final return values
-  - **The returned names must be surrounded by `()`, even if only one**
+  - **The declared returned names must be surrounded by `()`, even if only one**
   - *The names are initialized to their types' zero values*
   - They can be returned before any explicit use or assignment
-- We can also name only some of the return values
+- **We can also name only some of the return values**
   - Use `_` as the name of any that should be nameless
 - **The names for the returned values are local to the function**
   - Does not enforce any names outside the function
   - We can assign them to any names outside the function
 
 ```go
+import (
+    "errors"
+    "fmt"
+    "os"
+)
+
 // Example of Function With Named Return Values
 // --------------------------------------------
+
+// Divide an integer by another integer and return the result and the mod.
 func divmodNamed(num, den int) (res int, mod int, err error) {
     if den == 0 {
         err = errors.New("cannot divide by 0")
         // Returning multiple values
         return res, mod, err
     }
-    res, mod = num / den, num % den
+    res, mod = num/den, num%den
     return res, mod, nil
 }
 
 func main() {
     // Example of Function With Named Return Values
     // --------------------------------------------
+    fmt.Println("Example of Function With Named Return Values:")
+    fmt.Println("---------------------------------------------")
+
     resX, modY, errZ := divmodNamed(5, 2)
     // Error-handling
     if errZ != nil {
@@ -305,6 +346,7 @@ func main() {
   - The named return parameters declares the *intent*, but are *not required* to use them
 
 ```go
+// This version will work fine with no compiler errors
 func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
     res, mod = 20, 50
     if den == 0 {
@@ -318,19 +360,21 @@ func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
 ```
 
 - Named returns could be helpful for documentation
-- But they do not add additional values
-- They might create more issues instead
+  - But they do not add additional values
+  - They might create more issues instead
 - But they are good in one situation
 
 ### Blank Return: Never Use Them
 
-- With named return values, it is possible to just write `return` without specifying the values to return
-  - Returns the last value assigned to the named return values
+- **With named return values, it is possible to just write `return` without specifying the values to return**
+  - Returns whichever last value assigned to the named return values
   - If returning the zero-values, be sure they make sense
-  - `return` keyword is still required, else compile-time error
+  - **`return` keyword is still required, else compile-time error**
 - Blank return might appear handy
-  - But it is a bad idea because it makes it harder to understand the data flow
-  - **Never use blank return: Always specify what is being returned**
+  - But it is a bad idea
+  - It makes it harder to understand the data flow
+  - **Never use blank return**
+  - **Always specify what is being returned**
 
 ## Functions Are Values
 
@@ -343,10 +387,29 @@ func divmodNamedUnreturned(num, den int) (res int, mod int, err error) {
   - Attempting to run a function variable `nil` is a `panic`
 
 ```go
-// Declaring a Function Variable
-// -----------------------------
+// Example of Declaring a Function Variable
+// ----------------------------------------
+
+// Get the length of a string.
+func f1(s string) int {
+    return len(s)
+}
+
+// Get the sum of runes in a string.
+func f2(s string) int {
+    sum := 0
+    for _, c := range s {
+        sum += int(c)
+    }
+    return sum
+}
 
 func main() {
+    // Example of Declaring a Function Variable
+    // ----------------------------------------
+    fmt.Println("Example of Declaring a Function Variable:")
+    fmt.Println("-----------------------------------------")
+
     // A function variable
     var myFuncVar func(string) int
 
@@ -360,31 +423,26 @@ func main() {
     res = myFuncVar("Hello")
     fmt.Println("myFuncVar(\"Hello\") using f2:", res)
 }
-
-func f1(a string) int {
-    return len(a)
-}
-
-func f2(a string) int {
-    sum := 0
-    for _, v := range a {
-        sum += int(v)
-    }
-    return sum
-}
 ```
 
 - Functions as values are very helpful in different scenarios
+  - Here, the type of `opFunc` is `func(int, int) int`
 
 ```go
 // Example of a Simple Calculator With Functions
 // ---------------------------------------------
+
 func add(i int, j int) int { return i + j }
 func sub(i int, j int) int { return i - j }
 func mul(i int, j int) int { return i * j }
 func div(i int, j int) int { return i / j }
 
 func main() {
+    // Example of a Simple Calculator With Functions
+    // ---------------------------------------------
+    fmt.Println("Example of a Simple Calculator With Functions:")
+    fmt.Println("----------------------------------------------")
+
     opMap := map[string]func(int, int) int {
         "+": add,
         "-": sub,
@@ -427,9 +485,8 @@ func main() {
 }
 ```
 
-- `strconv.Atoi()` allows to convert a string to int
-  - Also returns an `error` if the conversion fails
-- The type of `opFunc` is `func (int, int) int`
+- **`strconv.Atoi()` allows to convert a string to int**
+  - Returns an `error` if the conversion fails
 - **Calling a function in a variable is the same as calling a regular function**
 - **NOTE: Do not write fragile programs**
   - Make sure to check for special-cases and handle appropriately
@@ -444,10 +501,10 @@ func main() {
 
 ```go
 // Declaring a Function Type
-type opFuncType func(int, int) int
+type opFunc func(int, int) int
 
 // Using a Function Type
-opMap := map[string]opFuncType {
+opMap := map[string]opFunc {
     // ...
 }
 ```
@@ -455,28 +512,34 @@ opMap := map[string]opFuncType {
 - Advantages of declaring a function type
   - Documentation
   - Less repetition
+  - Easier to read
   - Easier to maintain
 
 ### Anonymous Functions
 
-- We can define new functions within a function and assign them to variables
+- **We can define functions and assign them to variables**
 - We declare an anonymous function with `func(ParamTypes) ReturnType`
   - Followed immediately by the input parameters, return values, and body
-  - It is a compile-time error to try to add a name
+  - **It is a compile-time error to try to add a name**
 - It is called like any other functions
 
 ```go
 // Example of Anonymous Function
 // -----------------------------
-f := func(j int) {
+fmt.Println("Example of Anonymous Function:")
+fmt.Println("------------------------------")
+
+// Anonymous function assigned to a variable
+anonf := func(j int) {
     fmt.Println("Printing", j, "from inside an anonymous function")
 }
 for i := range 5 {
-    f(i)
+    // Calling the function
+    anonf(i)
 }
 ```
 
-- **We do not have to assign an anonymous function to a variable**
+- **We do not even have to assign an anonymous function to a variable**
   - Can be written inline and called immediately
   - But not something that we would normally do
   - If we are doing this approach, might as well just call the code
@@ -485,9 +548,13 @@ for i := range 5 {
 ```go
 // Example of Inline Anonymous Function
 // ------------------------------------
+fmt.Println("Example of Inline Anonymous Function:")
+fmt.Println("-------------------------------------")
+
+// Inline anonymous function
 for i := range 5 {
     func(j int) {
-        fmt.Println("Printing", j, "from inside an anonymous function")
+        fmt.Println("Printing", j, "from inside an inline anonymous function")
     }(i)
 }
 ```
@@ -497,6 +564,7 @@ for i := range 5 {
 ```go
 // Examples of Package-Scoped Variables With Anonymous Functions
 // -------------------------------------------------------------
+
 var (
     add = func(i int, j int) int { return i + j }
     sub = func(i int, j int) int { return i - j }
@@ -515,6 +583,7 @@ func main() {
 ```go
 // Examples of Re-assigning Package-Scoped Variables With Anonymous Functions
 // --------------------------------------------------------------------------
+
 var (
     add = func(i int, j int) int { return i + j }
     sub = func(i int, j int) int { return i - j }
@@ -530,6 +599,7 @@ func main() {
     fmt.Println(y)
 }
 
+// Reassigns add to a different function that declared earlier.
 func changeAdd() {
     // `add` here refers to the package-level variable
     add = func(i int, j int) int { return i + j + j }
@@ -537,9 +607,8 @@ func changeAdd() {
 ```
 
 - **NOTE: Be sure you need this capability before using Package-level anonymous function**
-  - Package-level states should be left immutable
-  - To make data-flow easier to understand
-  - If function changes while running, the data-flow can become very confusing
+  - Package-level states should be left immutable to make data-flow easier to understand
+  - If a function changes while running, the data-flow can become very confusing
 
 ## Closures
 
@@ -550,18 +619,17 @@ func changeAdd() {
 ```go
 // Example of Closure
 // ------------------
-func main() {
-    a := 20
-    fmt.Println("Outside fa(), a =", a)
-    fa := func() {
-        fmt.Println("Inside fa() before assignment, a =", a)
-        a = 30 // The assignment modifies outside a
-        fmt.Println("Inside fa() after assignment, a =", a)
-    }
-    fa()
-    fmt.Println("Outside fa(), a =", a)
-    fmt.Println()
-}
+fmt.Println("Example of Closure:")
+fmt.Println("-------------------")
+
+a := 20
+fmt.Println("Outside fa(), a =", a)
+/*fa =*/ func() {
+    fmt.Println("\tInside fa() before assignment, a =", a)
+    a = 30 // The assignment modifies outside a
+    fmt.Println("\tInside fa() after assignment, a =", a)
+}()
+fmt.Println("Outside fa(), a =", a)
 ```
 
 - We can also shadow the variables if we assign with `:=`
@@ -570,17 +638,18 @@ func main() {
 ```go
 // Example of Closure With Shadow
 // ------------------------------
-func main() {
-    b := 20
-    fmt.Println("Outside fb(), b =", b)
-    fb := func() {
-        fmt.Println("Inside fb() before assignment, b =", b)
-        b := 30 // This assignment shadows instead of modifying outside b
-        fmt.Println("Inside fb() after assignment, b =", b)
-    }
-    fb()
-    fmt.Println("Outside fb(), b =", b)
+fmt.Println("Example of Closure With Shadow:")
+fmt.Println("-------------------------------")
+
+b := 20
+fmt.Println("Outside fb(), b =", b)
+fb := func() {
+    fmt.Println("\tInside fb() before assignment, b =", b)
+    b := 30 // This assignment shadows instead of modifying outside b
+    fmt.Println("\tInside fb() after assignment, b =", b)
 }
+fb()
+fmt.Println("Outside fb(), b =", b)
 ```
 
 ### Benefits of Closures
@@ -594,15 +663,19 @@ func main() {
 
 ## Passing Functions As Arguments
 
-- **Functions are values: We can pass them as arguments to other functions**
+- **Functions are values**
+  - **We can pass them as arguments to other functions**
   - *Treat the function as data*
   - **We can pass *Closures* around: This is a very useful pattern**
-  - An example is *Sorting Slice* using `sort.Slice`
+  - An example is *Sorting Slice* using `sort.Slice(slc, func)`
     - **NOTE: This predates generics in Go**
 
 ```go
 // Example of Sorting Slice
 // ------------------------
+fmt.Println("Example of Sorting Slice")
+fmt.Println("------------------------")
+
 type Person struct {
     FirstName string
     LastName  string
@@ -610,19 +683,27 @@ type Person struct {
 }
 people := []Person{
     {"John", "Smith", 37},
-    {"Jeremy", "Trye", 50},
+    {"Jeremy", "Trye", 18},
     {"Jasmine", "Alter", 20},
 }
+
 fmt.Println("Before Sorting:", people)
+
 // Sorting the slice by last name
 sort.Slice(people, func(i int, j int) bool {
     return people[i].LastName < people[j].LastName
 })
 fmt.Println("After Sorting By Last Name:", people)
+
+// Sorting the slice by age
+sort.Slice(people, func(i int, j int) bool {
+    return people[i].Age < people[j].Age
+})
+fmt.Println("After Sorting By Age:", people)
 ```
 
-- A closure is passed to `sort.Slice()`
-  - `people` is *captured* within the closure
+- A closure anonymous function is passed to `sort.Slice()`
+  - The outside variable `people` is *captured* within the closure
 - **Passing functions as arguments to other functions is useful for performing different operations on the same kind of data**
 
 ## Returning Functions From Functions
@@ -632,32 +713,45 @@ fmt.Println("After Sorting By Last Name:", people)
 ```go
 // Example of Function That Returns a Closure
 // ------------------------------------------
+
+// Return a function that multiplies a number to a given base.
 func makeMult(base int) func(int) int {
-    return func(factor int) int {
-        return base * factor
+    return func(n int) int {
+        return n * base
     }
 }
 
-base2Mult := makeMult(2)
-base3Mult := makeMult(3)
-fmt.Println("i\tbase2\tbase3")
-for i := range 5 {
-    fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i))
+func main() {
+    // Example of Function That Returns a Closure
+    // ------------------------------------------
+    fmt.Println("Example of Function That Returns a Closure:")
+    fmt.Println("-------------------------------------------")
+
+    base2Mult := makeMult(2)
+    base3Mult := makeMult(3)
+    base5Mult := makeMult(5)
+
+    fmt.Println("i\tbase2\tbase3\tbase5")
+    fmt.Println("-\t-----\t-----\t-----")
+    for i := range 10 {
+        fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i), "\t", base5Mult(i))
+    }
 }
 ```
 
 - **Closures are very helpful in Go**
   - Can be used to sort slices
-  - Can be used to efficiently search a sorted slice with `sort.Search`
+  - Can be used to efficiently search a sorted slice with `sort.Search()`
   - Returning closures is used when bulding middlware for web server
   - Also used to implement resource cleanups with `defer`
-  - Typical pattern for *High-Order Functions*
+  - Typical pattern for *High-Order Functions* and *Factory Functions*
 
 ## `defer`
 
-- Progams often create temporary resources that need to be cleaned up later
+- **Progams often create temporary resources that need to be cleaned up later**
   - The cleanup has to happen no matter the exit point of the function
   - We can think of this as the `finally` portion of other languages' error handlers
+  - But applied specifically to function calls
 - **In Go, the cleanup code is attached to the function using `defer`**
   - We use `defer` to release resources
   - Normally, function calls are called right away
@@ -665,40 +759,49 @@ for i := range 5 {
   - *Executed when either the surrounding function returns, reach the end, or panic*
 
 ```go
-// Example of cat Command
-// ----------------------
-fmt.Println("Example of cat Command:")
-// Make sure a filename was pass as argument: make try ARGS="<filename>""
-// Args[0] is the name of the program
-if len(os.Args) < 2 {
-    log.Fatal("Error: No file was specified")
-}
-// Open the file: Read-only
-fl, err := os.Open(os.Args[1])
-if err != nil {
-    log.Fatal(err)
-}
-// Close the file after using it
-// This must be run no matter any errors in the program
-defer func() {
-    fmt.Println("Defer in main() is called here")
-    fmt.Println()
-    fl.Close()
-}()
-// Read from the file
-data := make([]byte, 2048)
-for {
-    count, err := fl.Read(data)
-    os.Stdout.Write(data[:count])
+func main() {
+    // Example of defer With a cat Command
+    // -----------------------------------
+    fmt.Println("Example of defer With a cat Command:")
+    fmt.Println("------------------------------------")
+
+    // Make sure a filename was passed as argument: make try ARGS="<filename>"
+    // Args[0] is the name of the program
+    if len(os.Args) < 2 {
+        log.Fatal("Error: No file was specified")
+    }
+    // Open the file: Read-only
+    fl, err := os.Open(os.Args[1])
     if err != nil {
-        if err != io.EOF {
-            log.Fatal(err)
+        log.Fatal(err)
+    }
+    // Close the file after using it
+    // This must be run no matter any errors in the program
+    defer func() {
+        fmt.Println("Defer in main() is called here")
+        fmt.Println("This simulates closing a file that was opened in main()")
+        fmt.Println()
+        fl.Close()
+    }()
+    // Read from the file
+    data := make([]byte, 2048)
+    for {
+        count, err := fl.Read(data)
+        os.Stdout.Write(data[:count])
+        if err != nil {
+            if err != io.EOF {
+                log.Fatal(err)
+            }
+            break
         }
-        break
     }
 }
 ```
 
+- **NOTES**
+  - We read from a file by passing a slice of bytes to `fl.Read()`
+  - It returns the number of bytes that were read into the slice and error
+  - Also need to handle `EOF` marker to stop reading the file
 - With `defer`
   - We can use a function, method, or closure
   - We can defer multiple functions in a Go function
@@ -706,20 +809,22 @@ for {
     - The last `defer` registered will run first
   - **Code within `defer` functions runs *after the `return` statement of the enclosing function***
     - We can supply a function with input parameters to `defer`
-    - The input parameters are evaluated immediately
+    - **The input parameters are evaluated immediately at the declaration location**
     - Their values are stored until the function runs
 
 ```go
 // Example of Using defer
 // ----------------------
 func main() {
-    // Example of Using defer
-    // ----------------------
-    fmt.Println("Example of Using defer:")
+    // Example of Using defer In a Function
+    // ------------------------------------
+    fmt.Println("Example of Using defer In a Function:")
+    fmt.Println("-------------------------------------")
+
     deferExample()
-    fmt.Println()
 }
 
+// A test function for using defer.
 func deferExample() int {
     a := 10
     defer func(val int) {
@@ -735,10 +840,6 @@ func deferExample() int {
 }
 ```
 
-- **NOTES**
-  - We read from a file by passing a slice of bytes to `fl.Read()`
-  - It returns the number of bytes that were read into the slice and error
-  - Also need to handle `EOF` marker to stop reading the file
 - We could also supply a function that returns values to `defer`
   - But there is no way to read those values
 
@@ -831,7 +932,7 @@ func getFile(name string) (*os.File, func(), error) {
 ## Go Is Call By Value
 
 - **When a function is called with parameters, Go makes a copy of the passed parameters**
-- Modifying parameters inside a function body does not affect the passed arguments
+- **Modifying parameters inside a function body does not affect the passed arguments**
   - This is not just for primitive types
   - Also applies to `struct`
 
@@ -843,20 +944,26 @@ type Person2 struct {
     name string
 }
 
-func modifyFails(i int, s string, p Person2) {
-    // Attempting to modify the passed parameters
-    i = i * 2
-    s = "Goodbye"
-    p.name = "Bob"
-}
-
 func main() {
-    p := Person2{}
+    // Example of Call-By-Value
+    // ------------------------
+    fmt.Println("Example of Call-By-Value:")
+    fmt.Println("-------------------------")
+
     i := 2
     s := "Hello"
-    // Modifying the passed parameters has no effect on the arguments
-    modifyFails(i, s, p)
-    fmt.Println(i, s, p)
+    p := Person2{}
+
+    fmt.Println("Before function call:", i, s, p)
+
+    // Modifying the passed parameters has no effect on the actual arguments
+    func(n int, st string, per Person2) {
+        // Attempting to modify the passed parameters
+        n = n * 2
+        st = "Goodbye"
+    }(i, s, p)
+
+    fmt.Println("After function call:", i, s, p)
 }
 ```
 
@@ -868,41 +975,41 @@ func main() {
 ```go
 // Example of Map-Slice Modification Calls
 // ---------------------------------------
-func modifyMap(m map[int]string) {
+fmt.Println("Example of Map-Slice Modification Calls:")
+fmt.Println("----------------------------------------")
+
+mapMod := map[int]string{
+    1: "first",
+    2: "second",
+}
+
+fmt.Println("Before: mapMod =", mapMod)
+func(m map[int]string) {
     m[2] = "hello"
     m[3] = "goodbye"
     delete(m, 1)
-}
+}(mapMod)
+fmt.Println("After: mapMod =", mapMod)
 
-func modifySlice(s []int) {
+slcMod := []int{1, 2, 3}
+
+fmt.Println("Before: slcMod =", slcMod)
+func(s []int) {
     for k, v := range s {
-        s[k] = v * 2
+        s[k] = v * 200
     }
     s = append(s, 10)
-}
-
-func main() {
-    mapMod := map[int]string{
-        1: "first",
-        2: "second",
-    }
-    modifyMap(mapMod)
-    fmt.Println(mapMod)
-
-    slcMod := []int{1, 2, 3}
-    modifySlice(slcMod)
-    fmt.Println(slcMod)
-    fmt.Println()
-}
+}(slcMod)
+fmt.Println("After: slcMod =", slcMod)
 ```
 
 - **Why do Maps and Slices behave differently?**
   - Because they are both implemented with pointers
-  - **Every type in Go is a *Value-Type***
+  - **Every type in Go is always a *Value-Type***
   - **But sometimes, that value is a *Pointer***
 - *Pass-By-Value* is why Go's limited support for Constant is not a huge issue
-  - Calling a function does not modify the original variable
-  - Unless it is a slice or a map
+  - **Calling a function does not modify the original variable**
+  - **Unless it is a slice or a map**
   - In general, this is a good thing: Easier flow of data
 - **However, sometimes we do need to modify the original value**
   - In those cases, we use *Pointers*

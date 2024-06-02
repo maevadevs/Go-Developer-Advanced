@@ -1,1 +1,1 @@
-This is a text file that we want to use to test some functionalities of the program
+This is paragraph is coming from an external text file that we want to use to test some functionalities of the program.

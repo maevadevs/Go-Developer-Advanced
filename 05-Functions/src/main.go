@@ -13,10 +13,7 @@ import (
 
 // Example of Call-By-Value
 // ------------------------
-type Person2 struct {
-	age  int
-	name string
-}
+type Person2 struct{}
 
 // This is the main entry of the application.
 func main() {
@@ -28,13 +25,17 @@ func main() {
 	// Example of calling a Function
 	// -----------------------------
 	fmt.Println("Example of calling a Function:")
+	fmt.Println("------------------------------")
+
 	result := div(100, 20)
+
 	fmt.Println("div(100, 20) =", result)
 	fmt.Println()
 
 	// Example of a Function With Optional and Named Parameters
 	// --------------------------------------------------------
 	fmt.Println("Example of a Function With Optional and Named Parameters:")
+	fmt.Println("---------------------------------------------------------")
 
 	// Call MyFunc() one way
 	MyFunc(FuncParams{
@@ -52,6 +53,8 @@ func main() {
 	// Example of a Variadic Function
 	// ------------------------------
 	fmt.Println("Example of a Variadic Function:")
+	fmt.Println("-------------------------------")
+
 	x := addNums(1, 2, 3, 4, 5, 6, 7, 8, 9)
 	y := addNums(21, 43, 65)
 	z := addNums()
@@ -67,6 +70,8 @@ func main() {
 	// Example of Function With Multiple Return Values
 	// -----------------------------------------------
 	fmt.Println("Example of Function With Multiple Return Values:")
+	fmt.Println("------------------------------------------------")
+
 	resDiv, resMod, err := divmod(5, 2)
 	if err != nil {
 		fmt.Println(err)
@@ -78,6 +83,8 @@ func main() {
 	// Example of Function With Named Return Values
 	// --------------------------------------------
 	fmt.Println("Example of Function With Named Return Values:")
+	fmt.Println("---------------------------------------------")
+
 	resX, modY, errZ := divmodNamed(5, 2)
 	// Error-handling
 	if errZ != nil {
@@ -90,6 +97,8 @@ func main() {
 	// Example of Declaring a Function Variable
 	// ----------------------------------------
 	fmt.Println("Example of Declaring a Function Variable:")
+	fmt.Println("-----------------------------------------")
+
 	// A function variable
 	var myFuncVar func(string) int
 
@@ -107,7 +116,12 @@ func main() {
 	// Example of a Simple Calculator With Functions
 	// ---------------------------------------------
 	fmt.Println("Example of a Simple Calculator With Functions:")
-	opMap := map[string]func(int, int) int{
+	fmt.Println("----------------------------------------------")
+
+	// Declaring a Function Type
+	type opFunc func(int, int) int
+
+	opMap := map[string]opFunc{
 		"+": add,
 		"-": sub,
 		"*": mul,
@@ -151,9 +165,27 @@ func main() {
 	// Example of Anonymous Function
 	// -----------------------------
 	fmt.Println("Example of Anonymous Function:")
+	fmt.Println("------------------------------")
+
+	// Anonymous function assigned to a variable
+	anonf := func(j int) {
+		fmt.Println("Printing", j, "from inside an anonymous function")
+	}
+	for i := range 5 {
+		// Calling the function
+		anonf(i)
+	}
+	fmt.Println()
+
+	// Example of Inline Anonymous Function
+	// ------------------------------------
+	fmt.Println("Example of Inline Anonymous Function:")
+	fmt.Println("-------------------------------------")
+
+	// Inline anonymous function
 	for i := range 5 {
 		func(j int) {
-			fmt.Println("Printing", j, "from inside an anonymous function")
+			fmt.Println("Printing", j, "from inside an inline anonymous function")
 		}(i)
 	}
 	fmt.Println()
@@ -161,12 +193,14 @@ func main() {
 	// Example of Closure
 	// ------------------
 	fmt.Println("Example of Closure:")
+	fmt.Println("-------------------")
+
 	a := 20
 	fmt.Println("Outside fa(), a =", a)
 	/*fa =*/ func() {
-		fmt.Println("Inside fa() before assignment, a =", a)
+		fmt.Println("\tInside fa() before assignment, a =", a)
 		a = 30 // The assignment modifies outside a
-		fmt.Println("Inside fa() after assignment, a =", a)
+		fmt.Println("\tInside fa() after assignment, a =", a)
 	}()
 	fmt.Println("Outside fa(), a =", a)
 	fmt.Println()
@@ -174,12 +208,14 @@ func main() {
 	// Example of Closure With Shadow
 	// ------------------------------
 	fmt.Println("Example of Closure With Shadow:")
+	fmt.Println("-------------------------------")
+
 	b := 20
 	fmt.Println("Outside fb(), b =", b)
 	fb := func() {
-		fmt.Println("Inside fb() before assignment, b =", b)
+		fmt.Println("\tInside fb() before assignment, b =", b)
 		b := 30 // This assignment shadows instead of modifying outside b
-		fmt.Println("Inside fb() after assignment, b =", b)
+		fmt.Println("\tInside fb() after assignment, b =", b)
 	}
 	fb()
 	fmt.Println("Outside fb(), b =", b)
@@ -188,6 +224,8 @@ func main() {
 	// Example of Sorting Slice
 	// ------------------------
 	fmt.Println("Example of Sorting Slice")
+	fmt.Println("------------------------")
+
 	type Person struct {
 		FirstName string
 		LastName  string
@@ -198,26 +236,33 @@ func main() {
 		{"Jeremy", "Trye", 18},
 		{"Jasmine", "Alter", 20},
 	}
-	fmt.Println("Before Sorting:", people)
+
+	fmt.Println("Before Sorting:\t\t\t", people)
+
 	// Sorting the slice by last name
 	sort.Slice(people, func(i int, j int) bool {
 		return people[i].LastName < people[j].LastName
 	})
-	fmt.Println("After Sorting By Last Name:", people)
+	fmt.Println("After Sorting By Last Name:\t", people)
+
 	// Sorting the slice by age
 	sort.Slice(people, func(i int, j int) bool {
 		return people[i].Age < people[j].Age
 	})
-	fmt.Println("After Sorting By Age:", people)
+	fmt.Println("After Sorting By Age:\t\t", people)
 	fmt.Println()
 
 	// Example of Function That Returns a Closure
 	// ------------------------------------------
 	fmt.Println("Example of Function That Returns a Closure:")
+	fmt.Println("-------------------------------------------")
+
 	base2Mult := makeMult(2)
 	base3Mult := makeMult(3)
 	base5Mult := makeMult(5)
+
 	fmt.Println("i\tbase2\tbase3\tbase5")
+	fmt.Println("-\t-----\t-----\t-----")
 	for i := range 10 {
 		fmt.Println(i, "\t", base2Mult(i), "\t", base3Mult(i), "\t", base5Mult(i))
 	}
@@ -226,7 +271,9 @@ func main() {
 	// Example of defer With a cat Command
 	// -----------------------------------
 	fmt.Println("Example of defer With a cat Command:")
-	// Make sure a filename was pass as argument: make try ARGS="<filename>""
+	fmt.Println("------------------------------------")
+
+	// Make sure a filename was passed as argument: make try ARGS="<filename>"
 	// Args[0] is the name of the program
 	if len(os.Args) < 2 {
 		log.Fatal("Error: No file was specified")
@@ -240,6 +287,7 @@ func main() {
 	// This must be run no matter any errors in the program
 	defer func() {
 		fmt.Println("Defer in main() is called here")
+		fmt.Println("This simulates closing a file that was opened in main()")
 		fmt.Println()
 		fl.Close()
 	}()
@@ -257,43 +305,77 @@ func main() {
 	}
 	fmt.Println()
 
-	// Example of Using defer
-	// ----------------------
-	fmt.Println("Example of Using defer:")
+	// Example of Using defer In a Function
+	// ------------------------------------
+	fmt.Println("Example of Using defer In a Function:")
+	fmt.Println("-------------------------------------")
+
 	deferExample()
 	fmt.Println()
 
 	// Example of Call-By-Value
 	// ------------------------
 	fmt.Println("Example of Call-By-Value:")
+	fmt.Println("-------------------------")
+
 	i := 2
 	s := "Hello"
 	p := Person2{}
-	// Modifying the passed parameters has no effect on the arguments
-	modifyFails(i, s, p)
-	fmt.Println(i, s, p)
+
+	fmt.Println("Before function call:", i, s, p)
+
+	// Modifying the passed parameters has no effect on the actual arguments
+	func(n int, st string, per Person2) {
+		// Attempting to modify the passed parameters
+		n = n * 2
+		st = "Goodbye"
+	}(i, s, p)
+
+	fmt.Println("After function call:", i, s, p)
 	fmt.Println()
 
 	// Example of Map-Slice Modification Calls
 	// ---------------------------------------
 	fmt.Println("Example of Map-Slice Modification Calls:")
+	fmt.Println("----------------------------------------")
+
 	mapMod := map[int]string{
 		1: "first",
 		2: "second",
 	}
+
 	fmt.Println("Before: mapMod =", mapMod)
-	modifyMap(mapMod)
+	func(m map[int]string) {
+		m[2] = "hello"
+		m[3] = "goodbye"
+		delete(m, 1)
+	}(mapMod)
 	fmt.Println("After: mapMod =", mapMod)
 
 	slcMod := []int{1, 2, 3}
+
 	fmt.Println("Before: slcMod =", slcMod)
-	modifySlice(slcMod)
+	func(s []int) {
+		for k, v := range s {
+			s[k] = v * 200
+		}
+		s = append(s, 10)
+	}(slcMod)
 	fmt.Println("After: slcMod =", slcMod)
+	fmt.Println()
+
+	// Footers
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
 	fmt.Println()
 }
 
+// -------------------------------------------------------------------------------------------------------------------------------
+
 // Example of a Function
 // ---------------------
+
+// Divide an integer by another integer.
 func div(num int, den int) int {
 	if den == 0 {
 		return 0
@@ -303,12 +385,14 @@ func div(num int, den int) int {
 
 // Example of a Function With Optional and Named Parameters
 // --------------------------------------------------------
+
 type FuncParams struct {
 	FirstName string
 	LastName  string
 	Age       int
 }
 
+// A test function for Optional and Named Parameters.
 func MyFunc(params FuncParams) error {
 	// Do something
 	fmt.Println("Passed parameters:", params)
@@ -317,6 +401,8 @@ func MyFunc(params FuncParams) error {
 
 // Example of a Variadic Function
 // ------------------------------
+
+// Add multiple integers and return their sum.
 func addNums(nums ...int) int {
 	var res int
 	for _, n := range nums {
@@ -327,6 +413,8 @@ func addNums(nums ...int) int {
 
 // Example of Function With Multiple Return Values
 // -----------------------------------------------
+
+// Divide an integer by another integer and return the result and the mod.
 func divmod(num, den int) (int, int, error) {
 	if den == 0 {
 		return 0, 0, errors.New("cannot divide by 0")
@@ -336,6 +424,8 @@ func divmod(num, den int) (int, int, error) {
 
 // Example of Function With Named Return Values
 // --------------------------------------------
+
+// Divide an integer by another integer and return the result and the mod.
 func divmodNamed(num, den int) (res int, mod int, err error) {
 	if den == 0 {
 		err = errors.New("cannot divide by 0")
@@ -348,20 +438,24 @@ func divmodNamed(num, den int) (res int, mod int, err error) {
 
 // Example of Declaring a Function Variable
 // ----------------------------------------
-func f1(a string) int {
-	return len(a)
+
+// Get the length of a string.
+func f1(s string) int {
+	return len(s)
 }
 
-func f2(a string) int {
+// Get the sum of runes in a string.
+func f2(s string) int {
 	sum := 0
-	for _, v := range a {
-		sum += int(v)
+	for _, c := range s {
+		sum += int(c)
 	}
 	return sum
 }
 
 // Example of a Simple Calculator With Functions
 // ---------------------------------------------
+
 func add(i int, j int) int  { return i + j }
 func sub(i int, j int) int  { return i - j }
 func mul(i int, j int) int  { return i * j }
@@ -369,14 +463,18 @@ func divs(i int, j int) int { return i / j }
 
 // Example of Function That Returns a Closure
 // ------------------------------------------
+
+// Return a function that multiplies a number to a given base.
 func makeMult(base int) func(int) int {
-	return func(factor int) int {
-		return base * factor
+	return func(n int) int {
+		return n * base
 	}
 }
 
 // Example of Using defer
 // ----------------------
+
+// A test function for using defer.
 func deferExample() int {
 	a := 10
 	defer func(val int) {
@@ -391,35 +489,11 @@ func deferExample() int {
 	return a
 }
 
-// Example of Call-By-Value
-// ------------------------
-func modifyFails(i int, s string, p Person2) {
-	// Attempting to modify the passed parameters
-	i = i * 2
-	s = "Goodbye"
-	p.name = "Bob"
-}
-
-// Example of Map-Slice Modification Calls
-// ---------------------------------------
-func modifyMap(m map[int]string) {
-	m[2] = "hello"
-	m[3] = "goodbye"
-	delete(m, 1)
-}
-
-func modifySlice(s []int) {
-	for k, v := range s {
-		s[k] = v * 2
-	}
-	s = append(s, 10)
-}
-
 // AVAILABLE COMMANDS
 // ------------------
-//  make            Default to `make try`
-//  make fmt        Format all source files
-//  make vet        Verify any possible errors
-//  make build      Build module
-//  make run        Build module then run
-//  make try        Build module, run, then remove built binary
+//  make ARGS=./testfiles/test.txt      Default to `make try`
+//  make fmt                            Format all source files
+//  make vet                            Verify any possible errors
+//  make build                          Build module
+//  make run ARGS=./testfiles/test.txt  Build module then run
+//  make try ARGS=./testfiles/test.txt  Build module, run, then remove built binary

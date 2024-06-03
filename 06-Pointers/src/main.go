@@ -15,12 +15,89 @@ func main() {
 	// Pointer Operators
 	// -----------------
 	fmt.Println("Pointer Operators:")
-	var x int32 = 10         // Value-type int32
-	var pointerX *int32 = &x // Pointer-type to a type int32
+	fmt.Println("------------------")
 
-	fmt.Println("pointerX =", pointerX)   // Prints the memory address
-	fmt.Println("*pointerX =", *pointerX) // Prints the pointed value
+	var x int32 = 10  // Value-type int32
+	var y bool = true // Value-type bool
+
+	var ptrX *int32 = &x // Pointer-type to a value of type int32: Referencing
+	ptrY := &y           // Pointer-type to a value of type bool
+
+	fmt.Println("ptrX =", ptrX)   // Prints the memory address
+	fmt.Println("*ptrX =", *ptrX) // Dereferencing: Prints the pointed value: Same as x
+	fmt.Println("x =", x)
+	fmt.Println("ptrY =", ptrY)   // Prints the memory address
+	fmt.Println("*ptrY =", *ptrY) // Dereferencing: Prints the pointed value: Same as y
+	fmt.Println("y =", y)
 	fmt.Println()
+
+	// Example of nil Pointer
+	// ----------------------
+	fmt.Println("Example of nil Pointer:")
+	fmt.Println("-----------------------")
+
+	var nilPtr *string // Pointer-type to a value of type string but default to nil
+
+	fmt.Println("nilPtr =", nilPtr)              // Prints nil
+	fmt.Println("nilPtr == nil:", nilPtr == nil) // Prints true
+	// fmt.Println("*nilPtr =", *nilPtr) // panic: runtime error: invalid memory address or nil pointer dereference
+	fmt.Println()
+
+	// Example of Pointer Type
+	// -----------------------
+	fmt.Println("Example of Pointer Type:")
+	fmt.Println("------------------------")
+
+	intVal := 10
+	var ptrIntVal *int
+	ptrIntVal = &intVal
+
+	fmt.Println("intVal =", intVal)
+	fmt.Println("ptrIntVal =", ptrIntVal)
+	fmt.Println()
+
+	// Example of Using new()
+	// ----------------------
+	fmt.Println("Example of Using new():")
+	fmt.Println("-----------------------")
+
+	ptrNewVar := new(int)                              // Returns a pointer to 0
+	fmt.Println("ptrNewVar == nil:", ptrNewVar == nil) // false
+	fmt.Println("*ptrNewVar =", *ptrNewVar)            // 0
+	fmt.Println()
+
+	// Generic Pointer Helper For Constants
+	// ------------------------------------
+	fmt.Println("Generic Pointer Helper For Constants:")
+	fmt.Println("-------------------------------------")
+
+	type Person struct {
+		FirstName  string
+		MiddleName *string
+		LastName   string
+	}
+
+	p := Person{
+		FirstName:  "John",
+		MiddleName: makeConstPtr("Edler"), // This works!
+		LastName:   "Smith",
+	}
+
+	fmt.Println("p =", p)
+	fmt.Println()
+
+	// Footers
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 100))
+	fmt.Println()
+}
+
+// Generic Pointer Helper For Constants
+// ------------------------------------
+
+// Generic helper function for getting constant's pointer.
+func makeConstPtr[T any](t T) *T {
+	return &t
 }
 
 // AVAILABLE COMMANDS

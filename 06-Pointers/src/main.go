@@ -86,6 +86,19 @@ func main() {
 	fmt.Println("p =", p)
 	fmt.Println()
 
+	// Example of Dereferencing a Pointer to Update Pointed Value
+	// ----------------------------------------------------------
+	fmt.Println("Example of Dereferencing a Pointer to Update Pointed Value:")
+	fmt.Println("-----------------------------------------------------------")
+
+	someInt := 100
+	fmt.Println("someInt =", someInt)
+	failsToUpdate(&someInt)
+	fmt.Println("After failsToUpdate(&someInt), someInt =", someInt)
+	succeedToUpdate(&someInt)
+	fmt.Println("After succeedToUpdate(&someInt), someInt =", someInt)
+	fmt.Println()
+
 	// Footers
 	fmt.Println()
 	fmt.Println(strings.Repeat("-", 100))
@@ -98,6 +111,25 @@ func main() {
 // Generic helper function for getting constant's pointer.
 func makeConstPtr[T any](t T) *T {
 	return &t
+}
+
+// Example of Dereferencing a Pointer to Update Pointed Value
+// ----------------------------------------------------------
+
+// A function that does not dereference the parameter fails to update.
+func failsToUpdate(ptrX *int) {
+	// Attempting to change value at an address by re-assiging a new address to a pointer
+	// Address to address
+	newValue := 20
+	ptrX = &newValue
+}
+
+// A function that dereference the parameter succeed to update.
+func succeedToUpdate(ptrX *int) {
+	// Change a pointed value by dereferencing the pointer, then re-assign a value
+	// Value to value
+	newValue := 20
+	*ptrX = newValue
 }
 
 // AVAILABLE COMMANDS

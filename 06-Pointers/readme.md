@@ -5,6 +5,7 @@
 - [Quick Pointer Primer](#quick-pointer-primer)
 - [Pointers Behavior Like Classes](#pointers-behavior-like-classes)
 - [Pointers Indicate Mutable Parameters](#pointers-indicate-mutable-parameters)
+- [Pointer: Last Resort](#pointer-last-resort)
 
 ---
 
@@ -73,6 +74,7 @@ fmt.Println("y =", y)
 // ----------------------
 fmt.Println("Example of nil Pointer:")
 fmt.Println("-----------------------")
+
 var ptrZ *string // Pointer-type to a value of type string but default to nil
 
 fmt.Println("ptrZ =", ptrZ) // Prints nil
@@ -127,6 +129,7 @@ fmt.Println(nilPtr == nil)      // Prints true
 // -----------------------
 fmt.Println("Example of Pointer Type:")
 fmt.Println("------------------------")
+
 intVal := 10
 var ptrIntVal *int
 ptrIntVal = &intVal
@@ -233,7 +236,7 @@ func main() {
 - Pointers might look intimidating
 - **But Pointers are actually the familiar behavior for classes in other languages**
 - **In other languages, there is a behavior difference between primitives and classes**
-  - When primitives are assigned to another variable (aliased) or passed to functions, changes made to the other variable/parameter are not reflected
+  - When primitives are aliased or passed to functions, changes made to the other variable/parameter are not reflected
   - The aliases (or params/args) do not share the same memory
   - **They are often referred to as *Passed-By-Value* in Java and JavaScript**
   - **Python and Ruby use *Immutable Instances* for the same purpose**
@@ -255,7 +258,7 @@ attempt_change(x)
 print(x) # Prints 10
 ```
 
-- This is not the case when an instance of a class is done the same
+- **This is not the case when an instance of a class is done the same**
   - Change in one variable also affect the other
 
 ```py
@@ -313,3 +316,67 @@ outer()
     - Also reduces the work of the Garbage Collector
 
 ## Pointers Indicate Mutable Parameters
+
+- Go constants provide names for literal expressions that can be calculated at compile time
+- **Go has no mechanism to declare immutability**
+- But immutability is a good thing
+  - Safer from bugs
+  - Easier to understand
+  - More ready for change
+- **Ability to choose between *Value* and *Pointer* addresses this**
+  - **Using Pointer == The variable is mutable**
+  - **Not using Pointer == The variable is not mutable**
+- Go is a *Call-By-Value* language
+  - Values passed to functions are copies
+  - For non-pointer-types, called functions cannot modify original arguments
+  - The original data's immutability is guaranteed
+- **When passing pointers to function, the original data can be modified**
+- **When passing `nil` pointers, cannot make the value non-nil**
+  - Can only reassign if a value was already assigned to the pointer
+  - `nil` is a fixed location in-memory
+  - Also, we cannot change the pointer as it is *Passed-By-Value* to the function
+- **If we want the value assigned to a pointer parameter to last after exiting the function, dereference the pointer and set the value**
+  - Dereferencing allows to access the value pointed by the pointer
+  - Also allows to set the value pointed by the pointer
+  - Attempting to change value at an address by re-assiging a new address to a pointer will not work
+    - We cannot change the pointer as it is *Passed-By-Value* to the function
+    - **We can only change a pointed value by dereferencing the pointer, then re-assign a value**
+
+```go
+// Example of Dereferencing a Pointer to Update Pointed Value
+// ----------------------------------------------------------
+
+// A function that does not dereference the parameter fails to update.
+func failsToUpdate(ptrX *int) {
+    // Attempting to change value at an address by re-assiging a new address to a pointer
+    // Address to address
+    // Does not work because ptrX was Passed-By-Value
+    newValue := 20
+    ptrX = &newValue
+}
+
+// A function that dereference the parameter succeed to update.
+func succeedToUpdate(ptrX *int) {
+    // Change a pointed value by dereferencing the pointer, then re-assign a value
+    // Value to value
+    newValue := 20
+    *ptrX = newValue
+}
+
+func main() {
+    // Example of Dereferencing a Pointer to Update Pointed Value
+    // ----------------------------------------------------------
+    fmt.Println("Example of Dereferencing a Pointer to Update Pointed Value:")
+    fmt.Println("-----------------------------------------------------------")
+
+    someInt := 100
+    fmt.Println("someInt =", someInt)
+    failsToUpdate(&someInt)
+    fmt.Println("After failsToUpdate(&someInt), someInt =", someInt)
+    succeedToUpdate(&someInt)
+    fmt.Println("After succeedToUpdate(&someInt), someInt =", someInt)
+    fmt.Println()
+}
+```
+
+## Pointer: Last Resort

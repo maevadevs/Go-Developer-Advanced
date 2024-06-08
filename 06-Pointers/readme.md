@@ -6,6 +6,7 @@
 - [Pointers Behavior Like Classes](#pointers-behavior-like-classes)
 - [Pointers Indicate Mutable Parameters](#pointers-indicate-mutable-parameters)
 - [Pointer: Last Resort](#pointer-last-resort)
+- [Pointer-Passing Performance](#pointer-passing-performance)
 
 ---
 
@@ -380,3 +381,55 @@ func main() {
 ```
 
 ## Pointer: Last Resort
+
+- Be careful when using pointers in Go
+  - Can make it hard to understand data flow
+  - Can create extra-work for the Garbage Collector
+- E.g. Prefer instantiating a struct instead of modifying a struct
+
+```go
+// Don't do this
+func MakeFoo(f *Foo) error {
+    f.Field1 = "val"
+    f.Field2 = 20
+    return nil
+}
+
+// Do this instead
+func MakeFoo() (Foo, error) {
+  f := Foo{
+    Field1: "val",
+    Field2: 20,
+  }
+  return f, nil
+}
+```
+
+- **When the function expects an interface, use pointer parameters**
+- E.g. When working with JSON
+
+```go
+someJson := struct {
+    Name string `json:"name"`
+    Age int `json:"age"`
+}{}
+err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
+```
+
+- `json.Unmarshal()`
+  - Populates a variable from a slice of bytes containing JSON
+  - Takes a `[]byte` and an `any` parameters
+  - Value passed for `any` must be a pointer, else error
+- 2 reasons for using pointer with `json.Unmarshall()`
+  - *This function predates generics*
+    - Without Generics, we don't know what type of value to create and return
+  - *Passing a pointer gives control over memory allocation*
+    - `Unmarshall` is optimized for iterative type conversion between `json` and `struct`
+    - This can be more memory-efficient
+- JSON integration is very common
+  - **But `json.Unmarshal()` should be treated as an exception case**
+  - **When returning values from a function, favor value types**
+  - **Use pointer type only when there is a state in the data type that needs to be modified**
+  - Some data types used with concurrency must always be passed as pointers
+
+## Pointer-Passing Performance

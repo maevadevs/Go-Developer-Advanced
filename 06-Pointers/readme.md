@@ -7,6 +7,8 @@
 - [Pointers Indicate Mutable Parameters](#pointers-indicate-mutable-parameters)
 - [Pointer: Last Resort](#pointer-last-resort)
 - [Pointer-Passing Performance](#pointer-passing-performance)
+- [Zero-Value vs No Value](#zero-value-vs-no-value)
+- [Map vs Slice](#map-vs-slice)
 
 ---
 
@@ -433,3 +435,28 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
   - Some data types used with concurrency must always be passed as pointers
 
 ## Pointer-Passing Performance
+
+- If a struct is large enough, using pointer improves performance
+  - Time to pass a pointer to a function is always constant
+  - The size of pointers is always the same for all data types
+- Passing values to a function takes longer depending on the size of the value
+  - **For data structures less than 10 MB, it is slower to return pointer than the value**
+  - **The performance flips with larger data structures**
+  - For the most cases, the difference might be trivial
+  - For large data, consider using pointers instead of values, even if the data should be immutable
+
+## Zero-Value vs No Value
+
+- Pointers are often used to differentiate between variable/field assigned zero value and unassigned variable/field
+  - **Use a `nil` pointer to represent unnassigned variable/field**
+  - **NOTE: Be careful as pointer also indicate mutability**
+- It is preferrable to use map's comma-ok idiom instead
+  - `nil` pointer as parameter is useless
+  - Non-`nil` pointer as parameter means mutability
+- JSON-conversion are the exception
+  - When converting data back and forth between JSON and struct, need to differentiate zero-value and no value
+  - **Use a pointer value for fields in the struct that are nullable**
+- **When not working with JSON, do not use pointer to indicate no value**
+  - If the value will be immutable, use a value-tupe paired with a boolean
+
+## Map vs Slice

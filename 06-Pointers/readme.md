@@ -9,6 +9,7 @@
 - [Pointer-Passing Performance](#pointer-passing-performance)
 - [Zero-Value vs No Value](#zero-value-vs-no-value)
 - [Map vs Slice](#map-vs-slice)
+  - [Slices As Buffers](#slices-as-buffers)
 
 ---
 
@@ -156,14 +157,14 @@ fmt.Println("ptrNewVar == nil:", ptrNewVar == nil) // false
 fmt.Println("*ptrNewVar =", *ptrNewVar)            // 0
 ```
 
-- For struct, use `&` before the struct literal
+- For Struct, use `&` before the Struct literal
 - **Cannot use `&` on primitive literals or constants**
   - They do not have memory address
   - Exist only at compile time
   - *If pointer is needed for them, declare a variable instead*
 
 ```go
-x := &Foo{} // Struct pointer
+x := &Foo{} // struct pointer
 var y string
 var z int
 ptrY := &y  // String pointer
@@ -313,7 +314,7 @@ outer()
   - Referring to the same memory address => Changes made to one is reflected to the other (E.g. `f` above is a pointer)
   - **Re-assigning a new instance creates a separate instance/local variable (separate memory address)**
 - **The same behavior applies when using *Pointer Variables* in Go**
-  - But Go gives the choice to use pointers or values for both primitives and structs
+  - But Go gives the choice to use pointers or values for both primitives and Structs
   - Most of the time, use values
     - Make it easier to understand how and when the data is modified
     - Also reduces the work of the Garbage Collector
@@ -387,7 +388,7 @@ func main() {
 - Be careful when using pointers in Go
   - Can make it hard to understand data flow
   - Can create extra-work for the Garbage Collector
-- E.g. Prefer instantiating a struct instead of modifying a struct
+- E.g. Prefer instantiating a Struct instead of modifying a Struct
 
 ```go
 // Don't do this
@@ -426,7 +427,7 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
   - *This function predates generics*
     - Without Generics, we don't know what type of value to create and return
   - *Passing a pointer gives control over memory allocation*
-    - `Unmarshall` is optimized for iterative type conversion between `json` and `struct`
+    - `Unmarshall` is optimized for iterative type conversion between `json` and `Struct`
     - This can be more memory-efficient
 - JSON integration is very common
   - **But `json.Unmarshal()` should be treated as an exception case**
@@ -436,7 +437,7 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 
 ## Pointer-Passing Performance
 
-- If a struct is large enough, using pointer improves performance
+- If a Struct is large enough, using pointer improves performance
   - Time to pass a pointer to a function is always constant
   - The size of pointers is always the same for all data types
 - Passing values to a function takes longer depending on the size of the value
@@ -450,13 +451,47 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 - Pointers are often used to differentiate between variable/field assigned zero value and unassigned variable/field
   - **Use a `nil` pointer to represent unnassigned variable/field**
   - **NOTE: Be careful as pointer also indicate mutability**
-- It is preferrable to use map's comma-ok idiom instead
+- It is preferrable to use Map's comma-ok idiom instead
   - `nil` pointer as parameter is useless
   - Non-`nil` pointer as parameter means mutability
 - JSON-conversion are the exception
-  - When converting data back and forth between JSON and struct, need to differentiate zero-value and no value
-  - **Use a pointer value for fields in the struct that are nullable**
+  - When converting data back and forth between JSON and Struct, need to differentiate zero-value and no value
+  - **Use a pointer value for fields in the Struct that are nullable**
 - **When not working with JSON, do not use pointer to indicate no value**
-  - If the value will be immutable, use a value-tupe paired with a boolean
+  - If the value will be immutable, use a value-type paired with a boolean
 
 ## Map vs Slice
+
+- *Any modifications made to a Map via a function is reflected in the original Map variable*
+  - A Map is implemented as a pointer to a Struct
+  - Passing a Map to a function is copying a pointer
+- **Carefully consider before using Maps as input parameters or return values**
+  - Maps are bad choices for API-design
+  - They say nothing about the values contained within
+  - Nothing explicitly defines any keys in the Map
+  - We can only trace through the code to know what they contain
+  - Maps prevent API from being self-documenting
+- **Instead of using Maps, it is better to use Structs**
+  - Structs also help reduce the Garbage Collector's work
+- **NOTE: Maps are correct choice in certain situations**
+  - Struct field names are required at compile-time
+  - If the keys are not available at compile-time, a Map is ideal
+- Passing a Slice to a function has more complicated behaviors
+  - *Any modifications made to a Slice via a function is reflected in the original Slice variable*
+  - However, using `append()` is **not** reflected in the original slice
+  - A Slice is implemented a Struct with 3 fields: *`int` length*, *`int` capacity*, and pointer to an Array
+  - *When slice is copied to a function, a copy is made off those 3 fields*
+  - **Changing value in the Slice = Changing values in the Array pointed by the pointer**
+  - **Changing *length* or *capacity* = Only changing the local copies of the copied `int` values**
+  - The *length* and *capacity* in the original Slice remains unchanged even when its value has changed
+  - If the *length* of the original Slice is smaller than the new Slice, some values would not be visible in the original Slice
+  - If the Slice copy is appended to and there is not enough capacity, it moves to a different underlying array
+- **A Slice passed to a function can have its content modified, but it cannot be resized**
+  - Slices are passed around a lot in Go
+  - By default, assume it is not mutable
+- **NOTE: We can pass a Slice of any size to functions**
+  - It is really just a Struct of 2 `int` values and a pointer to an Array
+  - Always the same size of data passed around no matter the size of the Slice
+  - That is not the case with Arrays: Arrays are passed by value of their contents
+
+### Slices As Buffers

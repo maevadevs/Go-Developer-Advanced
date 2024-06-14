@@ -10,6 +10,7 @@
 - [Zero-Value vs No Value](#zero-value-vs-no-value)
 - [Map vs Slice](#map-vs-slice)
   - [Slices As Buffers](#slices-as-buffers)
+  - [Reducing the GC's Workload](#reducing-the-gcs-workload)
 
 ---
 
@@ -479,7 +480,7 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 - Passing a Slice to a function has more complicated behaviors
   - *Any modifications made to a Slice via a function is reflected in the original Slice variable*
   - However, using `append()` is **not** reflected in the original slice
-  - A Slice is implemented a Struct with 3 fields: *`int` length*, *`int` capacity*, and pointer to an Array
+  - A Slice is implemented as a Struct with 3 fields: *`int` length*, *`int` capacity*, and pointer to an Array
   - *When slice is copied to a function, a copy is made off those 3 fields*
   - **Changing value in the Slice = Changing values in the Array pointed by the pointer**
   - **Changing *length* or *capacity* = Only changing the local copies of the copied `int` values**
@@ -495,3 +496,42 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
   - That is not the case with Arrays: Arrays are passed by value of their contents
 
 ### Slices As Buffers
+
+- Useful approach for reading data from external sources
+- Reading data by chunks creates a lot of unnecessary memory allocations
+  - Handle automatically by the Garbage Collector
+  - But the work still needs to be done when done processing
+- **Writing idiomatic Go means avoid unnecessary memory allocations**
+  - Create a slice of bytes once
+  - Use it as a buffer to read data from source
+
+```go
+// Example of Using Slice as Buffer
+// --------------------------------
+
+file, err := os.Open(fileName)
+if err != nil {
+    return err
+}
+defer file.Close()
+
+data := make([]byte, 100)
+for {
+    count, err := file.Read(data)
+    process(data[:count])
+    if err!= nil {
+        if errors.Is(err., io.EOF) {
+            return nil
+        }
+        return err
+    }
+}
+```
+
+- Created a buffer of 100 bytes
+- Each loop, copy the next block of bytes into the slice
+- Pass the populated portion of the buffer to `process()`
+- `io.EOF` indicates that there is no more data
+  - Any other error is returned
+
+### Reducing the GC's Workload

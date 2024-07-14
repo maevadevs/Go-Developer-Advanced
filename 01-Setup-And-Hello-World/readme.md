@@ -47,10 +47,10 @@
 
 ```sh
 cd ~/Downloads
-wget https://go.dev/dl/{{go-version}}.tar.gz
+wget https://go.dev/dl/{{go_version}}.tar.gz
 ```
 
-- Remove any previous installation (if any)
+- Remove any previous installation, if any
 - Extract the new archive into installation location
 
 ```sh
@@ -103,7 +103,7 @@ where go
 - Or remove with `msiexec` via the `.msi` installation file
 
 ```ps1
-msiexec /x go{{version}}.windows-{{cpu-arch}}.msi /q
+msiexec /x go{{version}}.windows-{{cpu_arch}}.msi /q
 ```
 
 ### Detailed Installation for Mac
@@ -125,7 +125,11 @@ sudo rm -rf /usr/local/go
 sudo rm /etc/paths.d/go
 ```
 
-- Edit `/etc/profile` or `$HOME/.bash_profile` or `$HOME/.profile` or `$HOME/.bashrc`
+- Remove the Go paths from these files, if any
+  - `/etc/profile`
+  - `$HOME/.bash_profile`
+  - `$HOME/.profile`
+  - `$HOME/.bashrc`
 
 ## Commonly Used Go Commands
 
@@ -136,11 +140,20 @@ Command | Action
 `go run`|**Compiles and executes** multiple Go source code files (build & execute)<br>*But does not produce an actual executable*
 `go fmt`|When ran in a directory with `.go` files, **formats** all the code in each file in the directory
 `go vet`|When ran in a directory with `.go` files, **scans** for common coding mistakes
-`go install`|**Compiles** and **installs** a package
-`go get`|**Download** raw source code of someone else's package
+`go install`|**Compiles** and **installs** a package and dependencies
+`go get`|**Download** raw source code of someone else's package as dependency
 `go test`|Runs any **tests** associated with the current projects
 `go mod`|For **dependency management** and **module management**
 `go mod tidy`|Verify existing module dependencies<br>Adds missing and removes unused modules
+`go bug`|Start a bug report
+`go clean`|Remove object files and cached files
+`go doc`|Show documentation for package or symbol
+`go env`|Print Go environment information
+`go fix`|Update packages to use new APIs
+`go generate`|Generate Go files by processing source
+`go list`|List packages or modules
+`go work`|Workspace maintenance
+`go tool`|Run specified go tool
 
 - [Additional Go Commands](https://pkg.go.dev/cmd/go)
 
@@ -151,13 +164,13 @@ Command | Action
 
 ```tree
 Go-Module/
-|-- bin/
-|-- src/
-|   |-- main.go
-|-- tests/
-|-- go.mod
-|-- makefile
-|-- readme.md
+├── bin/
+├── src/
+|   ├── main.go
+├── tests/
+├── go.mod
+├── makefile
+└── readme.md
 ```
 
 ### Go Module
@@ -176,6 +189,7 @@ go mod init unique/module/path/typically/github
   - Any additional module dependencies
 - **The `go.mod` file should not be edited directly**
   - Use `go` command to manage its contents
+  - `go mod` creates it
   - `go get` adds dependencies
   - `go mod tidy` verifies dependencies
 - The module is then defined in `go.mod` file as follow
@@ -183,7 +197,7 @@ go mod init unique/module/path/typically/github
 ```sh
 module unique/module/path/typically/github
 
-go 1.22.3
+go 1.22.5
 ```
 
 ### `main.go`
@@ -211,8 +225,8 @@ func main() {
 #### Import Declaration
 
 - Allows to import external packages referenced in the file
-  - **Go imports only whole packages**
-  - We cannot limit the import to specific functions or atomic elements
+  - **Go `import` only imports whole packages**
+  - We cannot limit the imports to specific functions or atomic elements
 - `fmt` is from the standard library so it is already available
   - No need to use `go get`
   - For 3rd-Party libraries, we use `go get` first
@@ -228,25 +242,25 @@ Command | Action
 `go build`|**Compiles** multiple Go source code files into executable binaries
 `go run`|**Compiles and executes** multiple Go source code files (build & execute)<br>*But does not produce an actual executable*
 
-- To run
+- **To run**
 
 ```sh
 go run Go-Module-Name/src/main.go
 ```
 
-- To build/compile into binaries
+- **To build/compile into binaries**
 
 ```sh
 go build -o Go-Module-Name/bin/Hello-World Go-Module-Name/src/main.go
 ```
 
-- To run after compile
+- **To run after compile**
 
 ```sh
 ./Go-Module-Name/bin/Hello-World
 ```
 
-- To build/compile into binaries AND run
+- **To build/compile into binaries AND run**
 
 ```sh
 go build -o Go-Module-Name/bin/Hello-World Go-Module-Name/src/main.go && ./Go-Module-Name/bin/Hello-World
@@ -418,7 +432,7 @@ sudo apt-get install build-essential
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
-.PHONY: fmt vet build run try
+.PHONY: fmt vet build build-release run run-release try
 
 # Target
 fmt:
@@ -437,22 +451,32 @@ vet: fmt
 # Target
 build: vet
     # Task: Build module
-    go build -o bin/Hello-World src/main.go
+    go build -o bin/debug/Hello-World src/main.go
+
+# Target
+build-release: vet
+    # Task: Build module for release, strip symbols
+    go build -ldflags="-s -w" -o bin/release/Hello-World src/main.go
 
 # Target
 run: build
     # Task: Build module then run
-    bin/Hello-World
+    bin/debug/Hello-World
+
+# Target
+run-release: build-release
+    # Task: Build module for release then run
+    bin/release/Hello-World
 
 # Target
 try: vet
     # Task: Build module, run, then remove built binary
-    if test -f bin/Hello-World-Temp; then \
-        rm -f bin/Hello-World-Temp; \
+    if test -f bin/debug/Hello-World-Temp; then \
+        rm -f bin/debug/Hello-World-Temp; \
     fi
-    go build -o bin/Hello-World-Temp src/main.go
-    bin/Hello-World-Temp
-    rm -f bin/Hello-World-Temp
+    go build -o bin/debug/Hello-World-Temp src/main.go
+    bin/debug/Hello-World-Temp
+    rm -f bin/debug/Hello-World-Temp
 ```
 
 - *Target*

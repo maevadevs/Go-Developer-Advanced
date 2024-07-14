@@ -6,7 +6,7 @@
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
-.PHONY: fmt vet build run try
+.PHONY: fmt vet build build-release run run-release try
 
 # Target
 fmt:
@@ -25,19 +25,29 @@ vet: fmt
 # Target
 build: vet
 	# Task: Build module
-	go build -o bin/Hello-World src/main.go
+	go build -o bin/debug/Hello-World src/main.go
+
+# Target
+build-release: vet
+	# Task: Build module for release, strip symbols
+	go build -ldflags="-s -w" -o bin/release/Hello-World src/main.go
 
 # Target
 run: build
 	# Task: Build module then run
-	bin/Hello-World
+	bin/debug/Hello-World
+
+# Target
+run-release: build-release
+	# Task: Build module for release then run
+	bin/release/Hello-World
 
 # Target
 try: vet
 	# Task: Build module, run, then remove built binary
-	if test -f bin/Hello-World-Temp; then \
-		rm -f bin/Hello-World-Temp; \
+	if test -f bin/debug/Hello-World-Temp; then \
+		rm -f bin/debug/Hello-World-Temp; \
 	fi
-	go build -o bin/Hello-World-Temp src/main.go
-	bin/Hello-World-Temp
-	rm -f bin/Hello-World-Temp
+	go build -o bin/debug/Hello-World-Temp src/main.go
+	bin/debug/Hello-World-Temp
+	rm -f bin/debug/Hello-World-Temp

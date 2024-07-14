@@ -43,8 +43,8 @@
 - **Write programs in a way that makes intentions clear**
 - Some particular approaches produce clearer codes
 - Built-in types in Go and how to declare them
-- Go does some things differently
-- There are subtle differences from other languages
+  - Go does some things differently
+  - There are subtle differences from other languages
 - **NOTE: All declared variables in Go must be used**
 
 ## Predeclared Types
@@ -147,11 +147,11 @@ fmt.Println("bankBalance =", bankBalance)
 
 ### Rune Literal
 
-- Represent a single *Unicode Codepoint*
+- **Represent a single *Unicode Codepoint***
 - Surrounded by single-quotes `''`
-- **In Go, `'` and `"` are not interchangeable**
-  - `'` is for Runes
-  - `"` is for Strings
+- **In Go, `''` and `""` are not interchangeable**
+  - `''` is for Runes
+  - `""` is for Strings
 - Rune literals can be written in many ways
 
 Rune Literal|Example
@@ -159,8 +159,8 @@ Rune Literal|Example
 Single Unicode Character|`'a'`
 8-Bit Octal Number|`'\141'`
 8-Bit Hexadecimal Number|`'\x61'`
-16-Bit Hexadecimal Number (Must be `\u`)|`'\u0061'`
-32-Bit Unicode Number (Must be `\U`)|`'\U00000061'`
+16-Bit Hexadecimal Number (Must use `\u`)|`'\u0061'`
+32-Bit Unicode Number (Must use `\U`)|`'\U00000061'`
 
 - There are several backslash-escaped runes as well
   - Newline `\n`
@@ -211,9 +211,8 @@ fmt.Println("ninetySeven =", ninetySeven)
 - **In these cases, using *Raw String Literal* is more appropriate**
   - Delimited with backticks <code>``</code>
   - **Can contain any character except backticks**
-  - If <code>\`</code> is required in raw string, try using <code>\`raw string\` + "`"</code> instead
-  - No escape character can be applied
-  - All characters are included as-is
+  - If <code>\`</code> is required in raw string, try using <code>\`some raw string\` + "`"</code> approach instead
+  - No escape character can be applied: All characters are included as-is
 
 ```go
 // Example of String Literals
@@ -337,7 +336,7 @@ Integer Type|Range
 
 - **NOTE: Some legacy codes might define 2 separate functions using `int64` and `uint64`**
   - Those APIs were created before Go started supporting Generics
-  - E.g. Go Standard Library `strconv.FormatInt()` and `strconv.FormatUint()`
+  - E.g. Go Standard Library [`strconv.FormatInt()`](https://pkg.go.dev/strconv#FormatInt) and [`strconv.FormatUint()`](https://pkg.go.dev/strconv#FormatUint)
 
 #### Integer Operators
 
@@ -645,7 +644,7 @@ var age, favNum int
 var name, age, isAdult = "John", 26, true
 ```
 
-- We can also declare a list of variables at once
+- We can also declare a list of variables at once using `()`
 - This approach allows some to have initial values and some not
 - We can combine different previous approach
 
@@ -662,6 +661,7 @@ var (
 
 - `:=` can replace `var` declaration with type inference
 - `:=` is typically preferred over `var`
+- But it can only be used inside functions
 - However, it can get confusing if the inferred type is not obvious
 
 ```go
@@ -699,14 +699,14 @@ name, age, isAdult := "Johnny", 26, true
   - `var` is the only option for package-level variables
   - `:=` is the most common inside functions
   - Use declaration lists when declaring multiple variables
-- Avoid `:=` when:
-  - Declaring package-level variables
+- **Avoid `:=` when:**
+  - Declaring *package-level* variables
   - Initializing to zero-value
   - Assigning an untyped constant
   - Variable type cannot/should not be deduced from the assigned value
     - Prefer `var x byte = 20` over `x := byte(20)`
   - **Sometimes, `:=` creates a new variable than using an existing one (*Shadowing*)**
-    - In those cases, it is better to use `var`
+    - In those cases, it is better to use `var` to be explicit
 - **NOTE: Only use *Multiple declaration and assignment* style when assigning multiple values from a function return**
 - **NOTE: Rarely declare variables outside functions**
   - Package-level variable is not a good idea
@@ -717,7 +717,7 @@ name, age, isAdult := "Johnny", 26, true
 
 ## Using `const`
 
-- Allows to declare values as *immutable*
+- Allows to declare values as *immutable* (at compile-time, not runtime)
 - Usage is very similar to `var`
 - But re-assignments result in error
 
@@ -725,11 +725,12 @@ name, age, isAdult := "Johnny", 26, true
 // Example of Package-level Constants
 // ----------------------------------
 const pi float64 = 3.1415
+
 const (
     idKey   = "id"
     nameKey = "name"
 )
-const total = 20 * 10
+const total = 20 * 10 // untyped
 
 // This is the main entry of the application.
 func main() {
@@ -774,7 +775,7 @@ func main() {
     - `const` is only a way to give names to literals
 
 ```go
-// This is an error: Runtime calculation of total
+// This is an error: Calculation of total is done at runtime, not compile-time
 // total is not a constant at compile-time
 x := 5
 y := 6
@@ -794,7 +795,7 @@ const total = x + y
   - Has no type on its own
   - Has default type when type cannot be inferred
 - **Typed Constant** can be assigned directly only to a *"variable"* of the same type
-  - The `const` variable must have an explicit type
+  - The `const` variable must have an explicit type declared
 - **Usage depends on the intent**
   - Constants to be used with multiple numeric types => *Keep untyped*
   - Untyped Constants give more flexibility
@@ -808,7 +809,7 @@ fmt.Println("----------------------------")
 
 const uConst = 100
 
-// Legal usage
+// Legal usage: Can be assigned to any compatible types
 var i int = uConst
 var f float64 = uConst
 var b byte = uConst
@@ -836,8 +837,8 @@ fmt.Println()
 
 ## Unused Variables
 
-- **Every *locally*-declared variables/constants must be used/read at least once**
-- It is a compile-time error if a declared variable is not used at least once
+- **Every *locally*-declared variables must be used/read at least once**
+- It is a compile-time error if a declared local name is not used at least once
 - As long as the variable is read once, Go compiler will stop complaining
 
 ```go
@@ -857,8 +858,9 @@ func main() {
   - 3rd-party tools can be used to cleanup these
 - **NOTE: This rule does not apply to *constants* and *package-level variables***
   - It is better to avoid *package-level variables*
-  - Constants in Go are calculated at compile-time (cannot have side-effects)
+  - Constants in Go are calculated at compile-time
     - They are excluded from the compiled binary if unused
+    - Cannot have side-effects during runtime
 
 ```go
 // This code will compile and produce nothing
@@ -880,7 +882,7 @@ func main() {
   - Name should communicate intent
   - Should not be difficult to type on keyboard
   - **Look-alike Unicode code-points can be a nightmare**
-    - Even if the look alike, they are completely different variables
+    - Even if they look alike, they are completely different variables
 
 ```go
 // Avoid this!!
@@ -900,6 +902,8 @@ func main() {
 - **NOTE: Do not use *all-caps* when naming constants**
   - **Keep `const` names the same as `var`**
   - **Go uses the case of the first letter of a name to determine its accessibility (*private* vs *public*)**
+    - Start with Uppercase Letter = *Public*
+    - Start with Lowercase Letter = *Private*
 - **Within functions, favor short names**
   - Smaller scope = Shorter name
   - Single-letters are common for `for` loops

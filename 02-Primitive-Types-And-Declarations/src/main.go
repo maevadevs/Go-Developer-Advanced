@@ -235,7 +235,7 @@ func main() {
 
 	const uConst = 100
 
-	// Legal usage
+	// Legal usage: Can be assigned to any compatible types
 	var i int = uConst
 	var f float64 = uConst
 	var b byte = uConst

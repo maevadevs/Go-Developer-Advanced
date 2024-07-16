@@ -83,7 +83,7 @@ var arrB = [3]int{10, 20, 30}
 var arrC = [15]int{1, 5: 4, 6, 10, 100, 15}
 ```
 
-- When using array literal, we can replace the length of the array to be dynamic with `...`
+- **When using array literal, we can replace the length of the array to be dynamic with `...`**
 - However, this can be harder to read
 
 ```go
@@ -103,7 +103,10 @@ arrE := [...]int{100, 200, 300}
 ### Comparing Arrays
 
 - We can use `==` and `!=` to compare arrays
-- **Arrays are equal if *same length and same values in the same order***
+- **Arrays are equal if:**
+  - **Same length**
+  - **Same values**
+  - **Same order**
 
 ```go
 // Comparing Arrays
@@ -147,6 +150,8 @@ fmt.Println("Array Access:")
 fmt.Println("-------------")
 
 arrI := [3]int{10, 20, 30}
+
+fmt.Println("arrI =", arrI)
 
 // Accessing the values
 fmt.Println("arrI[0] =", arrI[0])
@@ -231,6 +236,22 @@ sliceA := []int{10, 20, 30, 40}
 sliceB := []int{1, 5: 4, 6, 10, 100, 15}
 ```
 
+- The *Zero-Value* of a slice is a *Nil-Slice* `[]`
+
+```go
+// The Zero-Value of a slice is nil
+var sliceNil []int
+fmt.Println("sliceNil =", sliceNil)
+fmt.Println("sliceNil is nil?", sliceNil == nil)
+```
+
+- For better definition, we use `make()`
+- This initialize the slice with Zero-values instead of `nil`
+
+```go
+mySlice = make([]int, 4) // => mySlice = [0, 0, 0, 0]
+```
+
 ### Multidimensional Slice
 
 - **Go does not support multidimensional slices**
@@ -262,7 +283,7 @@ fmt.Println("sliceC =", sliceC)
 
 - Same rules as with *Arrays*
   - Read and write via the `slice[index]` syntax
-- We cannot access beyond the length of the slice
+- **We cannot access beyond the length of the slice**
   - Compile-time error
   - **Out-of-bounds access will *panic* at runtime**
 - **We cannot access with negative index**
@@ -819,7 +840,7 @@ fmt.Println("Copying subset from the middle of slice:")
 fmt.Println("----------------------------------------")
 
 // Length of the destination slice can be derived from the subslice
-// If the return value is not need, ignore
+// If the return value is not needed, ignore
 sliceR := make([]int, len(sliceO[2:]))
 copy(sliceR, sliceO[2:])
 
@@ -930,6 +951,7 @@ arrayPtr := (*[4]int)(slice)
 
 - **Strings are not made of *Runes***
   - **Using a sequence of *bytes* instead**
+  - **Using `len()` on string returns the number of bytes in the string**
   - Bytes do not have to be in any particular character encoding
   - But usually assumed to be UTF-8 code points
   - String literals are UTF8 unless using hexadecimal escapes
@@ -985,7 +1007,7 @@ fmt.Println("strBSub4 =", strBSub4)
 ```
 
 - We can get the length of a string using the `len()` function
-  - **However, it returns the length in *Bytes*, not in *Code-Points***
+  - **However, it returns the length in *Bytes*, not in *UTF-8 Codepoints***
   - This is also an issue with non-english languages and emojis
   - ***Only use `len()` when string contains only 1-byte characters***
 - **In summary**
@@ -1007,7 +1029,7 @@ fmt.Println("strC =", strC)
 fmt.Println("len(strC) =", len(strC))
 ```
 
-- Go has a complicated relationship between strings, runes, and bytes
+- **Go has a complicated relationship between strings, runes, and bytes**
   - *A single rune or byte can be converted to a string with `string()`*
   - *A string can be converted back and forth to `[]byte` or `[]rune`*
 - **Most data in Go is used as a sequence of bytes**

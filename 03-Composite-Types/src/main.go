@@ -68,6 +68,8 @@ func main() {
 
 	arrI := [3]int{10, 20, 30}
 
+	fmt.Println("arrI =", arrI)
+
 	// Accessing the values
 	fmt.Println("arrI[0] =", arrI[0])
 	fmt.Println("arrI[1] =", arrI[1])
@@ -397,7 +399,7 @@ func main() {
 	fmt.Println("----------------------------------------")
 
 	// Length of the destination slice can be derived from the subslice
-	// If the return value is not need, ignore
+	// If the return value is not needed, ignore
 	sliceR := make([]int, len(sliceO[2:]))
 	copy(sliceR, sliceO[2:])
 
@@ -804,9 +806,11 @@ func main() {
 
 // AVAILABLE COMMANDS
 // ------------------
-//  make            Default to `make try`
-//  make fmt        Format all source files
-//  make vet        Verify any possible errors
-//  make build      Build module
-//  make run        Build module then run
-//  make try        Build module, run, then remove built binary
+//  make                Default to `make try`
+//  make fmt            Format all source files
+//  make vet            Verify any possible errors
+//  make build          Build module
+//  make build-release  Build module for release, strip symbols
+//  make run            Build module then run
+//  make run-release    Build module for release then run
+//  make try            Build module, run, then remove built binary

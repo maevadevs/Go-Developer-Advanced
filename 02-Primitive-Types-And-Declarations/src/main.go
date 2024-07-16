@@ -267,9 +267,11 @@ func main() {
 
 // AVAILABLE COMMANDS
 // ------------------
-//  make            Default to `make try`
-//  make fmt        Format all source files
-//  make vet        Verify any possible errors
-//  make build      Build module
-//  make run        Build module then run
-//  make try        Build module, run, then remove built binary
+//  make                Default to `make try`
+//  make fmt            Format all source files
+//  make vet            Verify any possible errors
+//  make build          Build module
+//  make build-release  Build module for release, strip symbols
+//  make run            Build module then run
+//  make run-release    Build module for release then run
+//  make try            Build module, run, then remove built binary

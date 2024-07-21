@@ -36,11 +36,11 @@ func main() {
 	fmt.Println("Example of Variable Shadowing With :=")
 	fmt.Println("-------------------------------------")
 
+	fmt.Println("Outside the block, x =", x)
 	if x > 5 {
 		x, y := 5, 20
 		fmt.Println("\tInside the block, x =", x, "and y =", y)
 	}
-
 	fmt.Println("Outside the block, x =", x)
 	fmt.Println()
 
@@ -50,15 +50,14 @@ func main() {
 	fmt.Println("-----------------------------------")
 
 	pi := math.Pi
+
+	fmt.Println("Outside the block, math.Pi =", math.Pi)
 	if float64(x) > pi {
 		math := "oops!"
-
-		// This is an error: math.Pi is undefined
+		// This is an error: math.Pi is undefined because math == "oops!"
 		// pi2 := math.Pi
-
 		fmt.Println("\tInside the block, math =", math)
 	}
-
 	fmt.Println("Outside the block, math.Pi =", math.Pi)
 	fmt.Println()
 
@@ -90,6 +89,7 @@ func main() {
 	} else {
 		fmt.Println(m, ": That is a good number!")
 	}
+
 	// This throws an error: m is undefined here
 	// fmt.Println(m)
 	fmt.Println()

@@ -48,6 +48,6 @@ try: vet
 	if test -f bin/debug/Composite-Temp; then \
 		rm -f bin/debug/Composite-Temp; \
 	fi
-	go build -o bin//debug/Composite-Temp src/main.go
+	go build -o bin/debug/Composite-Temp src/main.go
 	bin/debug/Composite-Temp
 	rm -f bin/debug/Composite-Temp

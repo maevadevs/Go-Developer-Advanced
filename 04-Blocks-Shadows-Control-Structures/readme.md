@@ -7,7 +7,7 @@
 - [The Universe Block](#the-universe-block)
 - [`if`](#if)
 - [`for`](#for)
-  - [Complete C-Style `for`](#complete-c-style-for)
+  - [C-Style `for`](#c-style-for)
   - [Condition-Only `for` (`while`-Style)](#condition-only-for-while-style)
   - [Infinite `for`](#infinite-for)
     - [`break` and `continue`](#break-and-continue)
@@ -26,7 +26,7 @@
 ---
 
 - About programming logic and organization
-- Blocks can control when an identifier is available
+- Blocks can control when an identifier is available (scope)
 - Control structures: `if`, `for`, `switch`
 - Go also has `goto` for some situations
 
@@ -36,7 +36,8 @@
   - Outside of functions
   - Parameters of functions
   - Local variables of functions
-- **Block** - Each place where a declaration occurs
+- **Block**
+  - Each place where a declaration occurs
   - **Package Block** - Anything declared outside of a function
   - **File Block** - Names that can be used with `import`
 - **All variables defined at the top-level of a function are in a block**
@@ -87,15 +88,15 @@ fmt.Println("Outside the block again, x is back to:", x)
 fmt.Println("Example of Variable Shadowing With :=")
 fmt.Println("-------------------------------------")
 
+fmt.Println("Outside the block, x =", x)
 if x > 5 {
     x, y := 5, 20
     fmt.Println("\tInside the block, x =", x, "and y =", y)
 }
-
 fmt.Println("Outside the block, x =", x)
 ```
 
-- **When using `:=`, make sure outside variables with the same name does not exist**
+- **When using `:=`, make sure outside variables with the same name do not exist**
   - **Unless it is an intentional shadowing**
 - **WARNING: Be careful to not shadow package imports**
   - E.g. `math`
@@ -113,15 +114,14 @@ fmt.Println("Example of Shadowing Package Names:")
 fmt.Println("-----------------------------------")
 
 pi := math.Pi
+
+fmt.Println("Outside the block, math.Pi =", math.Pi)
 if float64(x) > pi {
     math := "oops!"
-
-    // This is an error: math.Pi is undefined
+    // This is an error: math.Pi is undefined because math == "oops!"
     // pi2 := math.Pi
-
     fmt.Println("\tInside the block, math =", math)
 }
-
 fmt.Println("Outside the block, math.Pi =", math.Pi)
 ```
 
@@ -181,7 +181,7 @@ import "math/rand"
 
 if m := rand.Intn(10); m == 0 {
     fmt.Println(m, ": That is too low!")
-} else if n > 5 {
+} else if m > 5 {
     fmt.Println(m, ": That is too big!")
 } else {
     fmt.Println(m, ": That is a good number!")
@@ -194,8 +194,7 @@ if m := rand.Intn(10); m == 0 {
 - **NOTE**
   - We could put any simple statement before the comparison
   - Not just variable declaration
-  - But don't do that
-  - Leave it for only declaring variables to be scoped for the `if-else` blocks
+  - But don't do that: Leave it for only declaring variables to be scoped for the `if-else` blocks
   - Anything else would be confusing
   - **Variable declared for the `if-else` block will shadow any existing outside variables**
 
@@ -203,12 +202,12 @@ if m := rand.Intn(10); m == 0 {
 
 - **`for` is the only loop construct available in Go**
 - **But there are 4 ways of using `for` loops**
-  - Complete *C-Style `for`*
+  - *C-Style `for`*
   - *Condition-Only `for` (`while`-Style)*
   - *Infinite `for`*
   - *`for-range`*
 
-### Complete C-Style `for`
+### C-Style `for`
 
 - Similar format to other C-based languages
 

@@ -18,6 +18,7 @@ These are in-depth notes from learning Go.
    - VS Code Setup
    - `make` and Build Automation
    - Go Compatibility Promise
+   - Staying Up-To-Date
 2. [Primitive Types and Declarations](./02-Primitive-Types-And-Declarations/)
    - Predeclared Types
    - Zero-Values
@@ -78,7 +79,7 @@ These are in-depth notes from learning Go.
     - Universe Block
     - `if`
     - `for`
-      - Complete C-Style `for`
+      - C-Style `for`
       - Condition-Only `for` (`while`-Style)
       - Infinite `for`
         - `break` and `continue`
@@ -106,7 +107,7 @@ These are in-depth notes from learning Go.
       - Anonymous Functions
     - Closures
       - Benefits of Closures
-    - Passing Functions As Parameters
+    - Passing Functions As Arguments
     - Returning Functions From Functions
     - `defer`
     - Call By Value

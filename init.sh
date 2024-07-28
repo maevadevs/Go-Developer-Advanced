@@ -3,8 +3,8 @@
 ######################################################################################
 # SCRIPT:       Allow to quickly generate a new Go project as a Go module            #
 # AUTHOR:       github.com/maevadevs                                                 #
-# CALL SIGN:    bash init.sh -p <Project_Dir> -o <Out_File> -m <Module_Path_Dir>     #
-# CALL EXAMPLE: bash init.sh -p hello_world -o hello -m example.com/proj/hello_world #
+# CALL SIGN:    bash init.sh -p <Project_Dir> -o <Out_File> -m <Module_Root_Path>    #
+# CALL EXAMPLE: bash init.sh -p hello_world -o hello -m github.com/go_projects       #
 ######################################################################################
 
 # Get Current Directory
@@ -141,7 +141,7 @@ else
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
-.PHONY: fmt vet build run try
+.PHONY: fmt vet build build-release run run-release try
 
 # Target
 fmt:
@@ -160,22 +160,32 @@ vet: fmt
 # Target
 build: vet
 	# Task: Build module
-	go build -o bin/$OUT_FILE src/main.go
+	go build -o bin/debug/$OUT_FILE src/main.go
+
+# Target
+build-release: vet
+	# Task: Build module for release
+	go build -ldflags=\"-s -w\" -o bin/release/$OUT_FILE src/main.go
 
 # Target
 run: build
 	# Task: Build module then run
-	bin/$OUT_FILE \$(ARGS)
+	bin/debug/$OUT_FILE \$(ARGS)
+
+# Target
+run-release: build-release
+	# Task: Build module then run
+	bin/release/$OUT_FILE \$(ARGS)
 
 # Target
 try: vet
 	# Task: Build module, run, then remove built binary
-	if test -f bin/$OUT_FILE-Temp; then \\
-		rm -f bin/$OUT_FILE-Temp; \\
+	if test -f bin/debug/$OUT_FILE-Temp; then \\
+		rm -f bin/debug/$OUT_FILE-Temp; \\
 	fi
-	go build -o bin/$OUT_FILE-Temp src/main.go
-	bin/$OUT_FILE-Temp \$(ARGS)
-	rm -f bin/$OUT_FILE-Temp" >> makefile;
+	go build -o bin/debug/$OUT_FILE-Temp src/main.go
+	bin/debug/$OUT_FILE-Temp \$(ARGS)
+	rm -f bin/debug/$OUT_FILE-Temp" >> makefile;
 
     echo "Done."
     echo "";
@@ -223,12 +233,14 @@ func main() {
 
 // AVAILABLE COMMANDS
 // ------------------
-//  make            Default to \`make try\`
-//  make fmt        Format all source files
-//  make vet        Verify any possible errors
-//  make build      Build module
-//  make run        Build module then run
-//  make try        Build module, run, then remove built binary
+//  make                Default to \`make try\`
+//  make fmt            Format all source files
+//  make vet            Verify any possible errors
+//  make build          Build module
+//  make build-release  Build module for release, strip symbols
+//  make run            Build module then run
+//  make run-release    Build module for release then run
+//  make try            Build module, run, then remove built binary
 
 " >> src/main.go;
 

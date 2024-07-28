@@ -56,7 +56,7 @@ func div(num int, den int) int {
 
 ```go
 func div(num int, den int) int {
-    ...
+    // Define the body here
 }
 ```
 
@@ -67,7 +67,7 @@ func div(num int, den int) int {
 
 ```go
 func div(num, den int) int {
-    ...
+    // Define the body here
 }
 ```
 
@@ -160,7 +160,7 @@ func main() {
 // Example of a Variadic Function
 // ------------------------------
 
-// Add multiple integers and return their sum.
+// Add any number of integers and return their sum.
 func addNums(nums ...int) int {
     var res int
     for _, n := range nums {
@@ -196,7 +196,7 @@ func main() {
   - Do not put `()` around the actual returned values, else compile-time error
 - **We also return any associated errors**
   - **In Go, errors are values**
-  - We use Go's multiple return value support to return an error
+  - We use Go's multiple-return-value-support to return an error
     - This is how error-handling is done in Go
     - **If the function completes succesfully, return `nil` as the error**
     - We check error by comparing it as `err != nil`
@@ -309,7 +309,7 @@ import (
 func divmodNamed(num, den int) (res int, mod int, err error) {
     if den == 0 {
         err = errors.New("cannot divide by 0")
-        // Returning multiple values
+        // Returning multiple values: Default to zero-values
         return res, mod, err
     }
     res, mod = num/den, num%den
@@ -340,10 +340,10 @@ func main() {
 - They are not required to be returned
   - We could return different values instead
   - The compiler will not complain
-  - **The values of the `return` statement will always be returned**
+  - **The values in the `return` statement will always be returned**
   - This can create confusion
   - The Go compiler insert code that assigns any return value to the names
-  - The named return parameters declares the *intent*, but are *not required* to use them
+  - **The named return parameters declares the *intent*, but are *not required* to use them**
 
 ```go
 // This version will work fine with no compiler errors
@@ -530,12 +530,12 @@ fmt.Println("Example of Anonymous Function:")
 fmt.Println("------------------------------")
 
 // Anonymous function assigned to a variable
-anonf := func(j int) {
+anonFunc := func(j int) {
     fmt.Println("Printing", j, "from inside an anonymous function")
 }
 for i := range 5 {
     // Calling the function
-    anonf(i)
+    anonFunc(i)
 }
 ```
 
@@ -599,7 +599,7 @@ func main() {
     fmt.Println(y)
 }
 
-// Reassigns add to a different function that declared earlier.
+// Reassigns add to a different function than declared earlier.
 func changeAdd() {
     // `add` here refers to the package-level variable
     add = func(i int, j int) int { return i + j + j }
@@ -703,6 +703,8 @@ fmt.Println("After Sorting By Age:", people)
 ```
 
 - A closure anonymous function is passed to `sort.Slice()`
+  - `people` exists in the context of `sort.Slice()`
+  - The closure also exists in the context of `sort.Slice()`
   - The outside variable `people` is *captured* within the closure
 - **Passing functions as arguments to other functions is useful for performing different operations on the same kind of data**
 
@@ -742,8 +744,8 @@ func main() {
 - **Closures are very helpful in Go**
   - Can be used to sort slices
   - Can be used to efficiently search a sorted slice with `sort.Search()`
-  - Returning closures is used when bulding middlware for web server
-  - Also used to implement resource cleanups with `defer`
+  - Returning closures is used when bulding middleware for web server
+  - Also used to implement resource-cleanups with `defer`
   - Typical pattern for *High-Order Functions* and *Factory Functions*
 
 ## `defer`

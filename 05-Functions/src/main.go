@@ -24,7 +24,7 @@ func main() {
 
 	// Example of calling a Function
 	// -----------------------------
-	fmt.Println("Example of calling a Function:")
+	fmt.Println("Example of Calling a Function:")
 	fmt.Println("------------------------------")
 
 	result := div(100, 20)
@@ -168,12 +168,12 @@ func main() {
 	fmt.Println("------------------------------")
 
 	// Anonymous function assigned to a variable
-	anonf := func(j int) {
+	anonFunc := func(j int) {
 		fmt.Println("Printing", j, "from inside an anonymous function")
 	}
 	for i := range 5 {
 		// Calling the function
-		anonf(i)
+		anonFunc(i)
 	}
 	fmt.Println()
 
@@ -402,7 +402,7 @@ func MyFunc(params FuncParams) error {
 // Example of a Variadic Function
 // ------------------------------
 
-// Add multiple integers and return their sum.
+// Add any number of integers and return their sum.
 func addNums(nums ...int) int {
 	var res int
 	for _, n := range nums {
@@ -429,7 +429,7 @@ func divmod(num, den int) (int, int, error) {
 func divmodNamed(num, den int) (res int, mod int, err error) {
 	if den == 0 {
 		err = errors.New("cannot divide by 0")
-		// Returning multiple values
+		// Returning multiple values: Default to zero-values
 		return res, mod, err
 	}
 	res, mod = num/den, num%den

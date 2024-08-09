@@ -165,6 +165,8 @@ Command | Action
 ```tree
 Go-Module/
 ├── bin/
+    ├── debug/
+    ├── release/
 ├── src/
 |   ├── main.go
 ├── tests/
@@ -176,14 +178,14 @@ Go-Module/
 ### Go Module
 
 - **A Go project is called a *Go Module***
-  - A *Go Module* is a directory with a `go.mod` file
+  - A *Go Module* is a directory with a `go.mod` file in it
   - `go.mod` can be auto-generated with the following command in the module directory
 
 ```sh
 go mod init unique/module/path/typically/github
 ```
 
-- A `go.mod` file declares
+- A `go.mod` file declares:
   - The name of the module and its unique path
   - Minimum supported Go version
   - Any additional module dependencies
@@ -197,7 +199,7 @@ go mod init unique/module/path/typically/github
 ```sh
 module unique/module/path/typically/github
 
-go 1.22.5
+go 1.22.6
 ```
 
 ### `main.go`
@@ -233,7 +235,7 @@ func main() {
 
 ### `main` Function
 
-- **All executable Go programs start execution from `main` function in the `main` package**
+- **All executable Go programs start execution from the `main()` function in the `main` package**
 
 ### Build and Execution
 

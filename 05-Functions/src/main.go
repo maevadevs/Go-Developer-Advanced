@@ -491,9 +491,9 @@ func deferExample() int {
 
 // AVAILABLE COMMANDS
 // ------------------
-//  make ARGS=./testfiles/test.txt      Default to `make try`
-//  make fmt                            Format all source files
-//  make vet                            Verify any possible errors
-//  make build                          Build module
-//  make run ARGS=./testfiles/test.txt  Build module then run
-//  make try ARGS=./testfiles/test.txt  Build module, run, then remove built binary
+//  make ARGS=./src/textfiles/example.txt       Default to `make try`
+//  make fmt                                    Format all source files
+//  make vet                                    Verify any possible errors
+//  make build                                  Build module
+//  make run ARGS=./src/textfiles/example.txt   Build module then run
+//  make try ARGS=./src/textfiles/example.txt   Build module, run, then remove built binary

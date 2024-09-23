@@ -1,10 +1,10 @@
-go 1.23.0
+go 1.23.1
 
 use (
-    ./01-Setup-And-Hello-World
-    ./02-Primitive-Types-And-Declarations
-    ./03-Composite-Types
-    ./04-Blocks-Shadows-Control-Structures
-    ./05-Functions
-    ./06-Pointers
+	./01-Setup-And-Hello-World
+	./02-Primitive-Types-And-Declarations
+	./03-Composite-Types
+	./04-Blocks-Shadows-Control-Structures
+	./05-Functions
+	./06-Pointers
 )

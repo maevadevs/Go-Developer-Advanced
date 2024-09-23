@@ -43,9 +43,9 @@
 - **Write programs in a way that makes intentions clear**
 - Some particular approaches produce clearer codes
 - Built-in types in Go and how to declare them
-  - Go does some things differently
+  - Go does some things differently than other languages
   - There are subtle differences from other languages
-- **NOTE: All declared variables in Go must be used**
+- ***NOTE: All declared variables in Go must be used***
 
 ## Predeclared Types
 
@@ -53,13 +53,13 @@
 - Similar to types found in other languages
   - Booleans
   - Integers
-  - Floats
+  - Floating-Points
   - Strings
 
 ## Zero-Values
 
 - **Declared variables with no initial values are assigned default *Zero Values***
-  - Explicit *Zero Value*, depending on the data type
+  - Implicit *Zero Value*, depending on the data type
   - Makes code clearer
   - Removes sources of bugs
   - [More details on the docs page](https://go.dev/ref/spec#The_zero_value)
@@ -212,7 +212,7 @@ fmt.Println("ninetySeven =", ninetySeven)
   - Delimited with backticks <code>``</code>
   - **Can contain any character except backticks**
   - If <code>\`</code> is required in raw string, try using <code>\`some raw string\` + "`"</code> approach instead
-  - No escape character can be applied: All characters are included as-is
+  - No escape character can be applied in raw strings: All characters are included as-is
 
 ```go
 // Example of String Literals
@@ -366,16 +366,15 @@ Integer Type|Range
 ### Floating-Point Types
 
 - 2 Floating-Point types
-  - `float32`
-  - `float64`
-- Match to IEEE 754 standard (single-precision and double-precision)
+  - `float32` IEEE 754 Single-Precision
+  - `float64` IEEE 754 Double-Precision
 - **Zero-Value = `0.0`**
 - **Literal Default Type: `float64`**
 
 Float Type|Range|Precision
 :-:|:-:|:-
 `float32`|$±1.4012984e^{-45}$ ... $±3.4028234e^{38}$|6-7 digits
-`float64`|$±1.7976931e^{308}$ ... $±4.9406564^{324}$|15-16 digits
+`float64`|$±4.9406564^{-324}$ ... $±1.7976931e^{308}$|15-16 digits
 
 #### Which Floating-Point Type To Use
 
@@ -478,7 +477,7 @@ fmt.Println("cmplx.Abs(x) =", cmplx.Abs(x))
 #### Go For Numerical Computing
 
 - **Go is not popular for Numerical Computing**
-- Limited adoption because of other features
+- Limited adoption because of other features missing
   - Matrix
   - Vectors
 - Libraries have to use inefficient replacements (slices of slices)
@@ -509,7 +508,7 @@ Concatenation|`+` `+=`
 - Used for representing a character
 - Alias for `int32` type
   - *Characters* are represented as integer codepoints
-  - **But do use `rune` for character, not `int32`**
+  - **But we use `rune` for character, not `int32`**
   - They are same for the compiler, but bad programming practice to mismatch
   - Helps to clarify the intent of the code
 - Default type is `rune`
@@ -524,7 +523,7 @@ var lNameInitial int32 = 'R'
 ## Explicit Type Conversion Required
 
 - Most languages have *Automatic Type Promotions/Upgrades*
-  - E.g. Bool -> Int -> Float -> String
+  - E.g. `bool` -> `int` -> `float` -> `string`
 - But the rule to apply this can get complicated and lead to unexpected results
 - **Go does not allow *Automatic Type Promotions***
   - **Type conversions must be explicit casts**

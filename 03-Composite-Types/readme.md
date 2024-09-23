@@ -97,7 +97,7 @@ var arrD = [...]int{100, 200, 300}
 ```go
 // Array declaration with :=
 // -------------------------
-arrE := [...]int{100, 200, 300}
+arrE := [...]int{250, 350, 450, 1000}
 ```
 
 ### Comparing Arrays

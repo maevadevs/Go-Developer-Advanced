@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ######################################################################################
-# SCRIPT:       Allow to quickly generate a new Go project as a Go module            #
+# SCRIPT:       Allows to quickly generate a new Go project as a Go module           #
 # AUTHOR:       github.com/maevadevs                                                 #
 # CALL SIGN:    bash init.sh -p <Project_Dir> -o <Out_File> -m <Module_Root_Path>    #
 # CALL EXAMPLE: bash init.sh -p hello_world -o hello -m github.com/go_projects       #

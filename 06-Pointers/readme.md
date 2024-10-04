@@ -17,22 +17,22 @@
 ## Quick Pointer Primer
 
 - **Pointer**
-  - A variable that holds the memory location (memory address) of where a value is stored
-- **Variables are stored in one or more contiguous memory locations: Addresses**
+  - A variable that holds the memory address of where in the memory an associated value is stored
+- **Variables are stored in one or more contiguous memory addresses**
   - Different variable types can take different number of memory addresses
-  - Depending on the size of the type
-  - **The smallest amount of addressable memory is a byte**
+  - Depends on the size of the data type
+  - **The smallest amount of addressable memory is a byte (8-bits)**
 
 ```go
-var x int32 = 10    // 4-bytes
-var y bool = true   // 1-byte
+var x int32 = 10    // 4 bytes
+var y bool = true   // 1 byte
 ```
 
 <img src="./img/2-variables-in-memory.png" width=30%>
 
-- **A pointer is a variable that contains the address of another variable**
+- **A pointer is a variable that contains the memory address of another variable**
   - Holds a number that indicates the memory location where the data is stored
-  - This number is the *Address*
+  - This number is the *Memory Address*
 
 ```go
 // Pointer Operators
@@ -83,25 +83,27 @@ fmt.Println("-----------------------")
 var ptrZ *string // Pointer-type to a value of type string but default to nil
 
 fmt.Println("ptrZ =", ptrZ) // Prints nil
+
 // Attempting to dereference a nil pointer results in a panic
 // Invalid Memory Address & Segmentation Violation
 // fmt.Println("*ptrZ =", *ptrZ) // panic: runtime error: invalid memory address or nil pointer dereference
 ```
 
-- ***Slice*, *Map*, *Function* are implemented using Pointers**
+- ***Slice*, *Map*, and *Function* are implemented using Pointers**
   - Which is why their zero-values are the same: `nil`
   - *Channel* and *Interface* are also implemented using Pointers
 - **Go's pointer syntax is partially borrowed from C/C++**
-  - But without painful memory management: Go is Garbage-Collected
+  - But without painful memory management
+  - Go is a *Garbage-Collected* language
   - Some pointer features in C/C++ are not allowed (E.g. *Pointer Arithmetics*)
-- *NOTE: Go has `unsafe` package for low-level operations*
+- *NOTE: Go has [`unsafe`](https://pkg.go.dev/unsafe) package for low-level operations*
   - But it is exceedingly rare to use `unsafe`
 - **`&` - *Address Operator***
-  - Precedes a value-type variable
+  - Precedes a *value-type* variable
   - Returns the memory address where the value of that variable is stored
   - **This is called *Referencing* the variable**
 - **`*` - *Indirection Operator***
-  - Precedes a pointer-type variable
+  - Precedes a *pointer-type* variable
   - Returns the pointed value at that memory address
   - **This is called *Dereferencing* the pointer**
   - **However, when used on a *type* instead of a variable, it denotes a *Pointer-Type* to that type**
@@ -144,7 +146,8 @@ fmt.Println("ptrIntVal =", ptrIntVal)
 ```
 
 - **Built-in function `new()` creates a pointer variable**
-  - Returns a pointer to a zero-value instance of the type
+  - Returns **a pointer to a zero-value instance of the type**
+  - Allows to *not set the pointer to `nil`*
   - But `new()` is rarely used
 
 ```go
@@ -242,7 +245,7 @@ func main() {
 - **But Pointers are actually the familiar behavior for classes in other languages**
 - **In other languages, there is a behavior difference between primitives and classes**
   - When primitives are aliased or passed to functions, changes made to the other variable/parameter are not reflected
-  - The aliases (or params/args) do not share the same memory
+  - The aliases (params vs args) do not share the same memory
   - **They are often referred to as *Passed-By-Value* in Java and JavaScript**
   - **Python and Ruby use *Immutable Instances* for the same purpose**
 
@@ -328,22 +331,23 @@ outer()
   - Safer from bugs
   - Easier to understand
   - More ready for change
-- **Ability to choose between *Value* and *Pointer* addresses this**
+- **Ability to choose between *Value* and *Pointer* addresses mutability/immutability**
   - **Using Pointer == The variable is mutable**
   - **Not using Pointer == The variable is not mutable**
-- Go is a *Call-By-Value* language
+- **Go is a *Call-By-Value* language**
   - Values passed to functions are copies
   - For non-pointer-types, called functions cannot modify original arguments
   - The original data's immutability is guaranteed
 - **When passing pointers to function, the original data can be modified**
+  - This is because the pointer itself is *passed-by-value*
 - **When passing `nil` pointers, cannot make the value non-nil**
   - Can only reassign if a value was already assigned to the pointer
   - `nil` is a fixed location in-memory
-  - Also, we cannot change the pointer as it is *Passed-By-Value* to the function
+  - Also, we cannot change the pointer as it is *passed-by-value* to the function
 - **If we want the value assigned to a pointer parameter to last after exiting the function, dereference the pointer and set the value**
   - Dereferencing allows to access the value pointed by the pointer
   - Also allows to set the value pointed by the pointer
-  - Attempting to change value at an address by re-assiging a new address to a pointer will not work
+  - *Attempting to change value at an address by re-assiging a new address to a pointer will not work*
     - We cannot change the pointer as it is *Passed-By-Value* to the function
     - **We can only change a pointed value by dereferencing the pointer, then re-assign a value**
 
@@ -415,7 +419,7 @@ func MakeFoo() (Foo, error) {
 ```go
 someJson := struct {
     Name string `json:"name"`
-    Age int `json:"age"`
+    Age  int `json:"age"`
 }{}
 err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 ```
@@ -424,7 +428,7 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
   - Populates a variable from a slice of bytes containing JSON
   - Takes a `[]byte` and an `any` parameters
   - Value passed for `any` must be a pointer, else error
-- 2 reasons for using pointer with `json.Unmarshall()`
+- 2 reasons for using pointer with `json.Unmarshal()`
   - *This function predates generics*
     - Without Generics, we don't know what type of value to create and return
   - *Passing a pointer gives control over memory allocation*
@@ -438,9 +442,9 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 
 ## Pointer-Passing Performance
 
-- If a Struct is large enough, using pointer improves performance
+- **If a Struct is large enough, using pointer improves performance**
   - Time to pass a pointer to a function is always constant
-  - The size of pointers is always the same for all data types
+  - The size of pointers is always the same for all data types (32-bit or 64-bit)
 - Passing values to a function takes longer depending on the size of the value
   - **For data structures less than 10 MB, it is slower to return pointer than the value**
   - **The performance flips with larger data structures**
@@ -466,6 +470,7 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 - *Any modifications made to a Map via a function is reflected in the original Map variable*
   - A Map is implemented as a pointer to a Struct
   - Passing a Map to a function is copying a pointer
+  - The pointer is *passed-by-value*
 - **Carefully consider before using Maps as input parameters or return values**
   - Maps are bad choices for API-design
   - They say nothing about the values contained within
@@ -477,10 +482,10 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 - **NOTE: Maps are correct choice in certain situations**
   - Struct field names are required at compile-time
   - If the keys are not available at compile-time, a Map is ideal
-- Passing a Slice to a function has more complicated behaviors
+- **Passing a Slice to a function has more complicated behaviors**
   - *Any modifications made to a Slice via a function is reflected in the original Slice variable*
   - However, using `append()` is **not** reflected in the original slice
-  - A Slice is implemented as a Struct with 3 fields: *`int` length*, *`int` capacity*, and pointer to an Array
+  - A Slice is implemented as a Struct with 3 fields: *`int` length*, *`int` capacity*, and pointer to an underlying Array
   - *When slice is copied to a function, a copy is made off those 3 fields*
   - **Changing value in the Slice = Changing values in the Array pointed by the pointer**
   - **Changing *length* or *capacity* = Only changing the local copies of the copied `int` values**
@@ -491,7 +496,7 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
   - Slices are passed around a lot in Go
   - By default, assume it is not mutable
 - **NOTE: We can pass a Slice of any size to functions**
-  - It is really just a Struct of 2 `int` values and a pointer to an Array
+  - It is really just a Struct of 2 `int` values (*length* and *capacity*) and a pointer to an Array
   - Always the same size of data passed around no matter the size of the Slice
   - That is not the case with Arrays: Arrays are passed by value of their contents
 
@@ -499,7 +504,7 @@ err := json.Unmarshal([]byte(`{"name": "Bob", "age": 30}`), &someJson)
 
 - Useful approach for reading data from external sources
 - Reading data by chunks creates a lot of unnecessary memory allocations
-  - Handle automatically by the Garbage Collector
+  - Handled automatically by the Garbage Collector
   - But the work still needs to be done when done processing
 - **Writing idiomatic Go means avoid unnecessary memory allocations**
   - Create a slice of bytes once
@@ -535,3 +540,61 @@ for {
   - Any other error is returned
 
 ### Reducing the GC's Workload
+
+- Using buffer is one example
+- **Garbage**
+  - Data that has no more pointers pointing to it
+  - The memory taken up by the data can be reused
+  - If the memory is not recovered, the program's memory usage would continue to grow
+  - Can result to *Stackoverflow* bug
+- **Garbage Collector**
+  - Automatically detect unused memory and recover it for reuse
+  - Simplify memory management
+- *Just because we have a Garbage Collector does not mean we should create a lot of garbages*
+- **Stack**
+  - Consecutive blocks of memory
+  - Every function call in a thread of execution shares the same stack
+  - Simple and fast memory allocation
+  - *Stack Pointer* tracks the allocated location
+    - Allocating additional memory is done by changing the value of the Stack Pointer
+  - Invoking function
+    - New stack frame is created for the function
+    - New scope
+    - Local variables are stored on the stack
+  - Each new variable moves the Stack Pointer by the size of the value
+  - Returning functions
+    - Return values are returned to the caller via the Stack
+    - Stack Pointer is moved back to the beginning of the stack frame
+    - Deallocating stack memory used by the function
+  - **NOTE: Since Go 1.17, uses combination of *Registers* and Stack to pass values into functions**
+    - *Register* - Small set of high-speed memory on the CPU
+    - Faster but more complicated
+    - The general concepts of Stack-Only functions still apply
+  - ***To store on the Stack, we have to know the value's size at compile-time***
+    - Case for all value types: Constant size
+    - For value types, the size is considered part of the type
+    - Because the size is known, they can be allocated on the Stack
+    - *The size of Pointers is also known and constant (32-bits or 64-bits)*
+- **NOTE: Go can increase the size of the Stack while the program is running**
+  - Each goroutine has its own stack
+  - Goroutines are managed by the Go Runtime
+  - Advantages:
+    - Go stacks start small
+    - Use less memory
+  - Disadvantages:
+    - When stack needs to grow, all data on the stack is copied
+    - This copy can be slow
+    - It is possible to write code that causes the stack to shrink and grow over and over
+- **Different rules for the data that the pointer points to**
+  - To allocate them on the Stack:
+    - Data must be a local variable with known data-size at compile-time
+    - Pointer cannot be returned from a function
+    - If pointer is passed to a function, these rules must still hold
+  - If unable to store on the Stack, the data that the pointer points to *escapes* the Stack
+    - It is stored on the **Heap**
+- **Heap**
+  - Memory that is managed by the *Garbage Collector*
+  - In other languages (C/C++), it is managed manually
+  - **Any data on the Heap is valid as long as it can be tracked back to pointer on the Stack**
+  - If there are no pointers pointing to the data, it becomes *Garbage*
+  - The *Garbage Collector* clears it up

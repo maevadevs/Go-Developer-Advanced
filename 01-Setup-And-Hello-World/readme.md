@@ -165,10 +165,10 @@ Command | Action
 ```tree
 Go-Module/
 ├── bin/
-    ├── debug/
-    ├── release/
+|   ├── debug/
+|   └── release/
 ├── src/
-|   ├── main.go
+|   └── main.go
 ├── tests/
 ├── go.mod
 ├── makefile
@@ -199,7 +199,7 @@ go mod init unique/module/path/typically/github
 ```sh
 module unique/module/path/typically/github
 
-go 1.22.6
+go 1.23.2
 ```
 
 ### `main.go`
@@ -384,7 +384,7 @@ func main() {
   - [Vim](https://www.vim.org/)
   - [Neovim](https://neovim.io/)
   - [GNU Emacs](https://www.gnu.org/software/emacs/)
-- **Here, we are using VS Code**
+- **Here, we are using VS Code + Go Extension**
 
 ### VS Code Setup
 
@@ -397,7 +397,7 @@ func main() {
   - A debugger `dlv`
   - Unit Test `gotests`
   - Linter `staticcheck`
-- Tools can be updated via the VS Code command
+- Tools can be updated via the VS Code Command (CTRL+SHIFT+P)
 
 ```sh
 Go: Install/Update Tools
@@ -426,15 +426,15 @@ sudo apt-get install build-essential
   - The *Makefile Tools* by Microsoft is a good extension to have
 
 ```makefile
-# NOTE: Make sure all indentations use tabs
+# NOTE: Make sure all indentations use actual tabs
 
 # DEFAULT_GOAL specifies the default target
 # This is run when no target is provided during the call
-.DEFAULT_GOAL := try
+.DEFAULT_GOAL := try-run
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
-.PHONY: fmt vet build build-release run run-release try
+.PHONY: fmt vet build build-release run run-release try-build-run try-run
 
 # Target
 fmt:
@@ -471,7 +471,7 @@ run-release: build-release
     bin/release/Hello-World
 
 # Target
-try: vet
+try-build-run: vet
     # Task: Build module, run, then remove built binary
     if test -f bin/debug/Hello-World-Temp; then \
         rm -f bin/debug/Hello-World-Temp; \
@@ -479,6 +479,11 @@ try: vet
     go build -o bin/debug/Hello-World-Temp src/main.go
     bin/debug/Hello-World-Temp
     rm -f bin/debug/Hello-World-Temp
+
+# Target
+try-run: vet
+    # Task: Test-Run the module without building anything
+    go run src/main.go
 ```
 
 - *Target*
@@ -488,7 +493,7 @@ try: vet
 - *Target Definitions*
   - **The word before `:` is the name of the target**
   - **After `:` is a requirement target that must run before running the current target**
-- `.PHONY` helps avoid possible name-collisions with other directory or file names on the computer
+- `.PHONY` helps avoid possible name-collisions with other directory names or file names on the computer
 
 Command|Description
 :-|:-

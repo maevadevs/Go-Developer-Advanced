@@ -28,8 +28,9 @@ func main() {
 //  make                Default to `make try`
 //  make fmt            Format all source files
 //  make vet            Verify any possible errors
-//  make build          Build module
-//  make build-release  Build module for release, strip symbols
+//  make bld            Build module
+//  make bld-rls        Build module for release, strip symbols
 //  make run            Build module then run
-//  make run-release    Build module for release then run
-//  make try            Build module, run, then remove built binary
+//  make run-rls        Build module for release then run
+//  make tbr            Build module, run, then remove built binary
+//  make try            Test-Run the module without building anything

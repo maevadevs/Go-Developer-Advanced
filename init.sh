@@ -133,7 +133,7 @@ else
     touch "makefile";
     # Add default placeholder contents
     echo "\
-# NOTE: Make sure all indentations use tabs
+# NOTE: Make sure all indentations use actual tabs
 
 # DEFAULT_GOAL specifies the default target
 # This is run when no target is provided during the call
@@ -141,7 +141,7 @@ else
 
 # Target definitions
 # .PHONY helps avoid possible name-collisions with other directory or file names on the computer
-.PHONY: fmt vet build build-release run run-release try
+.PHONY: fmt vet build bld build-release bld-rls run run-release run-rls try-build-run tbr try-run try
 
 # Target
 fmt:
@@ -162,8 +162,18 @@ build: vet
 	# Task: Build module
 	go build -o bin/debug/$OUT_FILE src/main.go
 
+# Target: Alias to build
+bld: vet
+	# Task: Build module
+	go build -o bin/debug/$OUT_FILE src/main.go
+
 # Target
 build-release: vet
+	# Task: Build module for release
+	go build -ldflags=\"-s -w\" -o bin/release/$OUT_FILE src/main.go
+
+# Target: ALias to build-release
+bld-rls: vet
 	# Task: Build module for release
 	go build -ldflags=\"-s -w\" -o bin/release/$OUT_FILE src/main.go
 
@@ -177,15 +187,42 @@ run-release: build-release
 	# Task: Build module then run
 	bin/release/$OUT_FILE \$(ARGS)
 
+# Target: ALias to run-release
+run-rls: build-release
+	# Task: Build module then run
+	bin/release/$OUT_FILE \$(ARGS)
+
 # Target
-try: vet
+try-build-run: vet
 	# Task: Build module, run, then remove built binary
 	if test -f bin/debug/$OUT_FILE-Temp; then \\
 		rm -f bin/debug/$OUT_FILE-Temp; \\
 	fi
 	go build -o bin/debug/$OUT_FILE-Temp src/main.go
 	bin/debug/$OUT_FILE-Temp \$(ARGS)
-	rm -f bin/debug/$OUT_FILE-Temp" >> makefile;
+	rm -f bin/debug/$OUT_FILE-Temp
+
+# Target: Alias to try-build-run
+tbr: vet
+	# Task: Build module, run, then remove built binary
+	if test -f bin/debug/$OUT_FILE-Temp; then \\
+		rm -f bin/debug/$OUT_FILE-Temp; \\
+	fi
+	go build -o bin/debug/$OUT_FILE-Temp src/main.go
+	bin/debug/$OUT_FILE-Temp \$(ARGS)
+	rm -f bin/debug/$OUT_FILE-Temp
+
+# Target
+try-run: vet
+	# Task: Test-Run the module without building anything
+	go run src/main.go
+
+# Target: Alias to try-run
+try: vet
+	# Task: Test-Run the module without building anything
+	go run src/main.go
+
+" >> makefile;
 
     echo "Done."
     echo "";
@@ -236,11 +273,12 @@ func main() {
 //  make                Default to \`make try\`
 //  make fmt            Format all source files
 //  make vet            Verify any possible errors
-//  make build          Build module
-//  make build-release  Build module for release, strip symbols
+//  make bld            Build module
+//  make bld-rls        Build module for release, strip symbols
 //  make run            Build module then run
-//  make run-release    Build module for release then run
-//  make try            Build module, run, then remove built binary
+//  make run-rls        Build module for release then run
+//  make tbr            Build module, run, then remove built binary
+//  make try            Test-Run the module without building anything
 
 " >> src/main.go;
 

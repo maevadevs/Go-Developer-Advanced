@@ -1,3 +1,3 @@
 module github.com/maevadevs/Go-Developer-Advanced/Primitive-Types-And-Declarations
 
-go 1.23.2
+go 1.23.5

@@ -45,7 +45,7 @@
 - Built-in types in Go and how to declare them
   - Go does some things differently than other languages
   - There are subtle differences from other languages
-- ***NOTE: All declared variables in Go must be used***
+- ***NOTE: All declared variables in Go must be used at least once***
 
 ## Predeclared Types
 
@@ -58,11 +58,15 @@
 
 ## Zero-Values
 
-- **Declared variables with no initial values are assigned default *Zero Values***
-  - Implicit *Zero Value*, depending on the data type
+- **Declared variables with no initial values are assigned default *Zero-Values***
+  - Implicit *Zero-Value*, depending on the data type
   - Makes code clearer
   - Removes sources of bugs
   - [More details on the docs page](https://go.dev/ref/spec#The_zero_value)
+  - `false` for booleans
+  - `0` for numeric types
+  - `""` for strings
+  - `nil` for pointers, functions, interfaces, slices, channels, and maps
 
 ## Literals
 
@@ -73,7 +77,7 @@
   - Rune Literal
   - String Literal
 - **Literals are considered *untyped* but have default type**
-  - Situations where the type is not explicitly declared but inferred from initial value
+  - Situations where the type is not explicitly declared but inferred from an initial value
   - In those cases, Go uses the *default type* for a literal
   - **If a type cannot be determined from an expression, the literal defaults to a default type**
     - E.g. Should `3` be used as a Float or an Integer?

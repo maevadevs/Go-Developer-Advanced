@@ -37,7 +37,7 @@
   - [Check here](https://go.dev/doc/install) for installation instructions
   - [Check here](https://go.dev/dl/) for all available releases
 - **Go programs compile to a single native binary**
-  - No VM needed to run
+  - Standalone: No VM needed to run the compiled applications
   - No additional software required to run
   - Go apps can also be [packaged inside Docker images](https://blog.baeke.info/2021/03/28/distroless-or-scratch-for-go-apps/)
 

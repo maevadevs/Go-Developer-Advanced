@@ -1,7 +1,5 @@
 # Setup and Hello World
 
----
-
 - [Installing Go](#installing-go)
   - [Detailed Installation for Linux](#detailed-installation-for-linux)
     - [Uninstalling Go from Linux](#uninstalling-go-from-linux)
@@ -34,8 +32,8 @@
 ## Installing Go
 
 - We only need to install Go: No additional tools
-  - [Check here](https://go.dev/doc/install) for installation instructions
-  - [Check here](https://go.dev/dl/) for all available releases
+  - [go.dev/doc/install](https://go.dev/doc/install) for installation instructions
+  - [go.dev/dl](https://go.dev/dl/) for all available releases
 - **Go programs compile to a single native binary**
   - Standalone: No VM needed to run the compiled applications
   - No additional software required to run
@@ -92,9 +90,9 @@ sudo rm /etc/paths.d/go
 - Close and reopen any open command prompts or shell prompts
 - Verify the installation
 
-```sh
+```ps1
 go version
-where go
+get-command go
 ```
 
 #### Uninstalling Go from Windows
@@ -164,11 +162,13 @@ Command | Action
 
 ```tree
 Go-Module/
+├── .git
+├── .gitignore
 ├── bin/
-|   ├── debug/
-|   └── release/
+│   ├── debug/
+│   └── release/
 ├── src/
-|   └── main.go
+│   └── main.go
 ├── tests/
 ├── go.mod
 ├── makefile
@@ -227,7 +227,7 @@ func main() {
 #### Import Declaration
 
 - Allows to import external packages referenced in the file
-  - **Go `import` only imports whole packages**
+  - **Go's `import` statement only imports whole packages**
   - We cannot limit the imports to specific functions or atomic elements
 - `fmt` is from the standard library so it is already available
   - No need to use `go get`
@@ -510,7 +510,7 @@ Command|Description
 ## Go Compatibility Promise
 
 - Go is periodically updated
-  - New release roughly occurs every 6 months
+  - New release occurs roughly every 6 months
   - Patches and security fixes are as-needed
   - Releases tend to be incremental than expansive
 - The Go team plans to avoid breaking changes by following the [*Go Compatibility Promise*](https://go.dev/doc/go1compat)

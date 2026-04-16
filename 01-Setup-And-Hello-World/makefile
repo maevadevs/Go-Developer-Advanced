@@ -40,7 +40,7 @@ build-release: vet
 # Target: ALias to build-release
 bld-rls: vet
 	# Task: Build module for release, strip symbols
-	go build -ldflags="-s -w" -o bin/release/Hello-World src/main.go
+	CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o bin/release/Hello-World src/main.go
 
 # Target
 run: build
